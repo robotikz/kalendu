@@ -8,6 +8,7 @@ import {
   faUnlockAlt, faCalendarCheck, faClock, faRunning, faRestroom, faPlus, faCopy, faTrashAlt, faShareAlt,
   faSlidersH, faEdit, faCheck, faCheckCircle, faTimesCircle, faArrowRight, faTshirt, faCalendarAlt, faBan, faPlay, faBell, faFlagCheckered
 } from '@fortawesome/free-solid-svg-icons';
+import { NgxSpinnerModule } from 'ngx-spinner';
 // import { faTimesCircle as farTimesCircle, faCalendarAlt } from '@fortawesome/free-regular-svg-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -35,7 +36,6 @@ import { MembersGameComponent } from './members-game/members-game.component';
 
 import { environment } from '../environments/environment';
 import { FbService } from './services/fb.service';
-import { ApiService } from './services/api.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { PusherService } from './services/pusher.service';
@@ -63,6 +63,7 @@ import { PusherService } from './services/pusher.service';
     ReactiveFormsModule,
     HttpClientModule,
     FontAwesomeModule,
+    NgxSpinnerModule,
     NgbModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
@@ -70,7 +71,6 @@ import { PusherService } from './services/pusher.service';
   ],
   providers: [
     PlaceDataService,
-    ApiService,
     FbService,
     AngularFirestore,
     AuthService,

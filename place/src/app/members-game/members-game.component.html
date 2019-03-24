@@ -1,20 +1,24 @@
 <app-a-header>
 </app-a-header>
 
-<div class="container">
+<ngx-spinner bdColor="#c1c1c1" size="large" color="#fff" type="ball-scale-multiple">
+</ngx-spinner>
+
+
+<div class="container" *ngIf="!loading">
     <p class="path">
-        <a [routerLink]="['/groups']" [queryParams]="{place_id: place.id}">
-      {{place.title}}
-    </a>
+        <a [routerLink]="['/groups']" [queryParams]="{place_id: game.place.id}">
+            {{game.place.title}}
+        </a>
         <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span>
-        <a [routerLink]="['/gamesg']" [queryParams]="{place_id:place.id, group_id:group.id}">
-      {{group.title}}
-    </a>
+        <a [routerLink]="['/gamesg']" [queryParams]="{place_id:game.place.id, group_id:game.group.id}">
+            {{game.group.title}}
+        </a>
         <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span> Spielrunde {{ game.dt | date:'dd.MM.yyyy' }}
     </p>
     <div class="row no-gutters">
         <div class="col-6">
-            <h3>{{place.title}}</h3>
+            <h3>{{game.place.title}}</h3>
             <p class="text-left text-secondary">
                 <fa-icon icon="calendar-check" class=""></fa-icon>
                 {{ game.dt | date:'EEEE, dd.MM.yyyy' }}

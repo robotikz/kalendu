@@ -21,10 +21,7 @@ const routes: Routes = [
     pathMatch: 'full',
     canActivate: [
     //   CanActivatePlacesGuard
-    ],
-    resolve: {
-      places: ResolverPlaces
-    }
+    ]
   },
   {
     path: 'sign-in',
@@ -35,10 +32,7 @@ const routes: Routes = [
     component: PlacesComponent,
     canActivate: [
     //   CanActivatePlacesGuard
-    ],
-    resolve: {
-      places: ResolverPlaces
-    }
+    ]
   },
   {
     path: 'groups',
@@ -68,9 +62,9 @@ const routes: Routes = [
     canActivate: [
     //   CanActivatePlacesGuard
     ],
-    resolve: {
-      data: ResolverGamesG
-    }
+    // resolve: {
+    //   data: ResolverGamesG
+    // }
   },
   {
     path: 'games/:id',
@@ -79,9 +73,9 @@ const routes: Routes = [
     canActivate: [
     //   CanActivatePlacesGuard
     ],
-    resolve: {
-      data: ResolverMembersGame
-    }
+    // resolve: {
+      // data: ResolverMembersGame
+    // }
   },
   {
     path: '**',

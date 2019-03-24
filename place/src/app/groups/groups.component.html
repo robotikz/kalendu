@@ -1,26 +1,28 @@
+<app-a-header>
+</app-a-header>
 
-<app-a-header></app-a-header>
+<ngx-spinner bdColor="#c1c1c1" size="large" color="#fff" type="ball-scale-multiple">
+</ngx-spinner>
 
-<div class="container">
-  <p class="path">
-    Orte
-    <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span>
-    <a [routerLink]="['/places']">
+<div class="container" *ngIf="!loading">
+    <p class="path">
+        Orte
+        <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span>
+        <a [routerLink]="['/places']">
       Spielstätten
     </a>
-    <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span>
-    Gruppen
-  </p>
-  <div class="row">
-    <div class="col-6">
-      <h3>Spielgruppen</h3>
+        <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span> Gruppen
+    </p>
+    <div class="row">
+        <div class="col-6">
+            <h3>Spielgruppen</h3>
+        </div>
+        <div class="col-6"></div>
     </div>
-    <div class="col-6"></div>
-  </div>
-   <div *ngFor="let group of groups">
-    <app-group-list-item [group]="group" [place]="place"></app-group-list-item>
-  </div>
-  
+    <div *ngFor="let group of groups">
+        <app-group-list-item [group]="group" [place]="place"></app-group-list-item>
+    </div>
+
 </div>
 
 <app-a-footer></app-a-footer>

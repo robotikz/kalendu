@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Place } from '../model/place';
 import { Observable, throwError, forkJoin } from 'rxjs';
-import { map, catchError, filter, tap, switchMap, mergeMap, flatMap, zip, combineAll, concatMap } from 'rxjs/operators';
+import { map, catchError, tap, concatMap } from 'rxjs/operators';
 import { Group } from '../model/group';
 import { Game } from '../model/game';
 import { Member } from '../model/member';
@@ -103,7 +103,7 @@ export class ApiService {
     return this.http
       .delete(API_URL + '/places/' + placeId, options)
       .pipe(
-        map(res => null),
+        map(() => null),
         catchError(this.handleError)
       );
   }
@@ -162,7 +162,7 @@ export class ApiService {
     return this.http
       .delete(API_URL + '/games/' + gameId, options)
       .pipe(
-        map(res => null),
+        map(() => null),
         catchError(this.handleError)
       );
   }
@@ -209,7 +209,7 @@ export class ApiService {
             return game;
           });
         }),
-        tap(games => {
+        tap(() => {
           // console.log(games);
         }),
         catchError(this.handleError)

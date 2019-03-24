@@ -1,7 +1,10 @@
 <app-a-header>
 </app-a-header>
 
-<div class="container">
+<ngx-spinner bdColor="#c1c1c1" size="large" color="#fff" type="ball-scale-multiple">
+</ngx-spinner>
+
+<div class="container" *ngIf="!loading">
     <p class="path">
         Orte
         <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span>
@@ -117,14 +120,14 @@
                         <div class="col-10 text-center">
                             <h3>Wann spielen wir? Datum</h3>
                             <div class="input-group mb-3">
-                                <input class="form-control" placeholder="dd.mm.yyyy" name="dt" autofocus (focus)="d.open()" [(ngModel)]="gameNew.dt" ngbDatepicker #d="ngbDatepicker" (keyup.enter)="dlggamenewCarousel.next()">
-                                <!-- <div class="input-group-append">
-                                        <div class="btn-group position-static">
-                                            <a class="btn fa-button" role="button" role="button" (click)="d.toggle()">
-                                                <fa-icon icon="calendar-alt" class="fa-btn" size="lg"></fa-icon>
-                                            </a>
-                                        </div>
-                                    </div> -->
+                                <input class="form-control" placeholder="dd.mm.yyyy" ngbAutofocus name="dt" [(ngModel)]="gameNew.dt" ngbDatepicker #d="ngbDatepicker" (keyup.enter)="dlggamenewCarousel.next()">
+                                <div class="input-group-append">
+                                    <div class="btn-group position-static">
+                                        <a class="btn fa-button" role="button" role="button" (click)="d.toggle()">
+                                            <fa-icon icon="calendar-alt" class="fa-btn" size="lg"></fa-icon>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-1"></div>

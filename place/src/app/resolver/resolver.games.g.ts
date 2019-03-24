@@ -26,10 +26,5 @@ export class ResolverGamesG implements Resolve<Observable<any>> {
             this.gameDataService.getAllGamesByGroupId(route.queryParams['group_id']),
             this.gameDataService.getLastGameByGroupId(route.queryParams['group_id'])
         ]);
-        // let place = this.placeDataService.getPlaceById(route.queryParams['place_id'])
-        // let games = this.gameDataService.getAllGamesByPlace(route.queryParams['place_id']);
-        // let data = {place: place, games: games};
-        // return of(data);
-        // return this.gameDataService.getAllGamesByPlace(route.queryParams['place_id']);
     }
 }

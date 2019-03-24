@@ -15,6 +15,10 @@ import { DeDateParserFormatter } from '../help/de-date-parser-formatter';
 import { environment } from 'src/environments/environment';
 import { SwPush } from '@angular/service-worker';
 import { PusherService } from '../services/pusher.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { forkJoin } from 'rxjs';
+import { PlaceDataService } from '../data-service/place-data.service';
+import { GroupDataService } from '../data-service/group-data.service';
 
 
 @Component({
@@ -30,6 +34,8 @@ import { PusherService } from '../services/pusher.service';
 })
 export class GamesGComponent implements OnInit {
 
+  loading = true;
+
   games: Game[] = [];
   place: Place;
   group: Group;
@@ -40,32 +46,34 @@ export class GamesGComponent implements OnInit {
 
   constructor(
     private gameDataService: GameDataService,
+    private placeDataService: PlaceDataService,
+    private groupDataServer: GroupDataService,
     private route: ActivatedRoute,
     private modalService: NgbModal,
     carouselConfig: NgbCarouselConfig,
     private swPush: SwPush,
     private pushService: PusherService,
+    private spinner: NgxSpinnerService,
   ) {
     carouselConfig.interval = 0;
   }
 
   ngOnInit() {
-    this.route.data
-      .pipe(
-        tap(data => console.log(data)),
-        map(data => {
-          const rdata = data['data'];
-          // let rdata = data['games'];
-          return rdata;
-        }),
-        tap(data => console.log(data)),
-      )
+    this.spinner.show();
+    // this.route.data
+    forkJoin([
+      this.placeDataService.getPlaceByGroupId(this.route.snapshot.queryParams['group_id']),
+      this.groupDataServer.getGroupById(this.route.snapshot.queryParams['group_id']),
+      this.gameDataService.getAllGamesByGroupId(this.route.snapshot.queryParams['group_id']),
+      this.gameDataService.getLastGameByGroupId(this.route.snapshot.queryParams['group_id'])
+    ])
       .subscribe(
         (data) => {
+          console.log('games-g - ngOnInit - ', data);
           this.place = data[0];
           this.group = data[1];
           this.games = data[2];
-          this.gameLast = data[3][0];
+          this.gameLast = data[3];
           if (!this.gameLast) {
             this.gameLast = new Game();
             this.gameLast.title = 'Freikick';
@@ -84,6 +92,8 @@ export class GamesGComponent implements OnInit {
               'second': 0
             };
           }
+          this.spinner.hide();
+          this.loading = false;
         }
       );
     this.swPush.notificationClicks.subscribe(payload => {

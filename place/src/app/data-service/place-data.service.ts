@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Place } from '../model/place';
-import { Observable } from 'rxjs';
-import { ApiService } from '../services/api.service';
+import { Observable, of } from 'rxjs';
 import { FbService } from '../services/fb.service';
 
 @Injectable({
@@ -16,7 +15,6 @@ export class PlaceDataService {
   // places: Place[] = [];
 
   constructor(
-    private api: ApiService,
     private fb: FbService
   ) {
 
@@ -27,18 +25,21 @@ export class PlaceDataService {
   }
 
   // Simulate POST /places
-  addPlace(place: Place): Observable<Place> {
-    return this.api.createPlace(place);
+  addPlace(): Observable<Place> {
+    // return this.fb.createPlace(place);
+    return of(null);
   }
 
   // Simulate DELETE /places/:id
-  deletePlaceById(placeId: number): Observable<Place> {
-    return this.api.deletePlaceById(placeId);
+  deletePlaceById(): Observable<Place> {
+    // return this.fb.deletePlaceById(placeId);
+    return of(null);
   }
 
   // Simulate PUT /places/:id
-  updatePlace(place: Place): Observable<Place> {
-    return this.api.updatePlace(place);
+  updatePlace(): Observable<Place> {
+    // return this.api.updatePlace(place);
+    return of(null);
   }
 
   // GET /places
@@ -62,6 +63,6 @@ export class PlaceDataService {
   // Toggle complete
   togglePlaceStatus(place: Place, status: number) {
     place.status = status;
-    return this.api.updatePlace(place);
+    // return this.fb.updatePlace(place);
   }
 }

@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Place } from '../model/place';
-
-import { map, tap, first } from 'rxjs/operators';
-
-import { ActivatedRoute, Router } from '@angular/router';
 import { PlaceDataService } from '../data-service/place-data.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-places',
@@ -13,33 +10,30 @@ import { PlaceDataService } from '../data-service/place-data.service';
 })
 export class PlacesComponent implements OnInit {
 
+  loading = true;
+
   places: Place[] = [];
 
   constructor(
-    private route: ActivatedRoute,
-    private placeDataService: PlaceDataService
+    private placeDataService: PlaceDataService,
+    private spinner: NgxSpinnerService,
   ) {
 
     console.log('places - constructor');
   }
 
   ngOnInit() {
-    console.log('places - ngOnInit');
-    // this.placeDataService.getAllPlaces()
-    this.route.data
-      .pipe(
-        // tap(data => console.log('data1')),
-        tap(data => console.log(data)),
-        map(data => data['places']),
-        tap(data => console.log(data)),
-      )
+    this.spinner.show();
+    this.placeDataService.getAllPlaces()
+      // this.route.data
       .subscribe(
-        (places) => {
-          // console.log('subscribe'),
-          this.places = places;
+        (d) => {
+          console.log('ngOnInit - getAllPlaces - ', d);
+          this.places = d;
+          this.spinner.hide();
+          this.loading = false;
         }
       );
-    console.log('places - ngOnInit2');
   }
 
 }

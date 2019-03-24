@@ -1,16 +1,15 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 import { Member } from '../model/member';
-import { Place } from '../model/place';
 import { Game } from '../model/game';
-import { Group } from '../model/group';
 import { GameDataService } from '../data-service/game-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, interval, Observable } from 'rxjs';
-import { mergeMap, groupBy, flatMap, tap, map, filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { interval, Observable } from 'rxjs';
+import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 // import { FormControl } from '@angular/forms';
 
 import { NgbModal, NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
 // import $ from 'jquery';
 // declare var $: any;
 
@@ -22,12 +21,13 @@ import { NgbModal, NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 })
 export class MembersGameComponent implements OnInit, AfterViewInit {
 
+  loading = true;
   // memberNickInput: FormControl;
   // memberNickSuggestions: string[] = [];
 
   game: Game;
-  place: Place;
-  group: Group;
+  // place: Place;
+  // group: Group;
   membersa: Member[] = [];
   membersi: Member[] = [];
   membersd: Member[] = [];
@@ -57,13 +57,13 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
       })
     )
 
-
   constructor(
     private gameDataService: GameDataService,
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
-    carouselConfig: NgbCarouselConfig
+    carouselConfig: NgbCarouselConfig,
+    private spinner: NgxSpinnerService,
   ) {
     carouselConfig.interval = 0;
   }
@@ -71,11 +71,10 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
   // setValue() { this.memberNickInput.setValue('new value'); }
 
   ngOnInit() {
+    this.spinner.show();
     // this.memberNickInput = new FormControl('');
-    this.route.data
-      .pipe(
-        map(data => data['data']),
-      )
+    // this.route.data
+    this.gameDataService.getGameById(this.route.snapshot.paramMap.get('id'))
       .subscribe(
         (data) => {
           // this.place = place;
@@ -83,9 +82,9 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
           // console.log(this.group);
           // console.log(this.place);
           console.log(data);
-          this.game = data[0];
-          this.group = data[1];
-          this.place = data[2];
+          this.game = data;
+          // this.group = this.game.group;
+          // this.place = this.game.place;
           this.membersInit();
           this.dtDeadline = new Date(this.game.dt);
           // this.dtDeadline.setHours(this.game.dt.getHours() - this.game.deadline);
@@ -101,6 +100,8 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
           ).subscribe((dt) => {
             this.dhms(dt);
           });
+          this.spinner.hide();
+          this.loading = false;
         }
       );
 
@@ -220,7 +221,7 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
     this.gameDataService
       .updateMember(this.game, member)
       .subscribe(
-        (game) => {
+        () => {
           // this.game = game;
         }
       );

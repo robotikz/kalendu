@@ -1,8 +1,8 @@
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { Observable, of, from, forkJoin } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable, of, forkJoin } from 'rxjs';
 import { Place } from '../model/place';
 import { Injectable } from '@angular/core';
-import { map, mergeMap, combineLatest, tap, first, switchMap, concatMap } from 'rxjs/operators';
+import { map, mergeMap, first, concatMap } from 'rxjs/operators';
 import { Group } from '../model/group';
 import { Game } from '../model/game';
 import { Member } from '../model/member';
@@ -22,38 +22,6 @@ export class FbService {
     return this.afs.createId();
   }
 
-  // API: GET /places
-  public getAllPlaces2(): Observable<Place[]> {
-    return this.afs.collection<Place>('places').snapshotChanges()
-      .pipe(
-        map(docs => docs.map(doc => {
-          // console.log(doc);
-          const data = doc.payload.doc.data() as Place;
-          const id = doc.payload.doc.id;
-          const r = { id, ...data };
-          // console.log(`places/${id}/sports`);
-          // console.log(r);
-          const place = new Place(r);
-          // console.log(place);
-          this.afs
-            .collection<any>(`places/${id}/sports`)
-            .valueChanges().pipe(
-              map(sports => {
-                // console.log(sports);
-                place.sports = sports;
-                return place;
-                // return { ...r, sports: sports };
-              })
-            ).subscribe();
-          // return r;
-          // const places = res as Place[];
-          // return places.map((place) => new Place(place));
-          return place;
-        })),
-        first(),
-        // tap(data => console.log(data))
-      );
-  }
 
   // API: GET /places/:id
   public getPlaceById(placeId: string): Observable<Place> {
@@ -76,7 +44,7 @@ export class FbService {
     return this.afs.collection<any>('places').snapshotChanges().pipe(
       map(docs => {
         const res = docs.map(doc => {
-          // console.log(doc);
+          console.log(doc);
           const data = doc.payload.doc.data(); // as Place;
           const id = doc.payload.doc.id;
           const r = { id, ...data };
@@ -149,19 +117,19 @@ export class FbService {
   // ######################################################################
   // API: GET /groups
   public getAllGroupsByPlace(placeId: string): Observable<Group[]> {
-    // return this.db.doc<Place>('places/' + placeId).collection<Group>('groups').snapshotChanges().pipe(
-    return this.afs.collection<Group>('groups', ref => ref.where('place_id', '==', placeId)).snapshotChanges().pipe(
-      map(docs => docs.map(doc => {
-        // console.log(doc);
-        const data = doc.payload.doc.data() as Group;
-        const id = doc.payload.doc.id;
-        const r = { id, ...data };
-        const group = new Group(r);
-        // console.log(r);
-        return group;
-      })),
-      first()
-    );
+    return this.afs.collection<Group>('groups', ref =>
+      ref.where('place_id', '==', placeId)).snapshotChanges().pipe(
+        map(docs => docs.map(doc => {
+          // console.log(doc);
+          const data = doc.payload.doc.data() as Group;
+          const id = doc.payload.doc.id;
+          const r = { id, ...data };
+          const group = new Group(r);
+          // console.log(r);
+          return group;
+        })),
+        first()
+      );
   }
 
   // API: GET /groups/:id
@@ -194,6 +162,20 @@ export class FbService {
           console.log(game);
           return game;
         })),
+        concatMap(games => {
+          const gameObservables = games.map(game => {
+            return this.afs
+              .collection<any>(`games/${game.id}/members`)
+              .valueChanges().pipe(
+                map(members => {
+                  const rr = { ...game, members: members };
+                  return rr;
+                }),
+                first()
+              );
+          });
+          return forkJoin(...gameObservables);
+        }),
         first()
       );
   }
@@ -207,23 +189,41 @@ export class FbService {
         const data = doc.payload.data();
         const id = doc.payload.id;
         const r = { id, ...data };
-        const game = new Game(r);
-        this.afs
-          .collection<Member>(`games/${id}/members`)
-          .snapshotChanges().pipe(
-            map(members => {
-              // console.log(sports);
-              game.members = members.map((member) => {
-                // tslint:disable-next-line:no-shadowed-variable
-                const id = member.payload.doc.id;
-                return new Member({ id, ...member.payload.doc.data() });
-              });
-              return game;
-              // return { ...r, sports: sports };
-            })
-          ).subscribe();
-        return game;
+        // const game = new Game(r);
+        return r;
       }),
+      concatMap(game => {
+        return this.afs
+          .collection<any>(`games/${game.id}/members`)
+          .valueChanges().pipe(
+            map(members => {
+              const rr = { ...game, members: members };
+              return rr;
+            }),
+            first()
+          );
+      }),
+      concatMap(game => {
+        return this.afs
+          .doc<any>(`places/${game.place_id}`)
+          .valueChanges().pipe(
+            map(place => {
+              return { ...game, place: place as Place };
+            }),
+            first()
+          );
+      }),
+      concatMap(game => {
+        return this.afs
+          .doc<any>(`groups/${game.group_id}`)
+          .valueChanges().pipe(
+            map(group => {
+              return { ...game, group: group as Group };
+            }),
+            first()
+          );
+      }),
+      concatMap(game => of(new Game(game))),
       first()
     );
   }
@@ -238,14 +238,6 @@ export class FbService {
   public updateGame(game: Game): Observable<Game> {
     this.afs.collection<Game>('games').doc(game.id).update(game.toJSON());
     return of();
-    // return this.http
-    //   .put(API_URL + '/games/' + game.id, game, options)
-    //   .pipe(
-    //     map(res => {
-    //       return new Game(res);
-    //     }),
-    //     catchError(this.handleError)
-    //   );
   }
 
   // API: PUT /game/:id
@@ -267,10 +259,5 @@ export class FbService {
     this.afs.collection<Game>('games').doc(game.id).collection('members').doc(member.id).set(Object.assign({}, member));
     return of();
   }
-
-  // private handleError(error: HttpErrorResponse | any) {
-  //     console.error('ApiService::handleError', error);
-  //     return throwError(error);
-  // }
 
 }

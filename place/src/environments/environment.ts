@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: true,
+  production: false,
   // URL of development API
   apiUrlLocal: 'http://localhost:443',
   firebase: {

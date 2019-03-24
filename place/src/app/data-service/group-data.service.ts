@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Group } from '../model/group';
 import { Observable } from 'rxjs';
-import { ApiService } from '../services/api.service';
 import { FbService } from '../services/fb.service';
 
 @Injectable({
@@ -16,7 +15,6 @@ export class GroupDataService {
   // groups: Group[] = [];
 
   constructor(
-    private api: ApiService,
     private fb: FbService
   ) {
 

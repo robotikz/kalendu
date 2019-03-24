@@ -46,11 +46,11 @@ export class PusherService {
       place_id: pid
     };
     return this.http.post(environment.pushurl + '/sendnotifications', su, httpOptions);
-    // console.log('post sendNotifications2 - ' + environment.pushurl + '/sendnotifications'); 
+    // console.log('post sendNotifications2 - ' + environment.pushurl + '/sendnotifications');
   }
 }
 
-interface PushSub extends PushSubscription {
-  group_id?: string;  // you can cast any Given to this and set .props
-  active?: number;
-}
+// interface PushSub extends PushSubscription {
+//   group_id?: string;  // you can cast any Given to this and set .props
+//   active?: number;
+// }

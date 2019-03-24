@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Game } from '../model/game';
-import { Observable, forkJoin } from 'rxjs';
-import { ApiService } from '../services/api.service';
-import { switchMap, mergeMap, flatMap, tap, map, filter } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { FbService } from '../services/fb.service';
 import { Member } from '../model/member';
-import { fbind } from 'q';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +16,7 @@ export class GameDataService {
 
   games: Game[] = [];
 
-  constructor(private api: ApiService, private fb: FbService) {
+  constructor(private fb: FbService) {
 
   }
 
@@ -33,7 +31,7 @@ export class GameDataService {
 
   // PUT /games/:id
   updateGame(game: Game): Observable<Game> {
-    return this.api.updateGame(game);
+    return this.fb.updateGame(game);
   }
 
   // DELETE /games/:id
@@ -42,34 +40,22 @@ export class GameDataService {
   }
 
   // Simulate GET /games
-  getAllGamesByPlace(place_id: string): Observable<Game[]> {
-    return this.api.getAllGamesByPlace(place_id)
-      .pipe(
-        // tap(data => console.log("1")),
-        // tap(data => console.log(data)),
-        map(data => {
-          // let datas = data['games'];
-          let rdata = [];
-          data.forEach(da => {
-            rdata = rdata.concat(da);
-          });
-          rdata = rdata.sort(function (a, b) { return b.dt > a.dt ? -1 : b.dt < a.dt ? 1 : 0; });
-          rdata = rdata.filter(function (a) { return new Date() < a.dt; });
-          // console.log(finalResult)
-          return rdata;
-        }),
-        // tap(data => console.log("2")),
-        // tap(data => console.log(data)),
-      );
-    // .pipe(
-    //   flatMap(games => {
-    //     // map every user into an array of observable requests
-    //     let gamesObservables: Observable<Game>[] = [];
-    //     gamesObservables = games.map(game => this.api.getGroupById(game.group_id));
-    //     return forkJoin(...gamesObservables);
-    //   })
-    // );
-  }
+  // getAllGamesByPlace(place_id: string): Observable<Game[]> {
+  //   return this.api.getAllGamesByPlace(place_id)
+  //     .pipe(
+  //       map(data => {
+  //         // let datas = data['games'];
+  //         let rdata = [];
+  //         data.forEach(da => {
+  //           rdata = rdata.concat(da);
+  //         });
+  //         rdata = rdata.sort(function (a, b) { return b.dt > a.dt ? -1 : b.dt < a.dt ? 1 : 0; });
+  //         rdata = rdata.filter(function (a) { return new Date() < a.dt; });
+  //         // console.log(finalResult)
+  //         return rdata;
+  //       }),
+  //     );
+  // }
 
 
   // GET /games
@@ -88,17 +74,18 @@ export class GameDataService {
   }
 
   // FIXME: better with HTTP request filter!!!
-  getLastGameByGroupId(group_id: string): Observable<Game[]> {
+  getLastGameByGroupId(group_id: string): Observable<Game> {
     return this.fb.getAllGamesByGroupId(group_id)
       .pipe(
         map(data => {
-          const rdata = [];
+          // const rdata = [];
           if (data.length > 0) {
             data = data.sort(function (a, b) { return b.dt > a.dt ? -1 : b.dt < a.dt ? 1 : 0; });
             data = data.filter(function (a) { return new Date() > a.dt; });
-            rdata.push(data[data.length - 1]);
+            // rdata.push(data[data.length - 1]);
+            return data[data.length - 1];
           }
-          return rdata;
+          // return rdata;
         }),
       );
   }
