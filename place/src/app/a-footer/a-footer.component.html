@@ -1,26 +1,14 @@
-<div class="container jumbotron jumbotron-footer text-center bg-dark mb-0 mt-4" style="margin-bottom:0">
-    <div class="row">
-        <div class="col-3">
-            <ul class="nav justify-content-start">
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="http://web-service-as.de/" target="_blank">Web Service AS 2019</a>
-                </li>
-            </ul>
-        </div>
-        <div class="col-3">
-        </div>
-        <div class="col-6">
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Über</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Datenschutz</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Impressum</a>
-                </li>
-            </ul>
+<footer class="footer mt-auto kalendu-footer mt-3">
+    <div class="container-fluid kalendu-footer-legal p-1">
+        <div class="container">
+            <div class="d-flex flex-row kalendu-footer-links justify-content-between">
+                <div class="footer-copyright">
+                    &copy; {{dtnow | date:'yyyy'}} <a href="https://web-service-as.de" target="_blank">Web-Service AS</a>
+                </div>
+                <div class="footer-legal-links">
+                    <a href="">Über</a> | <a href="">Datenschutz</a> | <a href="">Impressum</a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</footer>

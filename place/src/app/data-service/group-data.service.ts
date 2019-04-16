@@ -34,4 +34,24 @@ export class GroupDataService {
     return this.fb.getGroupById(group_id);
   }
 
+  // Simulate GET /places/:id
+  getGroupByAccessId(group_id: string): Observable<Group> {
+    return this.fb.getGroupByAccessId(group_id);
+  }
+
+  // PUT /games/:id
+  updateGroup(group: Group): Observable<any> {
+    return this.fb.updateGroup(group);
+  }
+
+  // PUT /games/:id
+  createGroup(group: Group): Observable<any> {
+    return this.fb.createGroup(group);
+  }
+
+  removeGroup(group: Group): Observable<any> {
+    return this.fb.removeGroup(group);
+  }
+
+
 }

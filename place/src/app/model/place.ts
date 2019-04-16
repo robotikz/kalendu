@@ -1,20 +1,28 @@
-import {Sport} from './sport';
+import { Sport } from './sport';
 
 export class Place {
-    id: string;
-    title = '';
-    info = '';
-    city = '';
-    zip = '';
-    state = '';
-    street = '';
-    nr = '';
-    status = 1;
-    sports: Sport[] = [];
+  id: string;
+  title = '';
+  info = '';
+  city = '';
+  zip = '';
+  state = '';
+  street = '';
+  nr = '';
+  status = 1;
+  sports: Sport[] = [];
 
-    constructor(values: Object = {}) {
-      Object.assign(this, values);
-    }
+  // access ids
+  aowner: string;
+  amember: string;
+
+  constructor(values: Object = {}) {
+    Object.assign(this, values);
+  }
+
+  toJSON() {
+    return Object.assign({}, this);
+  }
 }
 
 

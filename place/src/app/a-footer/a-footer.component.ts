@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AFooterComponent implements OnInit {
 
+  dtnow: Date = new Date();
+
   constructor() { }
 
   ngOnInit() {

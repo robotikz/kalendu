@@ -40,9 +40,9 @@ const routes: Routes = [
     canActivate: [
     //   CanActivatePlacesGuard
     ],
-    resolve: {
-      data: ResolverGroups
-    }
+    // resolve: {
+    //   data: ResolverGroups
+    // }
   },
   {
     path: 'games',
@@ -51,9 +51,9 @@ const routes: Routes = [
     canActivate: [
     //   CanActivatePlacesGuard
     ],
-    resolve: {
-      data: ResolverGames
-    }
+    // resolve: {
+    //   data: ResolverGames
+    // }
   },
   {
     path: 'gamesg',
@@ -67,7 +67,7 @@ const routes: Routes = [
     // }
   },
   {
-    path: 'games/:id',
+    path: 'gamem',
     pathMatch: 'full',
     component: MembersGameComponent,
     canActivate: [
@@ -77,6 +77,17 @@ const routes: Routes = [
       // data: ResolverMembersGame
     // }
   },
+  // {
+  //   path: 'games/:id',
+  //   pathMatch: 'full',
+  //   component: MembersGameComponent,
+  //   canActivate: [
+  //   //   CanActivatePlacesGuard
+  //   ],
+  //   // resolve: {
+  //     // data: ResolverMembersGame
+  //   // }
+  // },
   {
     path: '**',
     component: APageNotFoundComponent

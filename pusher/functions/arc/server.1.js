@@ -4,8 +4,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fbadmin = require('firebase-admin');
 const util = require('util');
-const n = require('./notifications.js');
-const fbs = require('./fbs.js');
+const n = require('../notifications.js');
+const fbs = require('../fbs.js');
 
 
 // const tunnel = require('tunnel2')
@@ -75,6 +75,7 @@ app.post('/subscription', (req, res) => {
                     message: 'Subscription ' + subscription.keys.auth + ' exists.'
                 });
             }
+            return null;
         })
         .catch((err) => {
             console.log('Error getting notifications', err);
@@ -115,13 +116,15 @@ app.post('/sendnotifications', (req, res) => {
                             message: 'Newsletter sent successfully.',
                             promises: promises
                         })
+                        return null;
                     })
                     .catch(err => {
                         console.error('Error sending notification, reason: ', err);
                         res.sendStatus(500);
+                        return null;
                     });
             }
-
+            return null;
         })
         .catch((err) => {
             console.log('Error getting notifications', err);
@@ -153,6 +156,7 @@ app.get('/all', (req, res) => {
             });
             // console.log(r);
             res.status(200).json(r);
+            return null;
         })
         .catch((err) => {
             console.log('Error getting documents', err);
@@ -180,4 +184,4 @@ function normalizePort(val) {
         return port;
     }
     return false;
-};
+}

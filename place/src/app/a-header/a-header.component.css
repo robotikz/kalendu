@@ -1,3 +1,21 @@
-a.header-link {
-    color: #FFF51C;
+@charset "utf-8";
+
+/* CSS FOR HEADER */
+
+.kalendu-fixed-header-bg {
+  background: #5AA8C2;
+}
+
+.kalendu-header-logo {
+  padding-bottom: 4px;
+  width: 30px;
+}
+
+.kalendu-header-link {
+  color: #FFF51C;
+  cursor: pointer;
+}
+
+.dropdown-toggle::after {
+  content: initial;
 }

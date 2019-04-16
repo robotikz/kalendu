@@ -12,7 +12,7 @@ export class Game {
     min: number;
     max: number;
     deadline: number;
-    play: number;
+    play = 1; // play - 1, play anyway - 2, cancel - 9
     // t: Date;
     group_id: string;
     group: Group;
@@ -23,6 +23,12 @@ export class Game {
     dtt: { 'hour': number; 'minute': number; 'second': number; };
     // ddd: Date;
     ddt: { 'hour': number; 'minute': number; 'second': number; };
+
+    status = 1; // open - 1, closed-5
+
+    // access ids
+    aowner: string;
+    amember: string;
 
     constructor(values: any = {}) {
         Object.assign(this, values);

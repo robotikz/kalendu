@@ -1,11 +1,12 @@
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, of, forkJoin } from 'rxjs';
+import { Observable, of, forkJoin, from, zip } from 'rxjs';
 import { Place } from '../model/place';
 import { Injectable } from '@angular/core';
 import { map, mergeMap, first, concatMap } from 'rxjs/operators';
 import { Group } from '../model/group';
 import { Game } from '../model/game';
 import { Member } from '../model/member';
+import * as firebase from 'firebase/app';
 
 
 
@@ -20,6 +21,27 @@ export class FbService {
 
   public uid(): string {
     return this.afs.createId();
+  }
+
+  get timestamp() {
+    return firebase.firestore.FieldValue.serverTimestamp();
+  }
+
+  private toJCreate(data: any) {
+    const timestamp = this.timestamp;
+    return {
+      ...data,
+      updatedAt: timestamp,
+      createdAt: timestamp,
+    };
+  }
+
+  private toJUpdate(data: any) {
+    const timestamp = this.timestamp;
+    return {
+      ...data,
+      updatedAt: timestamp,
+    };
   }
 
 
@@ -80,6 +102,9 @@ export class FbService {
               first()
             );
         });
+        if (placeObservables.length === 0) {
+          return of([]); // The workaround is to check the length of the list and to not use this operator when it is empty.
+        }
         return forkJoin(...placeObservables);
       }),
       first()
@@ -88,6 +113,7 @@ export class FbService {
 
   // API: GET /groups/:id/places/:id
   public getPlaceByGroupId(groupId: string): Observable<Place> {
+    console.log('getPlaceByGroupId - groupId - ', groupId);
     return this.afs.doc<Group>('groups/' + groupId).snapshotChanges().pipe(
       map(doc => {
         const data = doc.payload.data();
@@ -145,11 +171,131 @@ export class FbService {
     );
   }
 
+  // API: GET /groups/:id
+  public getGroupByAccessId(groupId: string): Observable<Group> {
+    return this.afs.collection<Group>('groups', ref =>
+      ref.where('aowner', '==', groupId).limit(1)).valueChanges().pipe(
+        map(docs => {
+          if (docs.length) {
+            return new Group(docs.pop());
+          } else {
+            return null;
+          }
+        }),
+        concatMap(group => {
+          console.log('getGroupByAccessId - aowner - ', group);
+          if (group) {
+            return of(group);
+          } else {
+            return this.afs.collection<Group>('groups', ref =>
+              ref.where('amember', '==', groupId).limit(1)).valueChanges().pipe(
+                map(docs => {
+                  if (docs.length) {
+                    return new Group(docs.pop());
+                  } else {
+                    return null;
+                  }
+                }),
+                first()
+              );
+          }
+        }),
+        concatMap(group => {
+          console.log('getGroupByAccessId - amember - ', group);
+          if (group) {
+            return of(group);
+          } else {
+            return this.afs.doc<Group>('groups/' + groupId).valueChanges().pipe(
+              map(doc => {
+                console.log('getGroupByAccessId - id - doc - ', doc);
+                if (!doc) {return null; }
+                if (doc.status === 1) {
+                  return new Group(doc);
+                } else {
+                  return null;
+                }
+              }),
+              first()
+            );
+          }
+        }),
+        first()
+      );
+  }
+
+  // API: PUT /game/:id
+  public updateGroup(group: Group) {
+    return from(
+      this.afs.collection<Game>('groups').doc(group.id).update(this.toJUpdate(group.toJSON()))
+        .then(() => {
+          return group.id;
+        })
+    );
+  }
+
+  // API: PUT /game/:id
+  public createGroup(group: Group) {
+    return from(
+      this.afs.collection<Game>('groups').doc(group.id).set(this.toJCreate(group.toJSON()))
+        .then(() => {
+          return group.id;
+        })
+    );
+  }
+
+  // API: 
+  public removeGroup(group: Group) {
+    // remove group
+    const o1 = from(
+      this.afs.collection('groups').doc(group.id).delete()
+        .then(() => {
+          return 'group-' + group.id;
+          // throw new Error('Error: set document-2');
+        }).catch((e) => {
+          console.error('Error removing document: ', e);
+          throw new Error('Error: remove document');
+        })
+    );
+    // remove games
+    const o2 = this.afs.collection('games', ref => ref.where('group_id', '==', group.id))
+      .snapshotChanges()
+      .pipe(
+        map(docs => docs.map(doc => {
+          const uid = doc.payload.doc.id;
+          return uid;
+        })),
+        concatMap(uids => {
+          console.log('remGroup - concatMap-games', uids);
+          const oRemove = uids.map(uid => {
+            return this.afs.collection('games').doc(uid).delete()
+              .then(() => {
+                return 'game-' + uid;
+                // throw new Error('Error: set document-2');
+              }).catch((e) => {
+                console.error('Error removing document: ', e);
+                throw new Error('Error: remove document');
+              });
+          });
+          console.log('remGroup - oRemove', oRemove);
+          if (oRemove.length === 0) {
+            return of([]); // The workaround is to check the length of the list and to not use this operator when it is empty.
+          }
+          return zip(...oRemove);
+        }),
+        // first()
+      );
+      return zip(o1, o2);
+  }
+
+
+  // ######################################################################
+  // ######################################################################
+
   // API: GET /games/:group_id
   public getAllGamesByGroupId(groupId: string): Observable<Game[]> {
-    // console.log('groupId' + groupId);
+    console.log('getAllGamesByGroupId - groupId - ', groupId);
     return this.afs.collection<Game>('games', ref =>
-      ref.where('group_id', '==', groupId)).snapshotChanges().pipe(
+      ref.where('group_id', '==', groupId).where('dt', '>', new Date()).orderBy('dt', 'asc')).snapshotChanges().pipe(
         map(docs => docs.map(doc => {
           console.log('getAllGamesByGroupId');
           console.log(doc.payload.doc.data());
@@ -163,18 +309,40 @@ export class FbService {
           return game;
         })),
         concatMap(games => {
+          console.log('getAllGamesByGroupId - games - ', games);
           const gameObservables = games.map(game => {
             return this.afs
               .collection<any>(`games/${game.id}/members`)
               .valueChanges().pipe(
                 map(members => {
                   const rr = { ...game, members: members };
-                  return rr;
+                  return new Game(rr);
                 }),
                 first()
               );
           });
+          if (gameObservables.length === 0) {
+            return of([]); // The workaround is to check the length of the list and to not use this operator when it is empty.
+          }
           return forkJoin(...gameObservables);
+        }),
+        first()
+      );
+  }
+
+
+  // API: GET /games/:group_id
+  public getLastGameByGroupId(groupId: string): Observable<Game> {
+    // console.log('getLastGameByGroupId - groupId - ', groupId);
+    return this.afs.collection<Game>('games', ref =>
+      ref.where('group_id', '==', groupId).orderBy('dt', 'desc').limit(1)).valueChanges().pipe(
+        map(docs => {
+          const games = docs.map(doc => {
+            console.log('getLastGameByGroupId - ', doc);
+            const game = new Game(doc);
+            return game;
+          });
+          return games.pop();
         }),
         first()
       );
@@ -229,35 +397,55 @@ export class FbService {
   }
 
   // API: PUT /games/:id/
-  public createGame(game: Game): Observable<Game> {
-    this.afs.collection<Game>('games').doc(game.id).set(game.toJSON());
-    return of();
+  public createGame(game: Game) {
+    return from(
+      this.afs.collection<Game>('games').doc(game.id).set(this.toJCreate(game.toJSON()))
+        .then(() => {
+          return game.id;
+        })
+    );
   }
 
   // API: PUT /game/:id
-  public updateGame(game: Game): Observable<Game> {
-    this.afs.collection<Game>('games').doc(game.id).update(game.toJSON());
-    return of();
+  public updateGame(game: Game) {
+    return from(
+      this.afs.collection<Game>('games').doc(game.id).update(this.toJUpdate(game.toJSON()))
+        .then(() => {
+          return game.id;
+        })
+    );
   }
 
   // API: PUT /game/:id
-  public removeGame(gameId: string): Observable<Game> {
-    this.afs.collection<Game>('games').doc(gameId).delete();
-    return of();
+  public removeGame(gameId: string) {
+    return from(
+      this.afs.collection<Game>('games').doc(gameId).delete()
+        .then(() => {
+          return gameId;
+        })
+    );
   }
 
   // API: PUT /games/:id/members/:id
-  public updateMember(game: Game, member: Member): Observable<Game> {
-    // console.log(Object.assign({}, member))
-    this.afs.collection<Game>('games').doc(game.id).collection('members').doc(member.id).update(Object.assign({}, member));
-    return of();
+  public updateMember(game: Game, member: Member) {
+    return from(
+      this.afs.collection<Game>('games').doc(game.id).collection('members')
+        .doc(member.id).update(this.toJUpdate(member.toJSON()))
+        .then(() => {
+          return game.id;
+        })
+    );
   }
 
   // API: PUT /games/:id/members/:id
-  public createMember(game: Game, member: Member): Observable<Game> {
-    // console.log(Object.assign({}, member))
-    this.afs.collection<Game>('games').doc(game.id).collection('members').doc(member.id).set(Object.assign({}, member));
-    return of();
+  public createMember(game: Game, member: Member) {
+    return from(
+      this.afs.collection<Game>('games').doc(game.id).collection('members')
+        .doc(member.id).set(this.toJCreate(member.toJSON()))
+        .then(() => {
+          return game.id;
+        })
+    );
   }
 
 }

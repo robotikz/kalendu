@@ -10,7 +10,20 @@ export class Group {
     place: Place;
     camisole = false;
     ball = false;
+
+    status = 1;
+
+    owner: string; // email of owner
+    member: [] = [];  // email of members
+    // access ids
+    aowner: string;
+    amember: string;
+
     constructor(values: Object = {}) {
         Object.assign(this, values);
+    }
+
+    toJSON() {
+        return Object.assign({}, this);
     }
 }

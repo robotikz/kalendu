@@ -1,4 +1,5 @@
-const url_ap = 'http://localhost:8080';
+// const url_ap = 'http://localhost:8080';
+const url_ap = 'https://kalendu.de';
 
 exports.notificationPayload = {
     notification: {
@@ -8,7 +9,7 @@ exports.notificationPayload = {
         badge: url_ap + '/assets/icons/icon-72x72.png',
         vibrate: [100, 50, 100],
         data: {
-            url_group: url_ap + '/gamesg?group_id=%s&place_id=%s',
+            url_group: url_ap + '/gamesg;group_id=%s&place_id=%s',
         },
         actions: [{
                 action: 'open_group',

@@ -1,6 +1,27 @@
-<nav class="container navbar navbar-dark fixed-top bg-info">
-    <h2> <a class="header-link" [routerLink]="[ '/' ]" routerLinkActive="active">KALENDU.de</a></h2>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-</nav>
+<header>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top kalendu-fixed-header-bg">
+        <div class="container">
+            <a class="navbar-brand kalendu-header-link" [routerLink]="[ '/' ]" routerLinkActive="active">
+                <img src="assets/images/kalendu-logo-30x30.png" class="kalendu-header-logo pr-1"> Kalendu
+            </a>
+            <div class="" ngbDropdown placement="bottom-right">
+                <button class="navbar-toggler" type="button" ngbDropdownToggle>
+                    <i class="navbar-toggler-icon"></i>
+                </button>
+                <div class="dropdown-menu" ngbDropdownMenu placement="bottom-right">
+                    <div class="dropdown-item">
+                        <a class="nav-link" [routerLink]="['/places']">Orte</a>
+                    </div>
+                    <div class="dropdown-item">
+                        <a class="nav-link" href="#">Gruppen</a>
+                    </div>
+                    <div class="dropdown-item">
+                        <a class="nav-link" href="#">Runden</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- /Fixed navbar -->
+</header>

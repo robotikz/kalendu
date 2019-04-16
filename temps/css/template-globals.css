@@ -1,0 +1,33 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* GLOBAL CSS */
+
+html, body {
+	width:100% !important;
+	height: 100% !important;
+}
+.card-title {
+	margin-bottom:0px !important;
+}
+h1 {
+	font-size:20px !important;
+}
+h2 {
+	font-size:18px !important;
+}
+h6 {
+	text-transform: capitalize!important;
+	color:#3EA2A2 !important;
+}
+.word-wrap {
+	overflow-wrap: break-word;
+ 	word-wrap: break-word;
+  	hyphens: auto;
+}
+
+.breadcrumb {
+	background-color:white !important;
+	margin-bottom:0px !important;
+	padding-top:0.25rem !important;
+}

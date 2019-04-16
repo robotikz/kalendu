@@ -1,14 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import {
-  faFutbol, faHockeyPuck, faEuroSign, faMapMarkerAlt, faLocationArrow, faLock, faEnvelope,
-  faUnlockAlt, faCalendarCheck, faClock, faRunning, faRestroom, faPlus, faCopy, faTrashAlt, faShareAlt,
-  faSlidersH, faEdit, faCheck, faCheckCircle, faTimesCircle, faArrowRight, faTshirt, faCalendarAlt, faBan, faPlay, faBell, faFlagCheckered
-} from '@fortawesome/free-solid-svg-icons';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { AngularDraggableModule } from 'angular2-draggable';
 // import { faTimesCircle as farTimesCircle, faCalendarAlt } from '@fortawesome/free-regular-svg-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -39,6 +33,7 @@ import { FbService } from './services/fb.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { PusherService } from './services/pusher.service';
+import { OOPipe } from './help/oo.pipe';
 
 @NgModule({
   declarations: [
@@ -54,7 +49,8 @@ import { PusherService } from './services/pusher.service';
     GamesComponent,
     GameListItemComponent,
     GamesGComponent,
-    MembersGameComponent
+    MembersGameComponent,
+    OOPipe
   ],
   imports: [
     BrowserModule,
@@ -62,8 +58,8 @@ import { PusherService } from './services/pusher.service';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FontAwesomeModule,
     NgxSpinnerModule,
+    AngularDraggableModule,
     NgbModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
@@ -81,13 +77,5 @@ import { PusherService } from './services/pusher.service';
 })
 export class AppModule {
   constructor() {
-    // Add an icon to the library for convenient access in other components
-    library.add(faFutbol, faHockeyPuck, faEuroSign, faMapMarkerAlt, faLocationArrow,
-      faLock, faEnvelope, faUnlockAlt,
-      faCalendarCheck, faClock, faRunning, faRestroom,
-      faPlus, faCopy, faTrashAlt, faShareAlt, faSlidersH, faEdit,
-      faCheck, faCheckCircle, faTimesCircle,
-      faArrowRight, faTshirt, faCalendarAlt, faBan, faPlay,
-      faBell, faFlagCheckered);
   }
 }

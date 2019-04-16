@@ -4,25 +4,163 @@
 <ngx-spinner bdColor="#c1c1c1" size="large" color="#fff" type="ball-scale-multiple">
 </ngx-spinner>
 
-<div class="container" *ngIf="!loading">
-    <p class="path">
-        Orte
-        <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span>
-        <a [routerLink]="['/places']">
+<div class="container kalendu-main-section" *ngIf="!loading">
+  <p class="path">
+    Orte
+    <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span>
+    <a [routerLink]="['/places']">
       Spielstätten
     </a>
-        <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span> Gruppen
-    </p>
-    <div class="row">
-        <div class="col-6">
-            <h3>Spielgruppen</h3>
-        </div>
-        <div class="col-6"></div>
+    <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span> Gruppen
+  </p>
+  <div class="row">
+    <div class="col-6">
+      <h3>Spielgruppen</h3>
     </div>
-    <div *ngFor="let group of groups">
-        <app-group-list-item [group]="group" [place]="place"></app-group-list-item>
+    <div class="col-6">
+      <button type="button" class="btn btn-outline-dark btn-round" (click)="onGroupAddDlg(dlggroupnew)">
+        <i class="fas fa-plus"></i>
+      </button>
     </div>
+  </div>
+  <div *ngFor="let group of groups">
+    <app-group-list-item [group]="group" [place]="place" (lock)='onLockGroup($event)'
+                         (dlgRequest)='mailerSendRequestDlg(dlgsend, $event)'></app-group-list-item>
+  </div>
 
 </div>
 
+
 <app-a-footer></app-a-footer>
+
+<!-- DLG SEND -->
+<ng-template #dlgsend let-modal let-c="close" let-d="dismiss">
+  <div class="modal-body bg-outline-dark">
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
+      <i class="fas fa-times"></i>
+    </button>
+    <form class="text-left" [formGroup]="frm">
+      <div class="form-group">
+        <label>Gruppe: {{group.title}}</label>
+      </div>
+      <div class="form-group">
+        <label>Ihre E-Mail:</label>
+        <input type="text" class="form-control" placeholder="max.mustermann@mail.de" formControlName="email"
+               [ngClass]="{ 'is-invalid': f.email.errors, 'is-valid': !f.email.errors }">
+        <div *ngIf="f.email.errors" class="invalid-feedback">
+          <div *ngIf="f.email.errors.required">Bitte tragen Sie ihre E-Mail ein.</div>
+          <div *ngIf="f.email.errors.email">E-Mail ist ungültig.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Mail-Inhalt:</label>
+        <textarea class="form-control" rows="3"
+                  placeholder="Ich möchte gerne mitspielen, meine E-Mail zum Kontakt: max.mustermann@email.com"
+                  formControlName="body"
+                  [ngClass]="{ 'is-invalid': f.body.errors, 'is-valid': !f.body.errors }"></textarea>
+        <div *ngIf="f.body.errors" class="invalid-feedback">
+          <div *ngIf="f.body.errors.required">Bitte tragen Sie den Mail-Inhalt mit ihrer E-Mail-Adresse ein.</div>
+        </div>
+      </div>
+    </form>
+    <div class="row">
+      <div class="col-6"></div>
+      <div class="col-6">
+        <button type="button" class="btn btn-secondary" *ngIf="wait">
+          <i class="fa fa-spinner fa-spin"></i>
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="modal.close('dlgsend')" *ngIf="!wait">
+          Senden
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- DLG GROUP NEW -->
+<ng-template #dlggroupnew let-modal let-c="close" let-d="dismiss">
+  <div class="modal-body bg-outline-dark" ngDraggable>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
+      <i class="fas fa-times"></i>
+    </button>
+    <form class="text-left" [formGroup]="frmg">
+      <div class="form-group">
+        <label>Ort: {{place.title}}</label>
+      </div>
+      <div class="form-group">
+        <label>Gruppe-Titel:</label>
+        <input type="text" class="form-control" formControlName="title"
+               [ngClass]="{ 'is-invalid': fg.title.errors, 'is-valid': !fg.title.errors }">
+        <div *ngIf="fg.title.errors" class="invalid-feedback">
+          <div *ngIf="fg.title.errors.required">Bitte tragen Sie eine Gruppe ein.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Ihre E-Mail:</label>
+        <input type="text" class="form-control" placeholder="max.mustermann@mail.de" formControlName="owner"
+               [ngClass]="{ 'is-invalid': fg.owner.errors, 'is-valid': !fg.owner.errors }">
+        <div *ngIf="fg.owner.errors" class="invalid-feedback">
+          <div *ngIf="fg.owner.errors.required">Bitte tragen Sie ihre E-Mail ein.</div>
+          <div *ngIf="fg.owner.errors.email">E-Mail ist ungültig.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Mitglieder einladen? Komma getrente E-Mails eintragen</label>
+        <input type="text" class="form-control" placeholder="max.mustermann@mail.de" formControlName="member">
+      </div>
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label>Min:</label>
+          <input type="text" class="form-control input-number" value="1" [min]="1" formControlName="min"
+                 [ngClass]="{ 'is-invalid': fg.min.errors, 'is-valid': !fg.min.errors }">
+          <div *ngIf="fg.min.errors" class="invalid-feedback">
+            <div *ngIf="fg.min.errors.required">Minimumspieler darf nicht leer sein</div>
+            <div *ngIf="fg.min.errors.min">Der Wert muss größer als Null sein</div>
+          </div>
+        </div>
+        <div class="form-group col-6">
+          <label>Max:</label>
+          <input type="text" class="form-control input-number" value="2" [min]="2" formControlName="max"
+                 [ngClass]="{ 'is-invalid': fg.max.errors, 'is-valid': !fg.max.errors }">
+          <div *ngIf="fg.max.errors" class="invalid-feedback">
+            <div *ngIf="fg.max.errors.required">Maximumspieler darf nicht leer sein</div>
+            <div *ngIf="fg.max.errors.min">Der Wert muss größer als Null sein</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-6">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" formControlName="ball" value="false">
+            <label class="form-check-label">Ball nötig?</label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" formControlName="camisole" value="false">
+            <label class="form-check-label">Leibchen nötig?</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-6">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" formControlName="status" value="5">
+            <label class="form-check-label">privat?</label>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="row">
+      <div class="col-6"></div>
+      <div class="col-6 text-right">
+        <button type="button" class="btn btn-secondary" *ngIf="wait">
+          <i class="fa fa-spinner fa-spin"></i>
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="onGroupAddDlgOk(c)" *ngIf="!wait">
+          Speichern & Link senden
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

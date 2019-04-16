@@ -40,11 +40,11 @@ export class PusherService {
   }
 
   sendNotifications(gid: string, pid: string) {
-    console.log('post sendNotifications1 - ' + environment.pushurl + '/sendnotifications');
     const su = {
       group_id: gid,
       place_id: pid
     };
+    console.log('post sendNotifications1 - ' + environment.pushurl + '/sendnotifications', 'su - ', su);
     return this.http.post(environment.pushurl + '/sendnotifications', su, httpOptions);
     // console.log('post sendNotifications2 - ' + environment.pushurl + '/sendnotifications');
   }

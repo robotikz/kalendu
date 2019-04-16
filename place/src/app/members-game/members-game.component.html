@@ -5,374 +5,455 @@
 </ngx-spinner>
 
 
-<div class="container" *ngIf="!loading">
-    <p class="path">
-        <a [routerLink]="['/groups']" [queryParams]="{place_id: game.place.id}">
-            {{game.place.title}}
-        </a>
-        <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span>
-        <a [routerLink]="['/gamesg']" [queryParams]="{place_id:game.place.id, group_id:game.group.id}">
-            {{game.group.title}}
-        </a>
-        <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span> Spielrunde {{ game.dt | date:'dd.MM.yyyy' }}
-    </p>
-    <div class="row no-gutters">
-        <div class="col-6">
-            <h3>{{game.place.title}}</h3>
-            <p class="text-left text-secondary">
-                <fa-icon icon="calendar-check" class=""></fa-icon>
-                {{ game.dt | date:'EEEE, dd.MM.yyyy' }}
-                <fa-icon icon="clock" class=""></fa-icon>
-                {{ game.dt | date:'HH:mm' }} Uhr
-            </p>
-        </div>
-        <div class="col-1"></div>
-        <div class="col-2">
-            <div class="flex-row">
-                <button type="button" class="btn btn-outline-dark">
-                  <span>MIN</span>
-                  <span>{{game.min}}</span>
-                </button>
-                <button type="button" class="btn btn-outline-dark">
-                  <span>MAX</span>
-                  <span>{{game.max}}</span>
-              </button>
+<!-- Main -->
+<main role="main" class="flex-shrink-0 kalendu-main-section pb-2 mb-3" *ngIf="!loading">
+  <div class="container px-0">
+    <div class="container px-0">
+      <div class="d-flex flex-row">
+        <div class="container px-0">
+
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb kalendu-breadcrumb">
+              <li class="breadcrumb-item">
+                <a [routerLink]="['/groups',{place_id: game.place.id}]">{{game.place.title}}</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a [routerLink]="['/gamesg',{place_id: game.place.id, group_id: gid}]">{{game.group.title}}</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                Spielrunde {{ game.dt | date:'dd.MM.yyyy' }}
+              </li>
+            </ol>
+          </nav>
+
+          <div class="container kalendu-main-headline">
+            <h1>Spielrunde</h1>
+          </div>
+
+          <div class="d-flex flex-row my-3 position-relative">
+            <div class="col-4 kalendu-main-info-day">
+              <i class="fas fa-calendar-alt"></i>
+              <span class="kalendu-main-day" (click)="game.group.aowner === gid && onGameDTStartDlg(dlgdtstart)">
+                {{ game.dt | date:'EE, dd.MM.yyyy' }}
+              </span>
             </div>
-        </div>
-        <div class="col-1"></div>
-        <div class="col-1">
-            <a class="">
-                <div class="btn btn-outline-dark">
-                    <fa-icon icon="sliders-h" class="" size="1x"></fa-icon>
-                </div>
-                <div class="btn btn-outline-dark">
-                    <fa-icon icon="share-alt" class="" size="1x"></fa-icon>
-                </div>
-            </a>
-        </div>
-        <div class="col-1"></div>
-    </div>
-
-    <!-- DEADLINE -->
-    <div class="row my-1 bg-ghostwhite">
-        <div class="col-3 d-flex align-items-center">
-            <button type="button" class="btn btn-outline-dark">
-                <span>ZUSAGEN</span><br>
-                <span class="text-danger font-weight-bold">{{membersa.length}}</span>
-                <span>/{{game.max}}</span> 
-              </button>
-        </div>
-        <div class="col-3 d-flex align-items-center">
-            <button type="button" class="btn btn-outline-dark">
-                <span>ABSAGEN</span><br>
-                <span class="font-weight-bold">{{membersd.length}}</span>
-            </button>
-        </div>
-        <div class="col-6">
-            <p class="text-left text-danger text-uppercase">Deadline Anmeldung
-            </p>
-            <p class="text-left text-danger text-uppercase">
-                {{dlDays}} <span class="text-secondary dl-days">Tage</span> {{dlHours}} <span class="text-secondary dl-hours">Stunden</span> {{dlMinutes}} <span class="text-secondary dl-minutes">Minuten</span> {{dlSeconds}} <span class="text-secondary dl-seconds">Sekunden</span>
-            </p>
-            <div class="d-flex flex-row">
-                <div *ngIf="gameHasBall === true">
-                    <fa-icon icon="futbol" class="fa-btn" size="lg"></fa-icon>
-                    <fa-icon icon="check" class="fa-btn" size="lg"></fa-icon>
-                </div>
-                &nbsp;&nbsp;&nbsp;
-                <div *ngIf="gameHasCamisole === true">
-                    <fa-icon icon="tshirt" class="fa-btn" size="lg"></fa-icon>
-                    <fa-icon icon="check" class="fa-btn" size="lg"></fa-icon>
-                </div>
+            <div class="col-3 kalendu-main-info-time">
+              <i class="fas fa-clock"></i>
+              <span class="kalendu-main-time"
+                    (click)="game.group.aowner === gid && onGameDTStartDlg(dlgdtstart)">{{ (game.dtt.hour | oo) + ':' + (game.dtt.minute | oo ) }}
+                Uhr</span>
             </div>
-        </div>
-    </div>
+            <div class="col-5 kalendu-main-info-zusagen-absagen">
+              <div class="d-flex flex-row mx-0">
+                <div class="kalendu-main-circle-min text-center"
+                     (click)="game.group.aowner === gid && onGameMinMaxDlg(dlgminmax)">
+                  <span class="kalendu-main-circle-min-text">Min</span>
+                  <span class="kalendu-main-circle-min-number">{{game.min}}</span>
+                </div>
+                <div class="kalendu-main-circle-max text-center ml-2"
+                     (click)="game.group.aowner === gid && onGameMinMaxDlg(dlgminmax)">
+                  <span class="kalendu-main-circle-max-text">Max</span>
+                  <span class="kalendu-main-circle-max-number">{{game.max}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="kalendu-main-settings-button" *ngIf="game.group.aowner === gid"
+                 (click)="onGameSettsDlg(dlgsetts)">
+              <i class="fas fa-sliders-h"></i>
+            </div>
+            <div class="kalendu-main-share-button" (click)="onSendNotifications()" *ngIf="game.group.aowner === gid">
+              <i class="fas fa-share-alt"></i>
+            </div>
+          </div>
 
-    <!-- BUTTON ZUSAGEN ABSAGEN -->
-    <div class="row no-gutters mb-2">
-        <div class="col-6">
-            <button type="button" class="btn btn-success btn-say" (click)="onMemberNewDlg(dlgzusage)">Zusagen</button>
-        </div>
-        <div class="col-5">
-            <!-- <button type="button" class="btn btn-danger btn-say" data-toggle="modal" data-target=".dlg-absage">Absagen</button> -->
-            <button type="button" class="btn btn-danger btn-say" (click)="onMemberDeclineDlg(dlgabsage)">Absagen</button>
-        </div>
-        <div class="col-1">
-        </div>
-    </div>
-    <p></p>
 
-    <!-- MEMBERS PLAY -->
-    <div *ngFor="let member of membersa; let i=index">
-        <div class="row no-gutters">
+          <!-- DEADLINE -->
+          <div class="d-flex container kalendu-main-info-bar py-2 pr-0 justify-content-between">
+            <div class="col-3 kalendu-main-zusagen text-center mr-2">
+              <div class="kalendu-main-zusagen-headline">
+                Zusagen
+              </div>
+              <div class="kalendu-main-zusagen-number">
+                <span class="kalendu-main-zusagen-red-number"
+                      [ngClass]="{'kalendu-main-zusagen-red-number': true, 'kalendu-main-zusagen-green-number': membersa.length >= game.min}">{{membersa.length}}</span>
+                / {{game.max}}
+              </div>
+            </div>
+            <div class="col-3 kalendu-main-absagen text-center">
+              <div class="kalendu-main-absagen-headline">
+                Absagen
+              </div>
+              <div class="kalendu-main-absagen-number">
+                {{membersd.length}}
+              </div>
+            </div>
+            <div class="col-6 kalendu-main-deadline pl-2 pr-0">
+              <span class="kalendu-main-deadline-headline"
+                    (click)="game.group.aowner === gid && onGameDeadlineDlg(dlgdeadline)">Deadline</span><br>
+              <span class="kalendu-main-deadline-red-number">{{dlDays}}</span> Tage<br>
+              <span class="kalendu-main-deadline-red-number">{{dlHours}}</span> Stunden<br>
+              <span class="kalendu-main-deadline-red-number">{{dlMinutes}}</span> Minuten<br>
+              <span class="kalendu-main-deadline-icon" *ngIf="gameHasCamisole"><i class="fas fa-tshirt"></i></span>
+              <span class="kalendu-main-deadline-check" *ngIf="gameHasCamisole"><i class="fas fa-check"></i></span>
+              <span class="kalendu-main-deadline-icon" *ngIf="gameHasBall"><i class="fas fa-futbol"></i></span>
+              <span class="kalendu-main-deadline-check" *ngIf="gameHasBall"><i class="fas fa-check"></i></span>
+            </div>
+          </div>
+
+          <!-- BUTTON ZUSAGEN ABSAGEN -->
+          <div class="d-flex flex-row kalendu-mains-ctas justify-content-center my-3">
+            <a class="btn btn-primary kalendu-main-button-zusagen mr-2 px-4"
+               (click)="onMemberNewDlg(dlgzusage)">Zusagen</a>
+            <a class="btn btn-primary kalendu-main-button-absagen ml-2 px-4"
+               (click)="onMemberDeclineDlg(dlgabsage)">Absagen</a>
+          </div>
+
+
+          <div class="d-flex flex-row kalendu-main-zusagen-block">
+            <!-- MEMBERS PLAY -->
+            <div class="col-1 kalendu-main-zusagen-block-titel text-center">
+              Z<br>u<br>s<br>a<br>g<br>e<br>n
+              <!-- <span>Zusagen</span> -->
+            </div>
             <div class="col-11">
-                <div class="d-flex flex-row">
-                    <div class="">
-                        <div class="btn btn-round text-success border-success font-weight-bold">{{i+1}}</div>
-                    </div>
-                    <div class="bulk d-flex align-items-center bg-success" style="width:100%; margin:2px;">
-                        <div class="mr-auto">{{member.nick}}
-                        </div>
-                        <a class="fa-button" *ngIf="member.camisole === true">
-                            <fa-icon icon="tshirt" class="fa-btn" size="lg"></fa-icon>
-                        </a>
-                        <a class="fa-button" *ngIf="member.ball === true">
-                            <fa-icon icon="futbol" class="fa-btn" size="lg"></fa-icon>
-                        </a>
-                        <a class="fa-button" role="button" (click)="onSelectedMemberDecline(member)">
-                            <fa-icon icon="times-circle" class="fa-btn" size="lg"></fa-icon>
-                        </a>
-                        <a class="fa-button" role="button" (click)="onSelectedMemberEditDlg(member, dlgzusage)">
-                            <fa-icon icon="edit" class="fa-btn" size="lg"></fa-icon>
-                        </a>
-                    </div>
+              <!-- Player Zusagen Elements -->
+              <div class="kalendu-main-zusage align-items-center mb-3 position-relative"
+                   *ngFor="let member of membersa; let i=index">
+                <div
+                     [ngClass]="{'kalendu-main-zusage-number position-absolute' : true, 'kalendu-main-zusage-number-2': (i+1)>9 }">
+                  {{i+1}}
                 </div>
-            </div>
-            <div class="col-1">
+                <div class="d-flex flex-row kalendu-main-zusage-green-bar w-100 justify-content-between">
+                  <div class="kalendu-main-zusage-name">
+                    {{member.nick}}
+                  </div>
+                  <div class="kalendu-main-zusage-icons">
+                    <i class="fas fa-tshirt" *ngIf="member.camisole"></i>
+                    <i class="fas fa-futbol" *ngIf="member.ball"></i>
+                  </div>
+                </div>
+                <!-- (click)="onSelectedMemberDecline(member)" -->
+                <div class="kalendu-main-edit-button" (click)="onSelectedMemberEditDlg(member, dlgzusage)">
+                  <i class="fas fa-edit"></i>
+                </div>
+                <!-- MIN Separator -->
+                <div class="p-0 mx-0 my-3 kalendu-separator" *ngIf="(i+1)===game.min">
+                  <div class="kalendu-separator-line"></div>
+                  <div class="kalendu-separator-min">Min</div>
+                  <div class="kalendu-separator-max">Min</div>
+                  <div class="kalendu-separator-triangle"></div>
+                </div>
+                <!-- MAX Separator -->
+                <div class="p-0 mx-0 my-3 kalendu-separator" *ngIf="(i+1)===game.max">
+                  <div class="kalendu-separator-line"></div>
+                  <div class="kalendu-separator-min">Max</div>
+                  <div class="kalendu-separator-max">Max</div>
+                  <div class="kalendu-separator-triangle"></div>
+                </div>
+              </div>
+
+              <div class="kalendu-main-frei align-items-center mb-3 position-relative"
+                   *ngFor="let member of memberse; let i=index">
+                <div
+                     [ngClass]="{'kalendu-main-frei-number position-absolute' : true, 'kalendu-main-frei-number-2': (membersa.length+i+1)>9 }">
+                  {{membersa.length+i+1}}
+                </div>
+                <div class="d-flex flex-row kalendu-main-frei-grey-bar w-100 justify-content-between">
+                  <div class="kalendu-main-frei-name">
+                    Noch frei
+                  </div>
+                  <div class="kalendu-main-frei-icons">
+                  </div>
+                </div>
+                <!-- MIN Separator -->
+                <div class="p-0 mx-0 my-3 kalendu-separator" *ngIf="(membersa.length+i+1)===game.min">
+                  <div class="kalendu-separator-line"></div>
+                  <div class="kalendu-separator-min">Min</div>
+                  <div class="kalendu-separator-max">Min</div>
+                  <div class="kalendu-separator-triangle"></div>
+                </div>
+                <!-- MAX Separator -->
+                <div class="p-0 mx-0 my-3 kalendu-separator" *ngIf="(membersa.length+i+1)===game.max">
+                  <div class="kalendu-separator-line"></div>
+                  <div class="kalendu-separator-min">Max</div>
+                  <div class="kalendu-separator-max">Max</div>
+                  <div class="kalendu-separator-triangle"></div>
+                </div>
+              </div>
 
             </div>
-        </div>
-    </div>
+          </div>
 
-    <!-- MIN MAX -->
-    <div class="row no-gutters">
-        <div class="col-11">
-            <div *ngIf="membersa.length < game.min" class="d-flex">
-                <div class="px-4">MIN {{game.min}}</div>
-                <hr class="my-auto flex-grow-1">
-                <div class="px-4">MIN {{game.min}}</div>
+          <!-- MEMBERS DECLINE -->
+          <div class="d-flex flex-row kalendu-main-zusagen-block mt-4" *ngIf="membersd.length">
+            <div class="col-1 kalendu-main-zusagen-block-titel text-center">
+              A<br>b<br>s<br>a<br>g<br>e<br>n
             </div>
-            <div *ngIf="membersa.length >= game.min" class="d-flex">
-                <div class="px-4">MIN {{game.min}} erreicht</div>
-                <hr class="my-auto flex-grow-1">
-                <div class="px-4">MIN {{game.min}} erreicht</div>
-            </div>
-            <div *ngIf="membersa.length < game.max" class="d-flex">
-                <div class="px-4">MAX {{game.max}}</div>
-                <hr class="my-auto flex-grow-1">
-                <div class="px-4">MAX {{game.max}}</div>
-            </div>
-            <div *ngIf="membersa.length >= game.max" class="d-flex">
-                <div class="px-4">MAX {{game.max}} erreicht</div>
-                <hr class="my-auto flex-grow-1">
-                <div class="px-4">MAX {{game.max}} erreicht</div>
-            </div>
-            <div *ngIf="membersi.length > 0" class="d-flex">
-                <div class="px-4">Noch zusagen</div>
-                <hr class="my-auto flex-grow-1">
-                <div class="px-4">Noch zusagen</div>
-            </div>
-        </div>
-        <div class="col-1"></div>
-    </div>
-
-    <!-- MEMBERS WAITING -->
-    <div *ngFor="let member of membersi; let i=index">
-        <div class="row no-gutters">
             <div class="col-11">
-                <div class="d-flex flex-row">
-                    <div>
-                        <div class="btn btn-round text-secondary border-secondary font-weight-bold">{{i+1}}</div>
-                    </div>
-                    <div class="bulk d-flex align-items-center bg-secondary" style="width:100%; margin:2px;">
-                        <div class="mr-auto">{{member.nick}}
-                        </div>
-                        <a *ngIf="membersa.length < game.max" class="fa-button " role="button" (click)="onSelectedMemberAccept(member)">
-                            <fa-icon icon="check-circle" class="fa-btn" size="lg"></fa-icon>
-                        </a>
-                        <a class="fa-button" role="button" (click)="onSelectedMemberDecline(member)">
-                            <fa-icon icon="times-circle" class="fa-btn" size="lg"></fa-icon>
-                        </a>
-                    </div>
+              <!-- Player Absagen Elements -->
+              <div class="kalendu-main-frei align-items-center mb-3 position-relative"
+                   *ngFor="let member of membersd; let i=index">
+                <div
+                     [ngClass]="{'kalendu-main-absage-number position-absolute' : true, 'kalendu-main-absage-number-2': (i+1)>9 }">
+                  {{i+1}}
                 </div>
-            </div>
-            <div class="col-1">
-                <!-- <div class="btn btn-outline-dark">
-                    <fa-icon icon="edit" class="" size="1x"></fa-icon>
-                </div> -->
-            </div>
-        </div>
-    </div>
-    <div class="row no-gutters">
-        <div class="col-11">
-            <div *ngIf="membersd.length > 0" class="d-flex">
-                <div class="px-4">ABGESAGT {{membersd.length}}</div>
-                <hr class="my-auto flex-grow-1">
-                <div class="px-4">ABGESAGT {{membersd.length}}</div>
-            </div>
-        </div>
-        <div class="col-1"></div>
-    </div>
-
-    <!-- MEMBERS DECLINE -->
-    <div *ngFor="let member of membersd; let i=index">
-        <div class="row no-gutters">
-            <div class="col-11">
-                <div class="d-flex flex-row">
-                    <div>
-                        <div class="btn btn-round text-danger border-danger font-weight-bold">{{i+1}}</div>
-                    </div>
-                    <div class="bulk d-flex align-items-center bg-danger" style="width:100%; margin:2px;">
-                        <div class="mr-auto">{{member.nick}}
-                        </div>
-                        <a *ngIf="membersa.length < game.max" class="fa-button " role="button" (click)="onSelectedMemberAccept(member)">
-                            <fa-icon icon="check-circle" class="fa-btn" size="lg"></fa-icon>
-                        </a>
-                    </div>
+                <div class="d-flex flex-row kalendu-main-absage-red-bar w-100 justify-content-between">
+                  <div class="kalendu-main-absage-name">
+                    {{member.nick}}
+                  </div>
+                  <div class="kalendu-main-absage-icons" *ngIf="member.comment">
+                    <i class="fas fa-comment" placement="left" ngbPopover="{{member.comment}}"></i>
+                  </div>
                 </div>
+                <div class="kalendu-main-edit-button" (click)="onSelectedMemberEditDlg(member,dlgzusage)">
+                  <i class="fas fa-edit"></i>
+                </div>
+              </div>
             </div>
-            <div class="col-1">
-                <!-- <div class="btn btn-outline-dark">
-                    <fa-icon icon="edit" class="" size="1x"></fa-icon>
-                </div> -->
-            </div>
+          </div>
         </div>
-    </div>
-    <p></p>
+        <div class="kalendu-edit-col">
+        </div>
 
-</div>
+      </div>
+    </div>
+  </div>
+</main>
+<!-- /Main -->
 
 <!-- DIALOG -->
 <!-- ******************************** -->
 <!-- ZUSAGE -->
-<!-- <div class="modal fade dlg-zusage" tabindex="-1" role="dialog" aria-labelledby="dlg-zusage" aria-hidden="true"> -->
 <ng-template #dlgzusage let-modal>
-    <!-- <div class="modal-dialog "> -->
-    <!-- <div class="modal-content"> -->
-    <div class="modal-header">
-        <span class="dlg-title-zusage">ZUSAGE</span>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
-            <span aria-hidden="true">&times;</span>
-        </button>
+  <!-- <div class="modal-header">
+    <span class="dlg-title-zusage">ZUSAGE</span>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
+      <i class="fas fa-times"></i>
+    </button>
+  </div> -->
+  <div class="modal-body kalendu-dlg-content-zusage" ngDraggable>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="row">
+      <div class="col-12">
+        <h5>Wie heißt du?</h5>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Name" ngbAutofocus [(ngModel)]="memberNew.nick"
+                 [ngbTypeahead]="memberNickSearch" (keyup.enter)="modal.close('ok')">
+        </div>
+      </div>
     </div>
-    <div class="modal-body bg-secondary">
-        <!-- <div id="carousel-zusage" class="carousel slide" data-ride="carousel" data-interval="0" data-keyboard="true"> -->
-        <ngb-carousel #dlgzusageCarousel="ngbCarousel">
-            <!-- <ol class="carousel-indicators">
-                <li data-target="#carousel-zusage" data-slide-to="0" class="active"></li>
-                <li data-target="#carousel-zusage" data-slide-to="1"></li>
-                <li data-target="#carousel-zusage" data-slide-to="2"></li>
-            </ol> -->
-            <!-- <div class="carousel-inner"> -->
-            <!-- <div class="carousel-item active"> -->
-            <ng-template ngbSlide>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-1"></div>
-                        <div class="col-10">
-                            <h3>Wie heißt du?</h3>
-                            <div class="input-group mb-3">
-                                <!-- [(ngModel)]="memberNew.nick" -->
-                                <!-- <input type="text" class="form-control" data-toggle="dropdown" placeholder="Name" aria-label="Name" aria-describedby="basic-addon2" [formControl]="memberNickInput" autofocus id="dlg-member-new-nick"> -->
-                                <input type="text" class="form-control" placeholder="Name" ngbAutofocus [(ngModel)]="memberNew.nick" [ngbTypeahead]="memberNickSearch" (keyup.enter)="dlgzusageCarousel.next()">
-                                <!-- <div class="dropdown-menu w-100 dd-member-suggestion">
-                                        <h6 class="dropdown-header"></h6>
-                                        <div class="dropdown-divider"></div>
-                                    </div> -->
-                                <div class="input-group-append">
-                                    <div class="btn-group position-static">
-                                        <a class="btn fa-button" role="button" role="button" (click)="dlgzusageCarousel.next()">
-                                            <fa-icon icon="arrow-right" class="fa-btn" size="lg"></fa-icon>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-1"></div>
-                    </div>
-                </div>
-            </ng-template>
-            <!-- </div> -->
-            <!-- <div class="carousel-item"> -->
-            <ng-template ngbSlide>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-1"></div>
-                        <div class="col-10 text-center">
-                            <h3>Bringst du einen Ball mit?</h3>
-                            <label class="switch">
-                                          <input type="checkbox" autofocus [(ngModel)]="memberNew.ball" id="dlg-member-new-ball">
-                                          <span class="slider round"></span>
-                                        </label>
-                            <a class="btn fa-button" role="button" role="button" (click)="dlgzusageCarousel.next()">
-                                <fa-icon icon="arrow-right" class="fa-btn" size="lg"></fa-icon>
-                            </a>
-                        </div>
-                        <div class="col-1"></div>
-                    </div>
-                </div>
-                <!-- </div> -->
-            </ng-template>
-            <!-- <div class="carousel-item"> -->
-            <ng-template ngbSlide>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-1"></div>
-                        <div class="col-10 text-center">
-                            <h3>Bringst du Leibchen mit?</h3>
-                            <label class="switch">
-                                    <input type="checkbox" autofocus [(ngModel)]="memberNew.camisole" id="dlg-member-new-camisole">
-                                    <span class="slider round"></span>
-                                </label>
-                            <!-- <a class="btn fa-button dlg-zusage-new-ok" (click)="onMemberNewDlgOk()" role="button"> -->
-                            <a *ngIf="memberDlg===1" class="btn fa-button dlg-zusage-new-ok" (click)="modal.close('oknew')" role="button">
-                                <fa-icon icon="check-circle" class="fa-btn" size="lg"></fa-icon>
-                            </a>
-                            <!-- <a class="btn fa-button dlg-zusage-edit-ok" role="button" (click)="onSelectedMemberEditDlgOk()"> -->
-                            <a *ngIf="memberDlg===2" class="btn fa-button dlg-zusage-edit-ok" role="button" (click)="modal.close('okedit')">
-                                <fa-icon icon="edit" class="fa-btn" size="lg"></fa-icon>
-                            </a>
-                        </div>
-                        <div class="col-1"></div>
-                    </div>
-                </div>
-            </ng-template>
-            <!-- </div> -->
-            <!-- </div> -->
-        </ngb-carousel>
-        <!-- </div> -->
+    <div class="row mb-2" *ngIf="game.group.camisole || game.group.ball">
+      <div class="col-6 text-center" *ngIf="game.group.camisole">
+        <div class="btn-group btn-group-toggle">
+          <label [ngClass]="{'btn btn-sm': true, 'kalendu-main-button-absagen': !memberNew.ball, 'kalendu-main-button-zusagen': memberNew.ball}"
+                 ngbButtonLabel>
+            <i [ngClass]="{'fas': true, 'fa-check': memberNew.ball, 'fa-times': !memberNew.ball}"></i>
+            <input type="checkbox" ngbButton [(ngModel)]="memberNew.ball">&nbsp;
+            <span *ngIf="memberNew.ball">Ich bringe einen Ball mit!</span>
+            <span *ngIf="!memberNew.ball">Bringst du einen Ball mit?</span>
+          </label>
+        </div>
+      </div>
+      <div class="col-6 text-center" *ngIf="game.group.ball">
+        <div class="btn-group btn-group-toggle">
+          <label [ngClass]="{'btn btn-sm': true, 'kalendu-main-button-absagen': !memberNew.camisole, 'kalendu-main-button-zusagen': memberNew.camisole}"
+                 ngbButtonLabel>
+            <i [ngClass]="{'fas': true, 'fa-check': memberNew.camisole, 'fa-times': !memberNew.camisole}"></i>
+            <input type="checkbox" ngbButton [(ngModel)]="memberNew.camisole">
+            &nbsp;
+            <span *ngIf="memberNew.camisole">Ich bringe Leibchen mit!</span>
+            <span *ngIf="!memberNew.camisole">Bringst du Leibchen mit?</span>
+          </label>
+        </div>
+      </div>
     </div>
-    <!-- </div> -->
-    <!-- </div> -->
+    <div class="row mb-1">
+      <div class="col-12 text-center">
+        <a class="btn btn-sm kalendu-main-button-zusagen px-4" (click)="modal.close('ok')">Zusagen</a>
+        &nbsp;
+        <a class="btn btn-sm kalendu-main-button-absagen px-4" *ngIf="memberDlg===2"
+           (click)="modal.close('decline')">Absagen</a>
+      </div>
+    </div>
+  </div>
 </ng-template>
-<!-- </div> -->
 
 
 <!-- ABSAGE -->
-<!-- <div class="modal fade dlg-absage" tabindex="-1" role="dialog" aria-labelledby="dlg-absage" aria-hidden="true"> -->
 <ng-template #dlgabsage let-modal>
-    <!-- <div class="modal-dialog "> -->
-    <!-- <div class="modal-content"> -->
-    <div class="modal-header">
-        <span class="modal-title">ABSAGE</span>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
-          <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body bg-danger">
-        <div class="container">
-            <div class="row">
-                <div class="col-1"></div>
-                <div class="col-10">
-                    <h3>Wie heißt du?</h3>
-                    <div class="input-group mb-3">
-                        <!-- <input type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon2" autofocus [(ngModel)]="memberNew.nick" id="dlg-member-decline-nick" (keyup.enter)="onMemberDecline()"> -->
-                        <input type="text" class="form-control" placeholder="Name" ngbAutofocus [(ngModel)]="memberNew.nick" [ngbTypeahead]="memberNickSearch" (keyup.enter)="modal.close('ok')">
-                        <div class="input-group-append">
-                            <!-- <a class="btn btn-info" role="button" id="dlg-member-decline-nick" (click)="onMemberDecline()"> -->
-                            <a class="btn fa-button" (click)="modal.close('ok')" role="button">
-                                <fa-icon icon="check-circle" class=""></fa-icon>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-1"></div>
-            </div>
+  <div class="modal-body kalendu-dlg-content-absage" ngDraggable>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="container">
+      <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+          <h5>Wie heißt du?</h5>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Name" ngbAutofocus [(ngModel)]="memberNew.nick"
+                   [ngbTypeahead]="memberNickSearch" (keyup.enter)="modal.close('ok')">
+          </div>
         </div>
+        <div class="col-1"></div>
+      </div>
+      <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+          <h5>Kommentar</h5>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Kommentar" [(ngModel)]="memberNew.comment"
+                   (keyup.enter)="modal.close('ok')">
+          </div>
+        </div>
+        <div class="col-1"></div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <a class="btn btn-sm kalendu-main-button-absagen px-4" (click)="modal.close('ok')">Absagen</a>
+        </div>
+      </div>
     </div>
-    <!-- </div> -->
-    <!-- </div> -->
-    <!-- </div> -->
+  </div>
 </ng-template>
+
+<!-- MIN MAX -->
+<ng-template #dlgminmax let-modal>
+  <div class="modal-body" ngDraggable>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="container">
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label>Min:</label>
+          <input type="text" class="form-control input-number" [(ngModel)]="game.min">
+        </div>
+        <div class="form-group col-6">
+          <label>Max:</label>
+          <input type="text" class="form-control input-number" [(ngModel)]="game.max">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <a class="btn btn-sm kalendu-main-button-zusagen px-4" (click)="modal.close('ok')">OK</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Deadline -->
+<ng-template #dlgdeadline let-modal>
+  <div class="modal-body" ngDraggable>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="container">
+      <div class="form-row text-center">
+        <div class="col-12">
+          <label>Deadline:</label>
+        </div>
+      </div>
+      <div class="form-row align-items-center">
+        <div class="form-group col-6">
+          <!-- <label>Datum:</label> -->
+          <input class="form-control" placeholder="dd.mm.yyyy" (focus)="d.open()" [(ngModel)]="game.dd" ngbDatepicker
+                 #d="ngbDatepicker">
+        </div>
+        <div class="form-group col-6">
+          <!-- <label>Zeit:</label> -->
+          <ngb-timepicker [(ngModel)]="game.ddt" [minuteStep]="15"></ngb-timepicker>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <a class="btn btn-sm kalendu-main-button-zusagen px-4" (click)="modal.close('ok')">OK</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Day-Time Start -->
+<ng-template #dlgdtstart let-modal>
+  <div class="modal-body" ngDraggable>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="container">
+      <div class="form-row text-center">
+        <div class="col-12">
+          <label>Wann spielen wir?</label>
+        </div>
+      </div>
+      <div class="form-row align-items-center">
+        <div class="form-group col-6">
+          <input class="form-control" placeholder="dd.mm.yyyy" (focus)="d.open()" [(ngModel)]="game.dt" ngbDatepicker
+                 #d="ngbDatepicker">
+        </div>
+        <div class="form-group col-6">
+          <ngb-timepicker [(ngModel)]="game.dtt" [minuteStep]="15"></ngb-timepicker>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <a class="btn btn-sm kalendu-main-button-zusagen px-4" (click)="modal.close('ok')">OK</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Setts -->
+<ng-template #dlgsetts let-modal>
+  <div class="modal-body" ngDraggable>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="container">
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label class="kalendu-dlg-content-label">Wann spielen wir?</label>
+          <input class="form-control" placeholder="dd.mm.yyyy" (focus)="d.open()" [(ngModel)]="game.dt" ngbDatepicker
+                 #d="ngbDatepicker">
+        </div>
+        <div class="form-group col-6">
+          <ngb-timepicker [(ngModel)]="game.dtt" [minuteStep]="15"></ngb-timepicker>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label class="kalendu-dlg-content-label">Deadline:</label>
+          <input class="form-control" placeholder="dd.mm.yyyy" (focus)="d.open()" [(ngModel)]="game.dd" ngbDatepicker
+                 #d="ngbDatepicker">
+        </div>
+        <div class="form-group col-6">
+          <!-- <label>Zeit:</label> -->
+          <ngb-timepicker [(ngModel)]="game.ddt" [minuteStep]="15"></ngb-timepicker>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label>Min:</label>
+          <input type="text" class="form-control input-number" [(ngModel)]="game.min">
+        </div>
+        <div class="form-group col-6">
+          <label>Max:</label>
+          <input type="text" class="form-control input-number" [(ngModel)]="game.max">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <a class="btn btn-sm kalendu-main-button-zusagen px-4" (click)="modal.close('ok')">OK</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
 
 <app-a-footer></app-a-footer>

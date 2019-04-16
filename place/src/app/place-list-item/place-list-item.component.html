@@ -1,50 +1,56 @@
 <div class="row">
-    <div class="col-10">
-        <div class="jumbotron">
-            <div class="row no-gutters">
-                <div class="col-2">
-                    <img src="https://soccer-center-bonn.de/assets/images/dsc-189-2000x1125.jpg" class="avatar">
-                </div>
-                <div class="col-8">
-                    <a [routerLink]="['/groups']" [queryParams]="{place_id: place.id}">
-                        <p class="text-left text-uppercase">{{place.title}}</p>
-                    </a>
-                    <div class="d-inline-flex">
-                        <div><span class="mdi mdi-map-marker"></span></div>
-                        <div class="address">
-                            <p class="text-left ">{{place.street}} {{place.nr}}</p>
-                            <p class="text-left ">{{place.zip}} {{place.city}}</p>
-                        </div>
-                    </div>
-                    <a [routerLink]="['/games']" [queryParams]="{place_id:place.id}">
-                        <p class="text-left ">Sportarten:
-                            <fa-icon *ngFor="let sport of place.sports" icon="{{sport.typ}}" [pulse]="true"></fa-icon>
-                        </p>
-                    </a>
-                </div>
-                <div class="col-2">
-                    <a class="">
-                        <div class="btn btn-outline-dark">
-                            <fa-icon icon="lock" class="" size="2x"></fa-icon>
-                            <!--<div class="">PRIVAT</div> -->
-                        </div>
-                    </a>
-                    <br>
-                    <a class="">
-                        <div class=" btn btn-outline-dark">
-                            <fa-icon icon="euro-sign" class="" size="2x"></fa-icon>
-                            <!-- <div class="">KOSTET</div>-->
-                        </div>
-                    </a>
-                </div>
-            </div>
+  <div class="col-10">
+    <div class="jumbotron">
+      <div class="row no-gutters">
+        <div class="col-2">
+          <img src="https://soccer-center-bonn.de/assets/images/dsc-189-2000x1125.jpg" class="avatar">
         </div>
-    </div>
-    <div class="col-2">
-        <a class="" target="_blank" href="https://www.google.com/maps/search/?api=1&query={{place.street}} {{place.nr}} {{place.zip}} {{place.city}}">
-            <div class="btn btn-outline-dark ">
-                <fa-icon icon="location-arrow" class="" size="2x"></fa-icon>
+        <div class="col-8">
+          <a [routerLink]="['/groups',{place_id: place.id}]">
+            <p class="text-left text-uppercase">{{place.title}}</p>
+          </a>
+          <div class="d-inline-flex">
+            <div><span class="mdi mdi-map-marker"></span></div>
+            <div class="address">
+              <p class="text-left ">{{place.street}} {{place.nr}}</p>
+              <p class="text-left ">{{place.zip}} {{place.city}}</p>
             </div>
-        </a>
+          </div>
+          <a [routerLink]="['/games',{place_id:place.id}]">
+            <p class="text-left ">Sportarten:
+              <i class="fas fa-{{sport.typ}}" *ngFor="let sport of place.sports"></i>
+            </p>
+          </a>
+        </div>
+        <div class="col-2">
+          <a class="" target="_blank"
+             href="https://www.google.com/maps/search/?api=1&query={{place.street}} {{place.nr}} {{place.zip}} {{place.city}}">
+            <div class="btn btn-outline-dark ">
+              <i class="fas fa-location-arrow"></i>
+            </div>
+          </a>
+          <!-- <a class="">
+                        <div class="btn btn-outline-dark">
+                            <i class="fas fa-clock"></i>
+                            <div class="">PRIVAT</div>
+                    </div>
+                    </a> -->
+          <br>
+          <a class="">
+            <div class=" btn btn-outline-dark">
+              <i class="fas fa-euro-sign"></i>
+              <!-- <div class="">KOSTET</div>-->
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="col-2">
+    <!-- <a class="" target="_blank" href="https://www.google.com/maps/search/?api=1&query={{place.street}} {{place.nr}} {{place.zip}} {{place.city}}">
+        <div class="btn btn-outline-dark ">
+            <i class="fas fa-location-arrow"></i>
+        </div>
+    </a> -->
+  </div>
 </div>

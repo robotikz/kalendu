@@ -14,18 +14,22 @@ export const environment = {
     storageBucket: 'sport4u-df275.appspot.com',
     messagingSenderId: '455037071171'
   },
-  pushurl: 'http://localhost:443',
+  pushurl: 'http://localhost:443/api',
   vapid: {
     'publicKey': 'BJcgsnnv4yYC_UeZ1cYhvFndCHa2s0fJYU-lnO_HKpki3g0RwGHZo3mTO0FkUuJPO2FtsLnPwdbiRyZpN7WRN9c',
     'privateKey': 'KNAWy9q9qx-6EZOD9_FSs0gJvKs5mqmEoXsX3QDgCG0'
-  }
+  },
+  mailer: {
+    url: 'https://us-central1-sport4u-df275.cloudfunctions.net/app/api/mailer',
+    request: {
+      subject: '',
+      body: '',
+      withfile: false
+    },
+    group: {
+      subject: '',
+      body: '',
+      withfile: false
+    },
+  },
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.

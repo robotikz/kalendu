@@ -1,6 +1,84 @@
 /* You can add global styles to this file, and also import other style files */
 
+@charset "utf-8";
+
+/* CSS Document */
+
+
+/* GLOBAL CSS */
+
+html,
 body {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.card-title {
+  margin-bottom: 0px !important;
+}
+
+h1 {
+  font-size: 20px !important;
+}
+
+h2 {
+  font-size: 18px !important;
+}
+
+h6 {
+  text-transform: capitalize !important;
+  color: #3EA2A2 !important;
+}
+
+.word-wrap {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.breadcrumb {
+  background-color: white !important;
+  margin-bottom: 0px !important;
+  padding-top: 0.25rem !important;
+}
+
+.modal-content {
+  /* box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 16px; */
+  box-shadow: none;
+  background-color: transparent;
+  border: none;
+}
+
+.modal-content .ng-draggable {
+  cursor: move;
+}
+
+.modal-content .modal-body {
+  background-color: #fff;
+  border-radius: 1rem;
+}
+
+.modal-content .modal-body button.close {
+  position: absolute;
+  color: #adb5bd;
+  background: #fff;
+  width: 2rem;
+  height: 2rem;
+  right: -0.75rem;
+  top: -1rem;
+  border-radius: 100%;
+  opacity: 1;
+  line-height: 1.15;
+  font-size: 100%;
+}
+
+.kalendu-main-section {
+  padding-top: 57px;
+}
+
+
+
+/* body {
     min-height: 25rem;
     padding-top: 4.5rem;
 }
@@ -8,3 +86,12 @@ body {
 .path {
     font-size: 0.7rem;
 }
+
+.btn-round {
+    cursor: pointer;
+}
+
+.link p {
+    cursor: pointer;
+    color: #0056b3;
+} */

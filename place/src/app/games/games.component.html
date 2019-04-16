@@ -1,67 +1,56 @@
-
-<app-a-header></app-a-header>
+<app-a-header>
+</app-a-header>
 
 <div class="container">
-  <p class="path">
-    Orte
-    <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span>
-    <a [routerLink]="['/places']">
+    <p class="path">
+        Orte
+        <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span>
+        <a [routerLink]="['/places']">
       Spielstätten
     </a>
-    <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span>
-    Spielrunde
-  </p>
-  <div class="row no-gutters">
-    <div class="col-6">
-      <h3>{{place.title}}</h3>
-    </div>
-    <div class="col-4"></div>
-    <div class="col-1">
-      <img src="https://soccer-center-bonn.de/assets/images/dsc-189-2000x1125.jpg" class="avatar"> 
-    </div>
-    <div class="col-1">
-      <a class="">
-        <div class="btn btn-outline-dark" >
-          <fa-icon icon="lock" class="" size="2x"></fa-icon>
+        <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span> Spielrunde
+    </p>
+    <div class="row no-gutters">
+        <div class="col-6">
+            <h3>{{place.title}}</h3>
         </div>
-      </a>
+        <div class="col-6"></div>
     </div>
-  </div>
-  <div class="row no-gutters">
-    <div class="col-1">
-      <p class="text-left ">Adresse:</p>
-    </div>
-    <div class="col-5">
-      <p class="text-left ">{{place.street}} {{place.nr}}</p>
-      <p class="text-left ">{{place.zip}} {{place.city}}</p>
-    </div>
-    <div class="col-4"></div>
-    <div class="col-2">
-      <a class="" target="_blank" href="https://www.google.com/maps/search/?api=1&query={{place.street}} {{place.nr}} {{place.zip}} {{place.city}}">
-        <div class="btn btn-outline-dark " >
-          <fa-icon icon="location-arrow" class="" size=""></fa-icon>
+    <div class="row no-gutters">
+        <div class="col-1">
+            <p class="text-left ">Adresse:</p>
         </div>
-      </a>
+        <div class="col-5">
+            <p class="text-left ">{{place.street}} {{place.nr}}</p>
+            <p class="text-left ">{{place.zip}} {{place.city}}</p>
+        </div>
+        <div class="col-4"></div>
+        <div class="col-2">
+            <a class="" target="_blank" href="https://www.google.com/maps/search/?api=1&query={{place.street}} {{place.nr}} {{place.zip}} {{place.city}}">
+                <div class="btn btn-outline-dark ">
+                    <i class="fas fa-location-arrow"></i>
+                </div>
+            </a>
+        </div>
     </div>
-  </div>
-  <div class="row no-gutters">
-    <div class="col-1">
-      <p class="text-left ">Info:</p>
+    <div class="row no-gutters">
+        <div class="col-1">
+            <p class="text-left ">Info:</p>
+        </div>
+        <div class="col-10">
+            <p class="text-left ">{{place.info}}</p>
+        </div>
     </div>
-    <div class="col-10">
-      <p class="text-left ">{{place.info}}</p>
+    <div class="row no-gutters">
+        <div class="col-6">
+            <h3>Spielrunde</h3>
+        </div>
+        <div class="col-6"></div>
     </div>
-  </div>
-  <div class="row no-gutters">
-    <div class="col-6">
-      <h3>Spielrunde</h3>
+    <div *ngFor="let game of games">
+        <app-game-list-item [game]="game" [group]="game.group" [place]="place"></app-game-list-item>
     </div>
-    <div class="col-6"></div>
-  </div>
-  <div *ngFor="let game of games">
-    <app-game-list-item [game]="game" [groupTitle]="game.group.title"  [place]="place"></app-game-list-item>
-  </div>
-  
+
 </div>
 
 <app-a-footer></app-a-footer>

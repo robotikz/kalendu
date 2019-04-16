@@ -2,14 +2,79 @@ p {
     margin: 0;
 }
 
-.btn {
-    border-radius: 3rem;
-    padding: .3rem;
-    width: 3rem;
-}
-
 .avatar {
     width: 80%;
     clip-path: circle();
     border-radius: 50%;
+}
+
+.btn {
+    border-radius: 2rem;
+}
+
+.btn.btn-say {
+    width: 10rem;
+}
+
+.bulk {
+    border-radius: 1rem;
+    padding: 0 10px;
+}
+
+.btn-round {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 1rem;
+    padding: 0.175rem;
+}
+
+.btn-round-lg {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 1.5rem;
+    padding: 0.45rem 0.3rem
+}
+
+.fa-button {
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.fa-button .fa-btn {
+    color: #ffffff;
+}
+
+
+/*  */
+
+::ng-deep .modal-content {
+    border-width: 0;
+}
+
+
+/*  */
+
+ngb-carousel ::ng-deep .carousel-inner {
+    overflow: visible;
+}
+
+ngb-carousel ::ng-deep .carousel-item .container {
+    margin: 2rem 0 0 0;
+}
+
+ngb-carousel ::ng-deep .carousel-control-next,
+ngb-carousel ::ng-deep .carousel-control-prev {
+    width: 5%;
+}
+
+ngb-carousel ::ng-deep .carousel-indicators {
+    top: -1px;
+    bottom: initial;
+}
+
+ngb-carousel ::ng-deep .carousel-indicators li {
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    background-color: #404040;
 }

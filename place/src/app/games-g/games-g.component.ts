@@ -2,8 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Place } from '../model/place';
 import { Game } from '../model/game';
 import { Group } from '../model/group';
-import { map, tap } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   NgbModal, NgbCarouselConfig, NgbDateAdapter, NgbDateNativeAdapter,
@@ -19,6 +18,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { forkJoin } from 'rxjs';
 import { PlaceDataService } from '../data-service/place-data.service';
 import { GroupDataService } from '../data-service/group-data.service';
+import { concatMap, first } from 'rxjs/operators';
 
 
 @Component({
@@ -41,19 +41,26 @@ export class GamesGComponent implements OnInit {
   group: Group;
   gameLast: Game;
   gameNew: Game = new Game();
+  // gameNewRepeat = 1;
+  // gameNewRepeatN = 1;
+  gid: string;
 
-  @ViewChild('dlgremove') private dlgremove: any;
+  ilock = 'lock';
+  ilockopen = 'lock-open';
+
+  @ViewChild('dlggameremove') private dlggameremove: any;
 
   constructor(
     private gameDataService: GameDataService,
     private placeDataService: PlaceDataService,
-    private groupDataServer: GroupDataService,
+    private groupDataService: GroupDataService,
     private route: ActivatedRoute,
     private modalService: NgbModal,
     carouselConfig: NgbCarouselConfig,
     private swPush: SwPush,
     private pushService: PusherService,
     private spinner: NgxSpinnerService,
+    public router: Router,
   ) {
     carouselConfig.interval = 0;
   }
@@ -61,19 +68,45 @@ export class GamesGComponent implements OnInit {
   ngOnInit() {
     this.spinner.show();
     // this.route.data
-    forkJoin([
-      this.placeDataService.getPlaceByGroupId(this.route.snapshot.queryParams['group_id']),
-      this.groupDataServer.getGroupById(this.route.snapshot.queryParams['group_id']),
-      this.gameDataService.getAllGamesByGroupId(this.route.snapshot.queryParams['group_id']),
-      this.gameDataService.getLastGameByGroupId(this.route.snapshot.queryParams['group_id'])
-    ])
+    this.gid = this.route.snapshot.params['group_id'];
+    const os = this.groupDataService.getGroupByAccessId(this.gid)
+      .pipe(
+        concatMap(gr => {
+          console.log('getGroupAccess', gr);
+          if (!gr) {
+            alert('Gruppe ist nicht gefunden, privat oder keine Rechte');
+            this.router.navigate(['/places']);
+            return;
+          }
+          const oo = [
+            this.placeDataService.getPlaceByGroupId(gr.id),
+            this.groupDataService.getGroupById(gr.id),
+            this.gameDataService.getAllGamesByGroupId(gr.id),
+            this.gameDataService.getLastGameByGroupId(gr.id)
+          ];
+          return forkJoin(...oo);
+        }),
+        first()
+      );
+    // forkJoin([
+    //   this.placeDataService.getPlaceByGroupId(this.route.snapshot.params['group_id']),
+    //   this.groupDataServer.getGroupById(this.route.snapshot.params['group_id']),
+    //   this.gameDataService.getAllGamesByGroupId(this.route.snapshot.params['group_id']),
+    //   this.gameDataService.getLastGameByGroupId(this.route.snapshot.params['group_id'])
+    // ])
+    os
       .subscribe(
         (data) => {
           console.log('games-g - ngOnInit - ', data);
-          this.place = data[0];
-          this.group = data[1];
-          this.games = data[2];
-          this.gameLast = data[3];
+          this.place = data[0] as Place;
+          this.group = data[1] as Group;
+          this.games = data[2] as Game[];
+          this.gameLast = data[3] as Game;
+          if (!this.group) {
+            alert('Gruppe ist nicht gefunden oder privat');
+            this.router.navigate(['/places']);
+            return;
+          }
           if (!this.gameLast) {
             this.gameLast = new Game();
             this.gameLast.title = 'Freikick';
@@ -147,7 +180,7 @@ export class GamesGComponent implements OnInit {
       return m;
     });
     this.gameNew.id = '' + Math.floor(Math.random()); // FIXME
-    this.modalService.open(dlg, { ariaLabelledBy: 'dlg-title-gamenew' }).result.then((result) => {
+    this.modalService.open(dlg, { centered: true }).result.then((result) => {
       // this.closeResult = `Closed with: ${result}`;
       // only OK is here
       console.log(result);
@@ -171,6 +204,7 @@ export class GamesGComponent implements OnInit {
     this.gameNew.id = this.gameDataService.uid();
     this.gameNew.place_id = this.place.id;
     this.gameNew.group_id = this.group.id;
+    this.gameNew.play = 1;
     console.log(this.gameNew);
     this.gameDataService
       .createGame(this.gameNew)
@@ -193,34 +227,34 @@ export class GamesGComponent implements OnInit {
       );
   }
 
-  onGameRemoveDlg(game) {
-    this.modalService.open(this.dlgremove, { ariaLabelledBy: 'dlg-title-gameremove' }).result.then((result) => {
+  onGameRemoveDlg(game: Game) {
+    this.gameNew = game;
+    this.modalService.open(this.dlggameremove, { centered: true }).result.then((result) => {
       console.log(result);
       if (result === 'dlgremove') {
-        this.onRemoveGame(game);
+        this.gameDataService.removeGame(game.id).subscribe();
+        this.games = this.games.filter((g) => g.id !== game.id);
+        this.gameNew = null;
       }
     }, (reason) => { // close, esc
       console.log(reason);
+      this.gameNew = null;
     });
-  }
-
-  onRemoveGame(game: Game) {
-    this.gameDataService.removeGame(game.id).subscribe();
-    this.games = this.games.filter((g) => g.id !== game.id);
   }
 
   onSubscribeToNotifications() {
     console.log('onSubscribeToNotifications');
     if (this.swPush.isEnabled) {
-      console.log('Push-Service ist an');
+      console.log('onSubscribeToNotifications - Push-Service ist an');
       this.swPush.requestSubscription({
         serverPublicKey: environment.vapid.publicKey,
       })
         .then(sub => {
+          console.log('onSubscribeToNotifications - sub1 - ', sub);
           Object.assign(sub, { group_id: this.group.id });
           // Object.assign(sub, { place_id: this.place.id });
           Object.assign(sub, { active: 1 });
-          console.log('sub->', sub);
+          console.log('onSubscribeToNotifications - sub2 - ', sub);
           this.pushService.addPushSubscriber(sub).subscribe(res => {
             console.log('[App] Add subscriber request answer', res);
           });
@@ -256,5 +290,32 @@ export class GamesGComponent implements OnInit {
       console.log('sendNotifications2', res);
     });
   }
+
+  onLockGroup() {
+    // game.play = 9;
+    this.group.status = this.group.status === 1 ? 5 : 1;
+    this.groupDataService
+      .updateGroup(this.group)
+      .subscribe(
+        () => {
+
+        }
+      );
+  }
+
+  onGroupRemDlg(dlg: any) {
+    this.modalService.open(dlg, { size: 'sm', centered: true }).result.then(() => {
+      this.groupDataService
+        .removeGroup(this.group)
+        .subscribe(
+          () => {
+            this.router.navigate(['/groups', { place_id: this.place.id }]);
+          }
+        );
+    }, () => { // close, esc
+      // this.wait = false;
+    });
+  }
+
 
 }

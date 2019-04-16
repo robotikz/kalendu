@@ -4,6 +4,8 @@ import { interval, timer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Place } from '../model/place';
 import { Member } from '../model/member';
+import { Group } from '../model/group';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-game-list-item',
@@ -14,8 +16,10 @@ export class GameListItemComponent implements OnInit {
 
   @Input() game: Game;
 
-  @Input() groupTitle: string;
+  // @Input() groupTitle: string;
+  @Input() group: Group;
   @Input() place: Place;
+  @Input() gid: string;
 
   @Output() remove: EventEmitter<Game> = new EventEmitter();
   @Output() play: EventEmitter<Game> = new EventEmitter();
@@ -31,15 +35,20 @@ export class GameListItemComponent implements OnInit {
   bIsLoaded = false;
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
+    console.log('ngOnInit - game - ', this.game);
     if (!this.game.dd) {
       this.dtDeadline = new Date(this.game.dt);
       // this.dtDeadline.setHours(this.game.dt.getHours() - this.game.deadline);
       this.dtDeadline.setSeconds(this.dtDeadline.getSeconds() - 1);
     } else {
       this.dtDeadline = this.game.dd;
+      this.dtDeadline.setHours(this.game.ddt.hour);
+      this.dtDeadline.setMinutes(this.game.ddt.minute);
     }
     this.membersInit();
     // console.log(this.game.id + ' ' + this.dtDeadline);
@@ -75,15 +84,15 @@ export class GameListItemComponent implements OnInit {
     // });
   }
 
-  onGameRemove(game: Game) {
-    console.log(game);
-    this.remove.emit(game);
+  onGameRemove() {
+    console.log('onGameRemove - game - ', this.game);
+    this.remove.emit(this.game);
   }
 
-  onGamePlay(game: Game, n: number) {
-    game.play = n;
-    // console.log(game);
-    this.play.emit(game);
+  onGamePlay(n: number) {
+    this.game.play = n;
+    console.log('onGamePlay - game - ', this.game);
+    this.play.emit(this.game);
   }
 
   private dhms(t) {
@@ -100,5 +109,10 @@ export class GameListItemComponent implements OnInit {
     this.dlMinutes = '' + minutes;
     this.dlSeconds = '' + seconds;
   }
+
+  onNavigateGame() {
+    this.router.navigate(['/gamem', { group_id: this.route.snapshot.params['group_id'], game_id: this.game.id }]);
+  }
+
 
 }
