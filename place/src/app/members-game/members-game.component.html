@@ -13,7 +13,13 @@
         <div class="container px-0">
 
           <nav aria-label="breadcrumb">
-            <ol class="breadcrumb kalendu-breadcrumb">
+            <ol class="breadcrumb kalendu-breadcrumb px-0">
+              <li class="breadcrumb-item active" aria-current="page">
+                Orte
+              </li>
+              <li class="breadcrumb-item">
+                <a [routerLink]="['/places']">Spielstätten</a>
+              </li>
               <li class="breadcrumb-item">
                 <a [routerLink]="['/groups',{place_id: game.place.id}]">{{game.place.title}}</a>
               </li>
@@ -42,7 +48,7 @@
               <span class="kalendu-main-time"
                     (click)="game.group.aowner === gid && onGameDTStartDlg(dlgdtstart)">{{ (game.dtt.hour | oo) + ':' + (game.dtt.minute | oo ) }}
                 Uhr</span>
-            </div>
+            </div> 
             <div class="col-5 kalendu-main-info-zusagen-absagen">
               <div class="d-flex flex-row mx-0">
                 <div class="kalendu-main-circle-min text-center"
@@ -158,7 +164,8 @@
                      [ngClass]="{'kalendu-main-frei-number position-absolute' : true, 'kalendu-main-frei-number-2': (membersa.length+i+1)>9 }">
                   {{membersa.length+i+1}}
                 </div>
-                <div class="d-flex flex-row kalendu-main-frei-grey-bar w-100 justify-content-between">
+                <div class="d-flex flex-row kalendu-main-frei-grey-bar w-100 justify-content-between"
+                     (click)="onMemberNewDlg(dlgzusage)">
                   <div class="kalendu-main-frei-name">
                     Noch frei
                   </div>
@@ -231,13 +238,13 @@
       <i class="fas fa-times"></i>
     </button>
   </div> -->
-  <div class="modal-body kalendu-dlg-content-zusage" ngDraggable>
+  <div class="modal-body kalendu-dlg-content-zusage" ngDraggable [handle]="ngd">
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
       <i class="fas fa-times"></i>
     </button>
     <div class="row">
       <div class="col-12">
-        <h5>Wie heißt du?</h5>
+        <h5 #ngd>Wie heißt du?</h5>
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="Name" ngbAutofocus [(ngModel)]="memberNew.nick"
                  [ngbTypeahead]="memberNickSearch" (keyup.enter)="modal.close('ok')">
@@ -283,7 +290,7 @@
 
 <!-- ABSAGE -->
 <ng-template #dlgabsage let-modal>
-  <div class="modal-body kalendu-dlg-content-absage" ngDraggable>
+  <div class="modal-body kalendu-dlg-content-absage" ngDraggable [handle]="ngd">
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
       <i class="fas fa-times"></i>
     </button>
@@ -291,7 +298,7 @@
       <div class="row">
         <div class="col-1"></div>
         <div class="col-10">
-          <h5>Wie heißt du?</h5>
+          <h5 #ngd>Wie heißt du?</h5>
           <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Name" ngbAutofocus [(ngModel)]="memberNew.nick"
                    [ngbTypeahead]="memberNickSearch" (keyup.enter)="modal.close('ok')">
@@ -321,11 +328,16 @@
 
 <!-- MIN MAX -->
 <ng-template #dlgminmax let-modal>
-  <div class="modal-body" ngDraggable>
+  <div class="modal-body" ngDraggable [handle]="ngd">
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
       <i class="fas fa-times"></i>
     </button>
     <div class="container">
+      <div class="form-row" #ngd>
+        <div class="text-center col-12">
+          <label>Mitspieler</label>
+        </div>
+      </div>
       <div class="form-row">
         <div class="form-group col-6">
           <label>Min:</label>
@@ -347,12 +359,12 @@
 
 <!-- Deadline -->
 <ng-template #dlgdeadline let-modal>
-  <div class="modal-body" ngDraggable>
+  <div class="modal-body" ngDraggable [handle]="ngd">
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
       <i class="fas fa-times"></i>
     </button>
     <div class="container">
-      <div class="form-row text-center">
+      <div class="form-row text-center" #ngd>
         <div class="col-12">
           <label>Deadline:</label>
         </div>
@@ -379,12 +391,12 @@
 
 <!-- Day-Time Start -->
 <ng-template #dlgdtstart let-modal>
-  <div class="modal-body" ngDraggable>
+  <div class="modal-body" ngDraggable [handle]="ngd">
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
       <i class="fas fa-times"></i>
     </button>
     <div class="container">
-      <div class="form-row text-center">
+      <div class="form-row text-center" #ngd>
         <div class="col-12">
           <label>Wann spielen wir?</label>
         </div>
@@ -409,14 +421,14 @@
 
 <!-- Setts -->
 <ng-template #dlgsetts let-modal>
-  <div class="modal-body" ngDraggable>
+  <div class="modal-body" ngDraggable [handle]="ngd">
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
       <i class="fas fa-times"></i>
     </button>
     <div class="container">
       <div class="form-row">
         <div class="form-group col-6">
-          <label class="kalendu-dlg-content-label">Wann spielen wir?</label>
+          <label class="kalendu-dlg-content-label" #ngd>Wann spielen wir?</label>
           <input class="form-control" placeholder="dd.mm.yyyy" (focus)="d.open()" [(ngModel)]="game.dt" ngbDatepicker
                  #d="ngbDatepicker">
         </div>

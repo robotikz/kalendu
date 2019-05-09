@@ -3,15 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { PlacesComponent } from './places/places.component';
 import { APageNotFoundComponent } from './a-page-not-found/a-page-not-found.component';
 import { SignInComponent } from './sign-in/sign-in.component';
-import { ResolverPlaces } from './resolver/resolver.places';
 import { GroupsComponent } from './groups/groups.component';
-import { ResolverGroups } from './resolver/resolver.groups';
-import { GamesComponent } from './games/games.component';
-import { ResolverGames } from './resolver/resolver.games';
 import { GamesGComponent } from './games-g/games-g.component';
-import { ResolverGamesG } from './resolver/resolver.games.g';
 import { MembersGameComponent } from './members-game/members-game.component';
-import { ResolverMembersGame } from './resolver/resolver.members.game';
 // import { CanActivatePlacesGuard } from './can-activate-places.guard';
 
 const routes: Routes = [
@@ -42,17 +36,6 @@ const routes: Routes = [
     ],
     // resolve: {
     //   data: ResolverGroups
-    // }
-  },
-  {
-    path: 'games',
-    pathMatch: 'full',
-    component: GamesComponent,
-    canActivate: [
-    //   CanActivatePlacesGuard
-    ],
-    // resolve: {
-    //   data: ResolverGames
     // }
   },
   {
@@ -98,11 +81,7 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
   providers: [
-    ResolverPlaces,
-    ResolverGroups,
-    ResolverGames,
-    ResolverGamesG,
-    ResolverMembersGame
+    // ResolverPlaces,
     // CanActivatePlacesGuard
   ]
 })

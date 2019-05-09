@@ -3,7 +3,9 @@
     <div class="jumbotron">
       <div class="row no-gutters">
         <div class="col-2">
-          <img src="https://soccer-center-bonn.de/assets/images/dsc-189-2000x1125.jpg" class="avatar">
+          <!-- <img src="https://soccer-center-bonn.de/assets/images/dsc-189-2000x1125.jpg" class="avatar"> -->
+          <img class="avatar" src="assets/images/fallback-ort.jpg" *ngIf="!place.avatar">
+          <img class="avatar" [src]="place.avatar" *ngIf="place.avatar">
         </div>
         <div class="col-8">
           <a [routerLink]="['/groups',{place_id: place.id}]">

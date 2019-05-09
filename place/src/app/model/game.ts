@@ -15,9 +15,9 @@ export class Game {
     play = 1; // play - 1, play anyway - 2, cancel - 9
     // t: Date;
     group_id: string;
-    group: Group;
+    group: Group; // buffer properties
     place_id: string;
-    place: Place;
+    place: Place; // buffer properties
     members: Member[] = [];
     // dtd: Date;
     dtt: { 'hour': number; 'minute': number; 'second': number; };
@@ -39,6 +39,8 @@ export class Game {
 
     toJSON() {
         const r = Object.assign({}, this);
+        delete r.group;
+        delete r.place;
         // r.dtd = this.dt; // .toISOString();
         // r.ddd = this.dd; // .toISOString();
         return r;

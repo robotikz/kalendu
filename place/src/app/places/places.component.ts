@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Place } from '../model/place';
-import { PlaceDataService } from '../data-service/place-data.service';
+// import { PlaceDataService } from '../data-service/place-data.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FbService } from '../services/fb.service';
 
 @Component({
   selector: 'app-places',
@@ -15,7 +16,7 @@ export class PlacesComponent implements OnInit {
   places: Place[] = [];
 
   constructor(
-    private placeDataService: PlaceDataService,
+    private fbService: FbService,
     private spinner: NgxSpinnerService,
   ) {
 
@@ -24,7 +25,7 @@ export class PlacesComponent implements OnInit {
 
   ngOnInit() {
     this.spinner.show();
-    this.placeDataService.getAllPlaces()
+    this.fbService.getAllPlaces()
       // this.route.data
       .subscribe(
         (d) => {

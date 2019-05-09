@@ -1,8 +1,11 @@
 import { Place } from './place';
+import { Game } from './game';
 
 export class Group {
     id: string;
     title = '';
+    avatar = '';
+    sport = '';
     min: number;
     max: number;
     deadline: number;
@@ -10,20 +13,26 @@ export class Group {
     place: Place;
     camisole = false;
     ball = false;
+    pay = true;
 
     status = 1;
 
     owner: string; // email of owner
-    member: [] = [];  // email of members
+    member: string[] = [];  // email of members
     // access ids
     aowner: string;
     amember: string;
+    
+    // buffer properties
+    gamenext: Game;
 
     constructor(values: Object = {}) {
         Object.assign(this, values);
     }
 
     toJSON() {
-        return Object.assign({}, this);
+        const r = Object.assign({}, this);
+        delete r.gamenext;
+        return r;
     }
 }

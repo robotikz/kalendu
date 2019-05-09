@@ -6,6 +6,7 @@
 	],
 	"settings": {
 		"svn.path": "c:\\Users\\Public\\smartsvn\\bin\\smartsvn.exe",
-		"svn.ignoreMissingSvnWarning": true
+		"svn.ignoreMissingSvnWarning": true,
+		"git.ignoreLimitWarning": true
 	}
 }

@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 });
 
 router.get('/test', (req, res) => {
-    res.send('home - pusher test 16');
+    res.send('home - pusher test 17');
 });
 
 router.use('/', mailer);

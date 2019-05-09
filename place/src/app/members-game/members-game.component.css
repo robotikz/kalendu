@@ -1,11 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
 
-
-.kalendu-breadcrumb {
-  font-size: 0.6rem !important;
-}
-
 .kalendu-main-section {
   padding-top: 57px;
 }
@@ -198,6 +193,7 @@ span.kalendu-main-circle-max-number {
   padding: 0.5rem 1rem 0.5rem 50px;
   color: white;
   text-transform: uppercase;
+  cursor: pointer;
   /*-webkit-box-shadow: 0px 0px 10px 0px rgba(255,160,28,1);
 	-moz-box-shadow: 0px 0px 10px 0px rgba(255,160,28,1);
 	box-shadow: 0px 0px 10px 0px rgba(255,160,28,1);*/

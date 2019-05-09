@@ -1,393 +1,335 @@
 <!doctype html>
 <html lang="de" class="h-100">
-
-<head>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <META HTTP-EQUIV="Language" CONTENT="de">
-    <meta name="description"
-          content="Kalendu ist die Terminfindungs-App für Freizeit- und Vereinsmannschaften. Mannschaften, Training und Spiele ganz einfach verwalten!">
-
+    <meta name="description" content="Kalendu ist die Terminfindungs-App für Freizeit- und Vereinsmannschaften. Mannschaften, Training und Spiele ganz einfach verwalten!">
+    
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
-    <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
-          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-
-    <!-- Meta Data -->
-    <meta name="robots" content="noindex,nofollow">
-    <meta property="og:url" content="www.kalendu.de" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Kalendu" />
-    <meta property="og:description"
-          content="Kalendu ist die Terminfindungs-App für Freizeit- und Vereinsmannschaften. Mannschaften, Training und Spiele ganz einfach verwalten!" />
-
-    <title>Kalendu</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    
+   	<!-- Font Awesome CDN -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+	
+	<!-- Meta Data -->
+	<meta name="robots" content="noindex,nofollow">
+	<meta property="og:url" content="www.kalendu.de"/>
+	<meta property="og:type" content="website"/>
+	<meta property="og:title" content="Kalendu"/>
+	<meta property="og:description" content="Kalendu ist die Terminfindungs-App für Freizeit- und Vereinsmannschaften. Mannschaften, Training und Spiele ganz einfach verwalten!"/>
+	
+	<title>Kalendu</title>
 
     <!-- Custom styles for this template -->
     <link href="css/template-globals.css" rel="stylesheet">
     <link href="css/template-header.css" rel="stylesheet">
     <link href="css/template-main.css" rel="stylesheet">
     <link href="css/template-footer.css" rel="stylesheet">
-</head>
+  	</head>
+ 	<body>
+ 		<div class="d-flex flex-column h-100">
+			<header>
+				<!-- Fixed navbar -->
+				<nav class="navbar navbar-expand-md navbar-dark fixed-top kalendu-fixed-header-bg">
+					<div class="container">
+						<a class="navbar-brand" href="#"><img src="images/kalendu-logo-30x30.png" class="kalendu-header-logo pr-1" width="30px" alt="Logo von Kalendu">Kalendu</a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="collapse navbar-collapse" id="navbarCollapse">
+							<ul class="navbar-nav mr-auto">
+								<li class="nav-item">
+									<a class="nav-link" href="#">Orte</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#">Gruppen</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#">Runden</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+				<!-- /Fixed navbar -->
+			</header>
 
-<body>
-    <div class="d-flex flex-column h-100">
-        <header>
-            <!-- Fixed navbar -->
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top kalendu-fixed-header-bg">
-                <div class="container">
-                    <a class="navbar-brand" href="#"><img src="images/kalendu-logo-30x30.png"
-                             class="kalendu-header-logo pr-1" width="30px" alt="Logo von Kalendu">Kalendu</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-                            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Orte</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Gruppen</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Runden</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <!-- /Fixed navbar -->
-        </header>
+			<!-- Main -->
+			<main role="main" class="flex-shrink-0 kalendu-main-section pb-2 mb-3">
+					<div class="container px-0">
+						<div class="container px-0">
+							<div class="d-flex flex-row">
+								<div class="container px-0">
+									<nav aria-label="breadcrumb">
+										<ol class="breadcrumb kalendu-breadcrumb">
+											<li class="breadcrumb-item"><a href="#">Kaserne</a></li>
+											<li class="breadcrumb-item"><a href="#">Freizeitkick FTE</a></li>
+											<li class="breadcrumb-item active" aria-current="page">Freizeitkick 12.09.2019</li>
+										</ol>
+									</nav>
+									<div class="container kalendu-main-headline">
+										<h1>Spielrunde</h1>
+									</div>
+									<div class="d-flex flex-row my-3 position-relative">
+										<div class="col-3 kalendu-main-info-day">
+											<i class="fas fa-calendar-alt"></i>
+											<span class="kalendu-main-day">Samstag, 12.09.19</span>
+										</div>
+										<div class="col-3 kalendu-main-info-time">
+											<i class="fas fa-clock"></i>
+											<span class="kalendu-main-time">17:00 Uhr</span>
+										</div>
+										<div class="col-6 kalendu-main-info-zusagen-absagen">
+											<div class="d-flex flex-row mx-0">
+												<div class="kalendu-main-circle-min text-center">
+													<span class="kalendu-main-circle-min-text">Min</span>
+													<span class="kalendu-main-circle-min-number">12</span>
+												</div>
+												<div class="kalendu-main-circle-max text-center ml-2">
+													<span class="kalendu-main-circle-max-text">Max</span>
+													<span class="kalendu-main-circle-max-number">14</span>
+												</div>
+											</div>
+										</div>
+										<div class="kalendu-main-settings-button">
+											<i class="fas fa-sliders-h"></i>
+										</div>
+										<div class="kalendu-main-share-button">
+											<i class="fas fa-share-alt"></i>
+										</div>
+									</div>
+									<div class="d-flex container kalendu-main-info-bar py-2 pr-0 justify-content-between">
+										<div class="col-3 kalendu-main-zusagen text-center mr-2">
+											<div class="kalendu-main-zusagen-headline">
+												Zusagen
+											</div>
+											<div class="kalendu-main-zusagen-number">
+												<span class="kalendu-main-zusagen-red-number">6</span> / 14
+											</div>
+										</div>
+										<div class="col-3 kalendu-main-absagen text-center">
+											<div class="kalendu-main-absagen-headline">
+												Absagen
+											</div>
+											<div class="kalendu-main-absagen-number">
+												2
+											</div>
+										</div>
+										<div class="col-6 kalendu-main-deadline pl-2 pr-0">
+											<span class="kalendu-main-deadline-headline">Deadline</span><br>
+											<span class="kalendu-main-deadline-red-number">02</span> Tage<br>
+											<span class="kalendu-main-deadline-red-number">10</span> Stunden<br>
+											<span class="kalendu-main-deadline-red-number">06</span> Minuten<br>
+											<span class="kalendu-main-deadline-icon"><i class="fas fa-tshirt"></i></span> <span class="kalendu-main-deadline-check"><i class="fas fa-check"></i></span>
+											<span class="kalendu-main-deadline-icon"><i class="fas fa-futbol"></i></span> <span class="kalendu-main-deadline-check"><i class="fas fa-check"></i></span>
+										</div>
+									</div>
+									<div class="d-flex flex-row kalendu-mains-ctas justify-content-center my-3">
+										<a class="btn btn-primary kalendu-main-button-zusagen mr-2 px-4" href="#">Zusagen</a>
+										<a class="btn btn-primary kalendu-main-button-absagen ml-2 px-4" href="#">Absagen</a>
+									</div>
+									<div class="d-flex flex-row kalendu-main-zusagen-block">
+										<div class="col-1 kalendu-main-zusagen-block-titel text-center">Z<br>u<br>s<br>a<br>g<br>e<br>n</div>
+										<div class="col-11">
+											<!-- Player Zusagen Elements -->
+											<div class="kalendu-main-zusage align-items-center mb-3 position-relative">
+												<div class="kalendu-main-zusage-number position-absolute">
+													1
+												</div>
+												<div class="d-flex flex-row kalendu-main-zusage-green-bar w-100 justify-content-between">
+													<div class="kalendu-main-zusage-name">
+														Matthias
+													</div>
+													<div class="kalendu-main-zusage-icons">
+														<i class="fas fa-tshirt"></i>
+														<i class="fas fa-futbol"></i>
+													</div>
+												</div>
+												<div class="kalendu-main-edit-button">
+													<i class="fas fa-edit"></i>
+												</div>
+											</div>
+											<div class="kalendu-main-zusage align-items-center mb-3 position-relative">
+												<div class="kalendu-main-zusage-number position-absolute">
+													2
+												</div>
+												<div class="d-flex flex-row kalendu-main-zusage-green-bar w-100 justify-content-between">
+													<div class="kalendu-main-zusage-name">
+														Jonas
+													</div>
+													<div class="kalendu-main-zusage-icons">
+														<i class="fas fa-futbol"></i>
+													</div>
+												</div>
+												<div class="kalendu-main-edit-button">
+													<i class="fas fa-edit"></i>
+												</div>
+											</div>
+											<div class="kalendu-main-zusage align-items-center mb-3 position-relative">
+												<div class="kalendu-main-zusage-number position-absolute">
+													3
+												</div>
+												<div class="d-flex flex-row kalendu-main-zusage-green-bar w-100 justify-content-between">
+													<div class="kalendu-main-zusage-name">
+														Alexandr
+													</div>
+													<div class="kalendu-main-zusage-icons">
+														
+													</div>
+												</div>
+												<div class="kalendu-main-edit-button">
+													<i class="fas fa-edit"></i>
+												</div>
+											</div>
+											<!-- /Player Zusagen Elements -->
+											<!-- Player Empty Elements -->
+											<div class="kalendu-main-frei align-items-center mb-3 position-relative">
+												<div class="kalendu-main-frei-number position-absolute">
+													4
+												</div>
+												<div class="d-flex flex-row kalendu-main-frei-grey-bar w-100 justify-content-between">
+													<div class="kalendu-main-frei-name">
+														Noch frei
+													</div>
+													<div class="kalendu-main-frei-icons">
+														
+													</div>
+												</div>
+											</div>
+											<div class="kalendu-main-frei align-items-center mb-3 position-relative">
+												<div class="kalendu-main-frei-number position-absolute">
+													5
+												</div>
+												<div class="d-flex flex-row kalendu-main-frei-grey-bar w-100 justify-content-between">
+													<div class="kalendu-main-frei-name">
+														Noch frei
+													</div>
+													<div class="kalendu-main-frei-icons">
+														
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- Separator -->
+									<div class="container-fluid p-0 mx-0 mt-3 kalendu-separator">
+									
+										<div class="kalendu-separator-line"></div>
+										<div class="kalendu-separator-min">Min</div>
+										<div class="kalendu-separator-max">Min</div>
+										<div class="kalendu-separator-triangle"></div>
+									</div>
+									<!-- /Separator -->
+									<div class="d-flex flex-row kalendu-main-zusagen-block mt-4">
+										<div class="col-1 kalendu-main-zusagen-block-titel text-center"></div>
+										<div class="col-11">
+											
+											<!-- Player Empty Elements -->
+											<div class="kalendu-main-frei align-items-center mb-3 position-relative">
+												<div class="kalendu-main-frei-number position-absolute">
+													6
+												</div>
+												<div class="d-flex flex-row kalendu-main-frei-grey-bar w-100 justify-content-between">
+													<div class="kalendu-main-frei-name">
+														Noch frei
+													</div>
+													<div class="kalendu-main-frei-icons">
+														
+													</div>
+												</div>
+											</div>
+											<div class="kalendu-main-frei align-items-center mb-3 position-relative">
+												<div class="kalendu-main-frei-number position-absolute">
+													7
+												</div>
+												<div class="d-flex flex-row kalendu-main-frei-grey-bar w-100 justify-content-between">
+													<div class="kalendu-main-frei-name">
+														Noch frei
+													</div>
+													<div class="kalendu-main-frei-icons">
+														
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- Separator -->
+									<div class="container-fluid p-0 mx-0 mt-3 kalendu-separator">
+									
+										<div class="kalendu-separator-line"></div>
+										<div class="kalendu-separator-min">Max</div>
+										<div class="kalendu-separator-max">Max</div>
+										<div class="kalendu-separator-triangle"></div>
+									</div>
+									<!-- /Separator -->
+									<div class="d-flex flex-row kalendu-main-zusagen-block mt-4">
+										<div class="col-1 kalendu-main-zusagen-block-titel text-center">A<br>b<br>s<br>a<br>g<br>e<br>n</div>
+										<div class="col-11">
+											<!-- Player Absagen Elements -->
+											<div class="kalendu-main-frei align-items-center mb-3 position-relative">
+												<div class="kalendu-main-absagen-nummer position-absolute">
+													1
+												</div>
+												<div class="d-flex flex-row kalendu-main-absagen-red-bar w-100 justify-content-between">
+													<div class="kalendu-main-absagen-name">
+														Carina
+													</div>
+													<div class="kalendu-main-absagen-icons">
+														<i class="fas fa-comment"></i>
+													</div>
+												</div>
+												<div class="kalendu-main-edit-button">
+													<i class="fas fa-edit"></i>
+												</div>
+											</div>
+											<div class="kalendu-main-frei align-items-center mb-3 position-relative">
+												<div class="kalendu-main-absagen-nummer position-absolute">
+													2
+												</div>
+												<div class="d-flex flex-row kalendu-main-absagen-red-bar w-100 justify-content-between">
+													<div class="kalendu-main-absagen-name">
+														Niklas
+													</div>
+													<div class="kalendu-main-absagen-icons">
+														
+													</div>
+												</div>
+												<div class="kalendu-main-edit-button">
+													<i class="fas fa-edit"></i>
+												</div>
+											</div>
+											<!-- Player /Absagen Elements -->
+										</div>
+									</div>
+								</div>
+								<div class="kalendu-edit-col">
+								</div>
+							</div>
+						</div>
+					</div>
+				</main>
+			<!-- /Main -->
 
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- Main -->
-        <main role="main" class="flex-shrink-0 kalendu-main-section pb-2 mb-3">
-            <div class="container px-0">
-                <div class="container px-0">
-                    <div class="d-flex flex-row">
-                        <div class="container px-0">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb kalendu-breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">Kaserne</a></li>
-                                    <li class="breadcrumb-item"><a href="#">Freizeitkick FTE</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Freizeitkick 12.09.2019</li>
-                                </ol>
-                            </nav>
-                            <div class="container kalendu-main-headline">
-                                <h1>Spielrunde</h1>
-                            </div>
-
-                            <div class="d-flex flex-row my-3 position-relative">
-                                <div class="col-3 kalendu-main-info-day">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span class="kalendu-main-day">Samstag, 12.09.19</span>
-                                </div>
-                                <div class="col-3 kalendu-main-info-time">
-                                    <i class="fas fa-clock"></i>
-                                    <span class="kalendu-main-time">17:00 Uhr</span>
-                                </div>
-                                <div class="col-6 kalendu-main-info-zusagen-absagen">
-                                    <div class="d-flex flex-row mx-0">
-                                        <div class="kalendu-main-circle-min text-center">
-                                            <span class="kalendu-main-circle-min-text">Min</span>
-                                            <span class="kalendu-main-circle-min-number">12</span>
-                                        </div>
-                                        <div class="kalendu-main-circle-max text-center ml-2">
-                                            <span class="kalendu-main-circle-max-text">Max</span>
-                                            <span class="kalendu-main-circle-max-number">14</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="kalendu-main-settings-button">
-                                    <i class="fas fa-sliders-h"></i>
-                                </div>
-                                <div class="kalendu-main-share-button">
-                                    <i class="fas fa-share-alt"></i>
-                                </div>
-                            </div>
-
-                            <div class="d-flex container kalendu-main-info-bar py-2 pr-0 justify-content-between">
-                                <div class="col-3 kalendu-main-zusagen text-center mr-2">
-                                    <div class="kalendu-main-zusagen-headline">
-                                        Zusagen
-                                    </div>
-                                    <div class="kalendu-main-zusagen-number">
-                                        <span class="kalendu-main-zusagen-red-number">6</span> / 14
-                                    </div>
-                                </div>
-                                <div class="col-3 kalendu-main-absagen text-center">
-                                    <div class="kalendu-main-absagen-headline">
-                                        Absagen
-                                    </div>
-                                    <div class="kalendu-main-absagen-number">
-                                        2
-                                    </div>
-                                </div>
-                                <div class="col-6 kalendu-main-deadline pl-2 pr-0">
-                                    <span class="kalendu-main-deadline-headline">Deadline</span><br>
-                                    <span class="kalendu-main-deadline-red-number">02</span> Tage<br>
-                                    <span class="kalendu-main-deadline-red-number">10</span> Stunden<br>
-                                    <span class="kalendu-main-deadline-red-number">06</span> Minuten<br>
-                                    <span class="kalendu-main-deadline-icon"><i class="fas fa-tshirt"></i></span> <span
-                                          class="kalendu-main-deadline-check"><i class="fas fa-check"></i></span>
-                                    <span class="kalendu-main-deadline-icon"><i class="fas fa-futbol"></i></span> <span
-                                          class="kalendu-main-deadline-check"><i class="fas fa-check"></i></span>
-                                </div>
-                            </div>
-
-                            <div class="d-flex flex-row kalendu-mains-ctas justify-content-center my-3">
-                                <a class="btn btn-primary kalendu-main-button-zusagen mr-2 px-4" href="#">Zusagen</a>
-                                <a class="btn btn-primary kalendu-main-button-absagen ml-2 px-4" href="#">Absagen</a>
-                            </div>
-
-                            <div class="d-flex flex-row kalendu-main-zusagen-block">
-                                <div class="col-1 kalendu-main-zusagen-block-titel text-center">
-                                    Z<br>u<br>s<br>a<br>g<br>e<br>n
-                                </div>
-                                <div class="col-11">
-                                    <!-- Player Zusagen Elements -->
-                                    <div class="kalendu-main-zusage align-items-center mb-3 position-relative">
-                                        <div class="kalendu-main-zusage-number position-absolute">
-                                            1
-                                        </div>
-                                        <div
-                                             class="d-flex flex-row kalendu-main-zusage-green-bar w-100 justify-content-between">
-                                            <div class="kalendu-main-zusage-name">
-                                                Matthias
-                                            </div>
-                                            <div class="kalendu-main-zusage-icons">
-                                                <i class="fas fa-tshirt"></i>
-                                                <i class="fas fa-futbol"></i>
-                                            </div>
-                                        </div>
-                                        <div class="kalendu-main-edit-button">
-                                            <i class="fas fa-edit"></i>
-                                        </div>
-                                    </div>
-                                    <div class="kalendu-main-zusage align-items-center mb-3 position-relative">
-                                        <div class="kalendu-main-zusage-number position-absolute">
-                                            2
-                                        </div>
-                                        <div
-                                             class="d-flex flex-row kalendu-main-zusage-green-bar w-100 justify-content-between">
-                                            <div class="kalendu-main-zusage-name">
-                                                Jonas
-                                            </div>
-                                            <div class="kalendu-main-zusage-icons">
-                                                <i class="fas fa-futbol"></i>
-                                            </div>
-                                        </div>
-                                        <div class="kalendu-main-edit-button">
-                                            <i class="fas fa-edit"></i>
-                                        </div>
-                                    </div>
-                                    <div class="kalendu-main-zusage align-items-center mb-3 position-relative">
-                                        <div class="kalendu-main-zusage-number position-absolute">
-                                            3
-                                        </div>
-                                        <div
-                                             class="d-flex flex-row kalendu-main-zusage-green-bar w-100 justify-content-between">
-                                            <div class="kalendu-main-zusage-name">
-                                                Alexandr
-                                            </div>
-                                            <div class="kalendu-main-zusage-icons">
-
-                                            </div>
-                                        </div>
-                                        <div class="kalendu-main-edit-button">
-                                            <i class="fas fa-edit"></i>
-                                        </div>
-                                    </div>
-                                    <!-- /Player Zusagen Elements -->
-                                    <!-- Player Empty Elements -->
-                                    <div class="kalendu-main-frei align-items-center mb-3 position-relative">
-                                        <div class="kalendu-main-frei-number position-absolute">
-                                            4
-                                        </div>
-                                        <div
-                                             class="d-flex flex-row kalendu-main-frei-grey-bar w-100 justify-content-between">
-                                            <div class="kalendu-main-frei-name">
-                                                Noch frei
-                                            </div>
-                                            <div class="kalendu-main-frei-icons">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="kalendu-main-frei align-items-center mb-3 position-relative">
-                                        <div class="kalendu-main-frei-number position-absolute">
-                                            5
-                                        </div>
-                                        <div
-                                             class="d-flex flex-row kalendu-main-frei-grey-bar w-100 justify-content-between">
-                                            <div class="kalendu-main-frei-name">
-                                                Noch frei
-                                            </div>
-                                            <div class="kalendu-main-frei-icons">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Separator -->
-                            <div class="container-fluid p-0 mx-0 mt-3 kalendu-separator">
-                                <div class="kalendu-separator-line"></div>
-                                <div class="kalendu-separator-min">Min</div>
-                                <div class="kalendu-separator-max">Min</div>
-                                <div class="kalendu-separator-triangle"></div>
-                            </div>
-                            <!-- /Separator -->
-                            <div class="d-flex flex-row kalendu-main-zusagen-block mt-4">
-                                <div class="col-1 kalendu-main-zusagen-block-titel text-center"></div>
-                                <div class="col-11">
-
-                                    <!-- Player Empty Elements -->
-                                    <div class="kalendu-main-frei align-items-center mb-3 position-relative">
-                                        <div class="kalendu-main-frei-number position-absolute">
-                                            6
-                                        </div>
-                                        <div
-                                             class="d-flex flex-row kalendu-main-frei-grey-bar w-100 justify-content-between">
-                                            <div class="kalendu-main-frei-name">
-                                                Noch frei
-                                            </div>
-                                            <div class="kalendu-main-frei-icons">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="kalendu-main-frei align-items-center mb-3 position-relative">
-                                        <div class="kalendu-main-frei-number position-absolute">
-                                            7
-                                        </div>
-                                        <div
-                                             class="d-flex flex-row kalendu-main-frei-grey-bar w-100 justify-content-between">
-                                            <div class="kalendu-main-frei-name">
-                                                Noch frei
-                                            </div>
-                                            <div class="kalendu-main-frei-icons">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Separator -->
-                            <div class="container-fluid p-0 mx-0 mt-3 kalendu-separator">
-                                <div class="kalendu-separator-line"></div>
-                                <div class="kalendu-separator-min">Max</div>
-                                <div class="kalendu-separator-max">Max</div>
-                                <div class="kalendu-separator-triangle"></div>
-                            </div>
-                            <!-- /Separator -->
-                            <div class="d-flex flex-row kalendu-main-zusagen-block mt-4">
-                                <div class="col-1 kalendu-main-zusagen-block-titel text-center">
-                                    A<br>b<br>s<br>a<br>g<br>e<br>n
-                                </div>
-                                <div class="col-11">
-                                    <!-- Player Absagen Elements -->
-                                    <div class="kalendu-main-frei align-items-center mb-3 position-relative">
-                                        <div class="kalendu-main-absagen-nummer position-absolute">
-                                            1
-                                        </div>
-                                        <div
-                                             class="d-flex flex-row kalendu-main-absagen-red-bar w-100 justify-content-between">
-                                            <div class="kalendu-main-absagen-name">
-                                                Carina
-                                            </div>
-                                            <div class="kalendu-main-absagen-icons">
-                                                <i class="fas fa-comment"></i>
-                                            </div>
-                                        </div>
-                                        <div class="kalendu-main-edit-button">
-                                            <i class="fas fa-edit"></i>
-                                        </div>
-                                    </div>
-                                    <div class="kalendu-main-frei align-items-center mb-3 position-relative">
-                                        <div class="kalendu-main-absagen-nummer position-absolute">
-                                            2
-                                        </div>
-                                        <div
-                                             class="d-flex flex-row kalendu-main-absagen-red-bar w-100 justify-content-between">
-                                            <div class="kalendu-main-absagen-name">
-                                                Niklas
-                                            </div>
-                                            <div class="kalendu-main-absagen-icons">
-
-                                            </div>
-                                        </div>
-                                        <div class="kalendu-main-edit-button">
-                                            <i class="fas fa-edit"></i>
-                                        </div>
-                                    </div>
-                                    <!-- Player /Absagen Elements -->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="kalendu-edit-col">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-        <!-- /Main -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <footer class="footer mt-auto kalendu-footer mt-3">
-            <div class="container-fluid kalendu-footer-legal p-1">
-                <div class="container">
-                    <div class="d-flex flex-row kalendu-footer-links justify-content-between">
-                        <div class="footer-copyright">
-                            &copy; 2019 <a href="https://www.web-service-as.de" target="_blank">Web-Service AS</a>
-                        </div>
-                        <div class="footer-legal-links">
-                            <a href="">Über</a> | <a href="">Datenschutz</a> | <a href="">Impressum</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-                integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-                crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-                crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-                crossorigin="anonymous"></script>
-</body>
-
+			<footer class="footer mt-auto kalendu-footer mt-3">
+				<div class="container-fluid kalendu-footer-legal p-1">
+					<div class="container">
+						<div class="d-flex flex-row kalendu-footer-links justify-content-between">
+							<div class="footer-copyright">
+								&copy; 2019 <a href="https://www.web-service-as.de" target="_blank">Web-Service AS</a>
+							</div>
+							<div class="footer-legal-links">
+								<a href="">Über</a> | <a href="">Datenschutz</a> | <a href="">Impressum</a>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</footer>
+		
+	
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	</body>
 </html>

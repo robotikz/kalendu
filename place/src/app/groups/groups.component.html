@@ -4,48 +4,155 @@
 <ngx-spinner bdColor="#c1c1c1" size="large" color="#fff" type="ball-scale-multiple">
 </ngx-spinner>
 
-<div class="container kalendu-main-section" *ngIf="!loading">
-  <p class="path">
-    Orte
-    <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span>
-    <a [routerLink]="['/places']">
-      Spielstätten
-    </a>
-    <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span> Gruppen
-  </p>
-  <div class="row">
-    <div class="col-6">
-      <h3>Spielgruppen</h3>
-    </div>
-    <div class="col-6">
-      <button type="button" class="btn btn-outline-dark btn-round" (click)="onGroupAddDlg(dlggroupnew)">
-        <i class="fas fa-plus"></i>
-      </button>
-    </div>
-  </div>
-  <div *ngFor="let group of groups">
-    <app-group-list-item [group]="group" [place]="place" (lock)='onLockGroup($event)'
-                         (dlgRequest)='mailerSendRequestDlg(dlgsend, $event)'></app-group-list-item>
-  </div>
+<main role="main" class="flex-shrink-0 kalendu-main-section pb-2 mb-3" *ngIf="!loading">
+  <div class="container px-0">
+    <div class="container px-0">
+      <div class="d-flex flex-row">
+        <div class="container px-0">
 
-</div>
+          <div class="kalendu-main-zusagen-block">
+            <div class="container">
+              <div class="position-relative mb-4">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb kalendu-breadcrumb  px-0">
+                    <li class="breadcrumb-item active" aria-current="page">
+                      Orte
+                    </li>
+                    <li class="breadcrumb-item">
+                      <a [routerLink]="['/places']">Spielstätten</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                      {{place.title}}
+                    </li>
+                  </ol>
+                </nav>
+                <div class="container kalendu-main-headline px-0">
+                  <h1>{{place.title}}</h1>
+                </div>
+                <div class="kalendu-main-spielort-bild">
+                  <!-- <img src="images/kaserne.jpg"> -->
+                </div>
+                <!-- EDIT BAR -->
+                <a class="kalendu-main-edit-button mt-4" target="_blank"
+                   href="https://www.google.com/maps/search/?api=1&query={{place.street}} {{place.nr}} {{place.zip}} {{place.city}}">
+                  <i class="fas fa-location-arrow"></i>
+                </a>
+                <!-- /EDIT BAR -->
+                <div class="d-flex flex-row kalendu-main-group-info">
+                  <div class="col-4 kalendu-group-info-label px-0">Adresse:</div>
+                  <div class="col-8 kalendu-group-info-data px-0">{{place.street}} {{place.nr}}<br>{{place.zip}}
+                    {{place.city}}</div>
+                </div>
+                <div class="d-flex flex-row kalendu-main-group-info px-0">
+                  <div class="col-4 kalendu-group-info-label px-0">Info:</div>
+                  <div class="col-8 kalendu-group-info-data px-0">{{place.info}}</div>
+                </div>
+                <!-- <div class="d-flex flex-row kalendu-mains-ctas justify-content-center my-3 px-0">
+                  <a class="btn btn-primary kalendu-main-button-spielrunden mr-2 px-4" href="#">Spielrunden</a>
+                  <a class="btn btn-primary kalendu-main-button-spieler ml-2 px-4" href="#">Spielgruppen</a>
+                </div> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="kalendu-main-zusagen-block mt-4">
+            <div class="container">
+
+              <!-- /Spielrunden Elements -->
+              <div class="position-relative mb-4">
+                <h2>Spielgruppen</h2>
+                <!-- EDIT BAR -->
+                <div class="kalendu-main-edit-button" (click)="onGroupAddDlg(dlggroupnew)">
+                  <i class="fas fa-plus"></i>
+                </div>
+                <!-- /EDIT BAR -->
+              </div>
+
+
+
+              <div class="kalendu-main-spielgruppe-item position-relative" [ngClass]="{'pointer': group.status === 1}"
+                   *ngFor="let group of groups" (click)="onNavigateMember(group)">
+                <div class="kalendu-main-spielgruppe-top-info text-center">Wir suchen Mitspieler!</div>
+                <div class="kalendu-main-spielgruppe-top-info2 text-center" *ngIf="group.gamenext?.id">Nächstes Spiel:
+                  {{group.gamenext?.dt | date:'EEEE, dd.MM.yyyy HH:mm'}}</div>
+                <div class="kalendu-main-spielgruppe-top-info2 text-center" *ngIf="!group.gamenext?.id">Nächstes Spiel: -
+                </div>
+                <div class="d-flex flex-row p-2">
+                  <div class="kalendu-main-spielgruppe-bild pr-3">
+                    <img src="assets/images/fallback-gruppe.jpg" *ngIf="!group.avatar">
+                    <img [src]="group.avatar" *ngIf="group.avatar">
+                  </div>
+                  <div class="kalendu-main-spielgruppe-infos">
+                    <h3 class="kalendu-main-spielgruppe-headline">{{group.title}}</h3>
+                    <div class="kalendu-main-spielgruppe-infos-status" *ngIf="group.status === 5"
+                         (click)="onNavigateAdmin(group)">
+                      <i class="fas fa-lock"></i><span>&nbsp;Privat</span>
+                      <span *ngIf="group.pay">&nbsp;|&nbsp;</span> <i class="fas fa-euro-sign"
+                         *ngIf="group.pay"></i><span *ngIf="group.pay">&nbsp;Kostet</span>
+                    </div>
+                    <div class="kalendu-main-spielgruppe-infos-status" *ngIf="group.status === 1"
+                         (click)="onNavigateAdmin(group)">
+                      <i class="fas fa-lock-open"></i> <span>&nbsp;Offen</span>
+                      <span *ngIf="group.pay">&nbsp;|&nbsp;</span><i class="fas fa-euro-sign"
+                         *ngIf="group.pay"></i><span *ngIf="group.pay">&nbsp;Kostet</span>
+                    </div>
+                    <div class="kalendu-main-spielgruppe-infos-typ">Freizeitmannschaft
+                    </div>
+                    <!-- <div class="kalendu-main-spielgruppe-infos-niveau">Niveau: gemischt</div> -->
+                    <!-- <div class="kalendu-main-spielgruppe-infos-niveau" *ngIf="group.pay">Man muss bezahlen!</div> -->
+                    <div class="kalendu-main-spielgruppe-infos-sportarten">
+                      <!-- <span class="text-left " *ngIf="group.gamenext.id">Nächste Spiel: -->
+                      <!-- {{group.gamenext.dt | date:'EEEE, dd.MM.yyyy HH:mm'}}</span> -->
+                      <!-- <span class="text-left " *ngIf="!group.gamenext.id">Nächste Spiel: -</span> -->
+                      <span>Sportart:&nbsp;</span>
+                      <span>{{group.sport}}</span>
+                      <!-- <i class="fas fa-futbol"></i> -->
+                    </div>
+                  </div>
+                </div>
+                <!-- EDIT BAR -->
+                <!-- <div class="kalendu-main-edit-button">
+                  <i class="fas fa-edit"></i>
+                </div> -->
+                <div class="kalendu-main-edit-button2" *ngIf="group.status === 5"
+                     (click)="mailerSendRequestDlg(dlgsend, group); $event.stopPropagation()">
+                  <i class="fas fa-envelope"></i>
+                </div>
+                <!-- /EDIT BAR -->
+              </div>
+
+            </div>
+          </div>
+
+          <!-- <div *ngFor="let group of groups">
+            <app-group-list-item [group]="group" [place]="place" (lock)='onLockGroup($event)'
+                                 (dlgRequest)='mailerSendRequestDlg(dlgsend, $event)'></app-group-list-item>
+          </div> -->
+
+        </div>
+        <div class="kalendu-edit-col">
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
 
 
 <app-a-footer></app-a-footer>
 
 <!-- DLG SEND -->
 <ng-template #dlgsend let-modal let-c="close" let-d="dismiss">
-  <div class="modal-body bg-outline-dark">
+  <div class="modal-body bg-outline-dark" ngDraggable [handle]="ngd">
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
       <i class="fas fa-times"></i>
     </button>
     <form class="text-left" [formGroup]="frm">
-      <div class="form-group">
+      <div class="form-group" #ngd>
         <label>Gruppe: {{group.title}}</label>
       </div>
       <div class="form-group">
         <label>Ihre E-Mail:</label>
-        <input type="text" class="form-control" placeholder="max.mustermann@mail.de" formControlName="email"
+        <input type="text" class="form-control" placeholder="max.mustermann@mail.de" formControlName="email" autofocus
                [ngClass]="{ 'is-invalid': f.email.errors, 'is-valid': !f.email.errors }">
         <div *ngIf="f.email.errors" class="invalid-feedback">
           <div *ngIf="f.email.errors.required">Bitte tragen Sie ihre E-Mail ein.</div>
@@ -79,17 +186,17 @@
 
 <!-- DLG GROUP NEW -->
 <ng-template #dlggroupnew let-modal let-c="close" let-d="dismiss">
-  <div class="modal-body bg-outline-dark" ngDraggable>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
+  <div class="modal-body bg-outline-dark" ngDraggable [handle]="ngd">
+    <button type="button" class="close" (click)="modal.dismiss('close')">
       <i class="fas fa-times"></i>
     </button>
-    <form class="text-left" [formGroup]="frmg">
-      <div class="form-group">
+    <form class="text-left" [formGroup]="frmg" >
+      <div class="form-group" #ngd>
         <label>Ort: {{place.title}}</label>
       </div>
-      <div class="form-group">
+      <div class="form-group" >
         <label>Gruppe-Titel:</label>
-        <input type="text" class="form-control" formControlName="title"
+        <input type="text" class="form-control" formControlName="title" autofocus
                [ngClass]="{ 'is-invalid': fg.title.errors, 'is-valid': !fg.title.errors }">
         <div *ngIf="fg.title.errors" class="invalid-feedback">
           <div *ngIf="fg.title.errors.required">Bitte tragen Sie eine Gruppe ein.</div>
@@ -104,9 +211,15 @@
           <div *ngIf="fg.owner.errors.email">E-Mail ist ungültig.</div>
         </div>
       </div>
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label>Mitglieder einladen? Komma getrente E-Mails eintragen</label>
         <input type="text" class="form-control" placeholder="max.mustermann@mail.de" formControlName="member">
+      </div> -->
+      <div class="form-group">
+        <label>Mitglieder einladen? Die Liste einfügen mit Komma getrent</label>
+        <tag-input formControlName="member" [secondaryPlaceholder]="'max.mustermann@mail.de'" [placeholder]="'Email'"
+                   [errorMessages]="memberErrorMessages" [validators]="memberValidators" [addOnPaste]='true'
+                   [theme]="'kalendu'" [modelAsStrings]='true'></tag-input>
       </div>
       <div class="form-row">
         <div class="form-group col-6">
@@ -148,6 +261,20 @@
             <input class="form-check-input" type="checkbox" formControlName="status" value="5">
             <label class="form-check-label">privat?</label>
           </div>
+        </div>
+        <div class="col-6">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" formControlName="pay" value="true">
+            <label class="form-check-label">kostet?</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-12">
+          <label for="inputBezeichnung">Sportart</label>
+          <input id="inputBezeichnung" type="text" class="form-control" placeholder="Sportart" formControlName="sport"
+                 [ngbTypeahead]="tasportsearch" (focus)="tasportFocus$.next($event.target.value)"
+                 (click)="tasportClick$.next($event.target.value, tasport)" #tasport="ngbTypeahead">
         </div>
       </div>
     </form>

@@ -1,4 +1,5 @@
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable, of, forkJoin, from, zip } from 'rxjs';
 import { Place } from '../model/place';
 import { Injectable } from '@angular/core';
@@ -16,7 +17,9 @@ import * as firebase from 'firebase/app';
 export class FbService {
 
   constructor(
-    private afs: AngularFirestore) {
+    private afs: AngularFirestore,
+    private afsr: AngularFireStorage
+  ) {
   }
 
   public uid(): string {
@@ -94,9 +97,10 @@ export class FbService {
                 // console.log(sports);
                 // place.sports = sports;
                 // return place;
-                const rr = { ...place, sports: sports };
+                // const rr = { ...place, sports: sports };
+                place.sports = sports;
                 // console.log(rr);
-                return rr;
+                return place;
                 // return Object.assign(r, {sports});
               }),
               first()
@@ -154,6 +158,32 @@ export class FbService {
           // console.log(r);
           return group;
         })),
+        concatMap(groups => {
+          const groupObservables = groups.map(group => {
+            return this.afs.
+              collection<Game>('games', ref =>
+                ref.where('group_id', '==', group.id).where('dt', '>', new Date()).orderBy('dt', 'asc').limit(1)).valueChanges().pipe(
+                  map(docs => {
+                    console.log('getAllGroupsByPlace - groupObservables - docs.length', docs.length);
+                    if (docs.length) {
+                      const game = new Game(docs.pop());
+                      group.gamenext = game;
+                    } else {
+                      const game = new Game();
+                      game.dt = new Date(2222, 0, 1); // fake for sorting to the bottom
+                      group.gamenext = game;
+                    }
+                    return group;
+                  }),
+                  first()
+                );
+          });
+          if (groupObservables.length === 0) {
+            return of([]); // The workaround is to check the length of the list and to not use this operator when it is empty.
+          }
+          return forkJoin(...groupObservables);
+        }),
+        map(groups => groups.sort((g1: any, g2: any) => g1.gamenext.dt.getTime() - g2.gamenext.dt.getTime())), //sort desc
         first()
       );
   }
@@ -208,7 +238,7 @@ export class FbService {
             return this.afs.doc<Group>('groups/' + groupId).valueChanges().pipe(
               map(doc => {
                 console.log('getGroupByAccessId - id - doc - ', doc);
-                if (!doc) {return null; }
+                if (!doc) { return null; }
                 if (doc.status === 1) {
                   return new Group(doc);
                 } else {
@@ -223,20 +253,20 @@ export class FbService {
       );
   }
 
-  // API: PUT /game/:id
+  // API: PUT /group/:id
   public updateGroup(group: Group) {
     return from(
-      this.afs.collection<Game>('groups').doc(group.id).update(this.toJUpdate(group.toJSON()))
+      this.afs.collection('groups').doc(group.id).update(this.toJUpdate(group.toJSON()))
         .then(() => {
           return group.id;
         })
     );
   }
 
-  // API: PUT /game/:id
+  // API: PUT /group/:id
   public createGroup(group: Group) {
     return from(
-      this.afs.collection<Game>('groups').doc(group.id).set(this.toJCreate(group.toJSON()))
+      this.afs.collection('groups').doc(group.id).set(this.toJCreate(group.toJSON()))
         .then(() => {
           return group.id;
         })
@@ -284,7 +314,7 @@ export class FbService {
         }),
         // first()
       );
-      return zip(o1, o2);
+    return zip(o1, o2);
   }
 
 
@@ -315,11 +345,29 @@ export class FbService {
               .collection<any>(`games/${game.id}/members`)
               .valueChanges().pipe(
                 map(members => {
-                  const rr = { ...game, members: members };
+                  members = members.map(e => new Member(e));
+                  const rr = { ...game, members: members as Member[] };
                   return new Game(rr);
                 }),
                 first()
               );
+          });
+          if (gameObservables.length === 0) {
+            return of([]); // The workaround is to check the length of the list and to not use this operator when it is empty.
+          }
+          return forkJoin(...gameObservables);
+        }),
+        concatMap(games => {
+          console.log('getAllGamesByGroupId - games - ', games);
+          const gameObservables = games.map(game => {
+            return this.afs
+            .doc<any>(`groups/${game.group_id}`)
+            .valueChanges().pipe(
+              map(group => {
+                return new Game({ ...game, group: new Group(group) }); //{ ...game, group: group as Group };
+              }),
+              first()
+            );
           });
           if (gameObservables.length === 0) {
             return of([]); // The workaround is to check the length of the list and to not use this operator when it is empty.
@@ -336,6 +384,23 @@ export class FbService {
     // console.log('getLastGameByGroupId - groupId - ', groupId);
     return this.afs.collection<Game>('games', ref =>
       ref.where('group_id', '==', groupId).orderBy('dt', 'desc').limit(1)).valueChanges().pipe(
+        map(docs => {
+          const games = docs.map(doc => {
+            console.log('getLastGameByGroupId - ', doc);
+            const game = new Game(doc);
+            return game;
+          });
+          return games.pop();
+        }),
+        first()
+      );
+  }
+
+  // API: GET /games/:group_id
+  public getNextGameByGroupId(groupId: string): Observable<Game> {
+    // console.log('getLastGameByGroupId - groupId - ', groupId);
+    return this.afs.collection<Game>('games', ref =>
+      ref.where('group_id', '==', groupId).where('dt', '>', new Date()).orderBy('dt', 'asc').limit(1)).valueChanges().pipe(
         map(docs => {
           const games = docs.map(doc => {
             console.log('getLastGameByGroupId - ', doc);
@@ -446,6 +511,50 @@ export class FbService {
           return game.id;
         })
     );
+  }
+
+  uploadData(b: string, typ: string, uid_name: string) {
+    console.log('file-b', b);
+    console.log('file-ref', typ + '/' + uid_name);
+    const ref = this.afsr.storage.ref(typ + '/' + uid_name);
+    if (b !== '') {
+      // console.log('b1 - ', b);
+      const newMetadata = {
+        cacheControl: 'public,max-age=86400',
+      };
+      const o1 = from(ref.putString(b, 'data_url', newMetadata)
+        .then((r1) => {
+          console.log('uploadData - putString - ', r1);
+          return ref.getDownloadURL()
+            .then((r2) => {
+              console.log('uploadData - getDownloadURL - ', r2);
+              return r2;
+            })
+            .catch((e) => {
+              console.log('uploadData - getDownloadURL - error', e);
+              return '';
+            });
+        })
+        .catch((e) => {
+          console.log('uploadData - putString - error', e);
+          return '';
+        })
+      );
+      return o1;
+    } else {
+      // console.log('b2 - ', b);
+      return from(
+        ref.delete()
+          .then(() => {
+            console.log('uploadData - delete - ', typ + '/' + uid_name);
+            return '';
+          })
+          .catch((e) => {
+            console.log('uploadData - delete - error', e);
+            return '';
+          })
+      );
+    }
   }
 
 }

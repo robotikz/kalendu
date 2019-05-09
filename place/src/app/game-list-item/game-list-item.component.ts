@@ -1,20 +1,25 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Game } from '../model/game';
-import { interval, timer } from 'rxjs';
+import { interval } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Place } from '../model/place';
 import { Member } from '../model/member';
 import { Group } from '../model/group';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-game-list-item',
   templateUrl: './game-list-item.component.html',
-  styleUrls: ['./game-list-item.component.css']
+  styleUrls: ['./game-list-item.component.css'],
+  providers: [
+    NgbTooltipConfig
+  ]
 })
 export class GameListItemComponent implements OnInit {
 
-  @Input() game: Game;
+  // @Input() game: Game;
+  private _game: Game;
 
   // @Input() groupTitle: string;
   @Input() group: Group;
@@ -23,6 +28,7 @@ export class GameListItemComponent implements OnInit {
 
   @Output() remove: EventEmitter<Game> = new EventEmitter();
   @Output() play: EventEmitter<Game> = new EventEmitter();
+  @Output() playmember: EventEmitter<Game> = new EventEmitter();
 
   membersa: Member[] = [];
   dlDays: string;
@@ -32,12 +38,14 @@ export class GameListItemComponent implements OnInit {
   iNeed: number;
   dtDeadline: Date;
   bDeadline = true;
-  bIsLoaded = false;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-  ) { }
+    config: NgbTooltipConfig
+  ) {
+    config.tooltipClass = 'kalendu-tooltip';
+  }
 
   ngOnInit() {
     console.log('ngOnInit - game - ', this.game);
@@ -68,9 +76,23 @@ export class GameListItemComponent implements OnInit {
     //   this.bIsLoaded = true;
     //   console.log(this.bIsLoaded);
     // });
-    this.bIsLoaded = true;
     // console.log(this.bIsLoaded);
   }
+
+  @Input() get game(): Game {
+    return this._game;
+  }
+  set game(g: Game) {
+    // console.log("setter", g);
+    this._game = g;
+    // this.membersInit();
+  }
+
+  //  ngOnChanges(changes: SimpleChanges) {
+  //   const game: SimpleChange = changes.game;
+  //   console.log('prev value: ', game);
+  //   console.log('got name: ', game);
+  // }
 
   private membersInit() {
     this.membersa = this.game.members.filter(m => m.play === 1);
@@ -89,10 +111,33 @@ export class GameListItemComponent implements OnInit {
     this.remove.emit(this.game);
   }
 
-  onGamePlay(n: number) {
+  onGamePlay(n: number, tt: any) {
+    if (tt) {
+      let ttt = '';
+      switch (n) {
+        case 2:
+          ttt = 'Klicken Sie noch mal, um trotzdem zu spielen, unabhängig von Zusage Anzahl!';
+          break;
+        case 9:
+          ttt = 'Klicken Sie noch mal, um die Spielrunde deaktivieren, keine Zusage möglich!';
+          break;
+        default:
+          break;
+      }
+      if (!tt.isOpen()) {
+        tt.open({ text: ttt });
+        return;
+      } else {
+        tt.close();
+      }
+    }
     this.game.play = n;
     console.log('onGamePlay - game - ', this.game);
     this.play.emit(this.game);
+  }
+
+  onGameMemberNew() {
+    this.playmember.emit(this.game);
   }
 
   private dhms(t) {
@@ -113,6 +158,7 @@ export class GameListItemComponent implements OnInit {
   onNavigateGame() {
     this.router.navigate(['/gamem', { group_id: this.route.snapshot.params['group_id'], game_id: this.game.id }]);
   }
+
 
 
 }

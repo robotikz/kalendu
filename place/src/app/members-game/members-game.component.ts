@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 
 import { Member } from '../model/member';
 import { Game } from '../model/game';
-import { GameDataService } from '../data-service/game-data.service';
+// import { GameDataService } from '../data-service/game-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { interval, Observable, forkJoin } from 'rxjs';
 import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -12,9 +12,10 @@ import { NgbModal, NgbDateAdapter, NgbDateNativeAdapter, NgbDatepickerI18n, NgbD
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PusherService } from '../services/pusher.service';
 import { Group } from '../model/group';
-import { GroupDataService } from '../data-service/group-data.service';
+// import { GroupDataService } from '../data-service/group-data.service';
 import { I18n, DeDatepickerI18n } from '../help/de-datepickerI-18n';
 import { DeDateParserFormatter } from '../help/de-date-parser-formatter';
+import { FbService } from '../services/fb.service';
 
 
 @Component({
@@ -71,8 +72,7 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
     )
 
   constructor(
-    private gameDataService: GameDataService,
-    private groupDataService: GroupDataService,
+    private fbService: FbService,
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
@@ -93,8 +93,8 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
     // this.route.data
     this.gid = this.route.snapshot.params['group_id'];
     const oo = forkJoin(
-      this.gameDataService.getGameById(this.route.snapshot.params['game_id']),
-      this.groupDataService.getGroupByAccessId(this.gid)
+      this.fbService.getGameById(this.route.snapshot.params['game_id']),
+      this.fbService.getGroupByAccessId(this.gid)
     );
 
     oo.subscribe(
@@ -162,13 +162,13 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
       return mem;
     });
     if (!bMemberFound) {
-      this.memberNew.id = this.gameDataService.uid();
+      this.memberNew.id = this.fbService.uid();
       this.game.members.push(this.memberNew);
-      this.gameDataService
+      this.fbService
         .createMember(this.game, this.memberNew)
         .subscribe();
     } else {
-      this.gameDataService
+      this.fbService
         .updateMember(this.game, this.memberNew)
         .subscribe();
     }
@@ -205,13 +205,13 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
     // this.game.members.push(this.memberNew);
     console.log(this.game.members);
     if (!bMemberFound) {
-      this.memberNew.id = this.gameDataService.uid();
+      this.memberNew.id = this.fbService.uid();
       this.game.members.push(this.memberNew);
-      this.gameDataService
+      this.fbService
         .createMember(this.game, this.memberNew)
         .subscribe();
     } else {
-      this.gameDataService
+      this.fbService
         .updateMember(this.game, this.memberNew)
         .subscribe();
     }
@@ -226,7 +226,7 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
       mem.play = (mem.id === member.id ? 9 : mem.play);
       return mem;
     });
-    this.gameDataService
+    this.fbService
       .updateMember(this.game, member)
       .subscribe(
         () => {
@@ -243,7 +243,7 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
       mem.play = (mem.id === member.id ? 1 : mem.play);
       return mem;
     });
-    this.gameDataService
+    this.fbService
       .updateMember(this.game, member)
       .subscribe();
     this.membersInit();
@@ -282,7 +282,7 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
       return mem;
     });
     console.log(this.game.members);
-    this.gameDataService
+    this.fbService
       .updateMember(this.game, this.memberNew)
       .subscribe();
     this.membersInit();
@@ -297,7 +297,7 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
     const max = this.game.max;
     this.modalService.open(dlg, { centered: true }).result.then(() => {
       // if (result === 'oknew') {
-      this.gameDataService
+      this.fbService
         .updateGame(this.game).subscribe();
       this.membersInit();
       // }
@@ -318,7 +318,7 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
       this.game.dd.setHours(this.game.ddt.hour);
       this.game.dd.setMinutes(this.game.ddt.minute);
       this.game.dd.setSeconds(this.game.ddt.second);
-      this.gameDataService
+      this.fbService
         .updateGame(this.game).subscribe();
       this.deadlineInit();
       // }
@@ -339,7 +339,7 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
       this.game.dd.setHours(this.game.ddt.hour);
       this.game.dd.setMinutes(this.game.ddt.minute);
       this.game.dd.setSeconds(this.game.ddt.second);
-      this.gameDataService
+      this.fbService
         .updateGame(this.game).subscribe();
       this.deadlineInit();
       // }
@@ -364,7 +364,7 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
       this.game.dd.setHours(this.game.ddt.hour);
       this.game.dd.setMinutes(this.game.ddt.minute);
       this.game.dd.setSeconds(this.game.ddt.second);
-      this.gameDataService
+      this.fbService
         .updateGame(this.game).subscribe();
       this.deadlineInit();
       this.membersInit();

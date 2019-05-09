@@ -1,4 +1,4 @@
-import { Sport } from './sport';
+// import { Sport } from './sport';
 
 export class Place {
   id: string;
@@ -10,7 +10,8 @@ export class Place {
   street = '';
   nr = '';
   status = 1;
-  sports: Sport[] = [];
+  sports: string[] = [];
+  avatar = '';
 
   // access ids
   aowner: string;

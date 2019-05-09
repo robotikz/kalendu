@@ -1,116 +1,98 @@
-<div *ngIf="!bIsLoaded" class="row">
-  <ngb-progressbar type="warning" [value]="100" [striped]="true" [animated]="true"></ngb-progressbar>
-</div>
-<div class="row no-gutters" *ngIf="bIsLoaded">
-  <div class="col-11">
-    <div class="jumbotron">
-      <div class="row no-gutters">
-        <div class="col-12">
-          <p class="bg-info text-left">{{group.title}}</p>
-        </div>
-      </div>
-      <div class="row no-gutters">
-        <div class="col-4">
-          <p *ngIf="game.title" class="text-uppercase">{{game.title}}</p>
-          <p *ngIf="!game.title" class="text-uppercase">Freizeitkick</p>
-        </div>
-        <div class="col-8">
-          <div *ngIf="game.play===9">
-            <p class="bg-danger text-uppercase">Abgesagt!</p>
-          </div>
-          <div *ngIf="game.play===2">
-            <div *ngIf="membersa?.length < game.min">
-              <p class="bg-warning text-uppercase">Noch {{iNeed}} Zusage notig!</p>
-            </div>
-            <div>
-              <p class="bg-success text-uppercase">{{membersa?.length}} Zusage - es wird trotzdem gespielt</p>
-            </div>
-          </div>
-          <div *ngIf="game.play!==9 && game.play!==2">
-            <div *ngIf="membersa?.length >= game.min">
-              <p class="bg-success text-uppercase">{{membersa?.length}} Zusage - es wird gespielt</p>
-            </div>
-            <div *ngIf="membersa?.length < game.min">
-              <p class="bg-danger text-uppercase">Noch {{iNeed}} Zusage notig!</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row no-gutters">
-        <div class="col-10">
-          <p class="text-left text-secondary">
-            <i class="fas fa-calendar-check"></i>
-            {{ game.dt | date:'EEEE, dd.MM.yyyy' }}
-            <i class="fas fa-clock"></i>
-            {{ game.dt | date:'HH:mm' }} Uhr
-          </p>
-          <p class="text-left text-secondary">
-            <i class="fas fa-map-marker-alt"></i>
-            &nbsp;<span>{{place.title}}</span>
-          </p>
-          <div *ngIf="game.play===9">
-            <p class="bg-danger text-uppercase">Abgesagt!</p>
-          </div>
-          <div *ngIf="game.play===2">
-            <p class="text-left text-success text-uppercase">
-              <span class="">Du kannst noch einsteigen, solange Platz frei!</span>
-            </p>
-          </div>
-          <div *ngIf="game.play!==9 && game.play!==2">
-            <p *ngIf="!bDeadline" class="text-left text-danger text-uppercase">
-              Deadline Anmeldung: {{dlDays}} <span class="text-secondary dl-days">Tage</span> {{dlHours}} <span
-                    class="text-secondary dl-hours">Stunden</span> {{dlMinutes}} <span
-                    class="text-secondary dl-minutes">Minuten</span> {{dlSeconds}}
-              <span class="text-secondary dl-seconds">Sekunden</span>
-            </p>
-            <p *ngIf="bDeadline && membersa?.length < game.min" class="text-left text-danger text-uppercase">
-              Deadline Anmeldung: <span class="">Es wird nicht gespielt!</span>
-            </p>
-            <p *ngIf="bDeadline && membersa?.length >= game.min" class="text-left text-success text-uppercase">
-              <span class="">Du kannst noch einsteigen, solange Platz frei!</span>
-            </p>
-          </div>
-        </div>
-        <div class="col-2">
-          <div class="">
-            <!-- <a [routerLink]="['/games', game.id]" class="btn btn-outline-dark btn-round-lg">
-                        </a> -->
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="kalendu-main-spielrunde-item position-relative">
+  <div class="kalendu-main-spielrunde-alert-red position-absolute" *ngIf="game.play===9">Abgesagt</div>
+
+  <div class="kalendu-main-spielrunde-alert-green  position-absolute" *ngIf="game.play===2">
+    <div class="kalendu-main-spielrunde-alert-green ">{{membersa?.length}} Zusage - es
+      wird trotzdem gespielt</div>
+    <div class="kalendu-main-spielrunde-alert-red  bg-warning" *ngIf="membersa?.length < game.min">
+      aber noch {{iNeed}} Zusagen nötig</div>
   </div>
-  <div class="col-1">
-    <div class="d-flex flex-column">
-      <a class="btn btn-outline-dark btn-round" (click)="onGamePlay(1)" *ngIf="group.aowner === gid">
-        <i class="fas fa-play"></i>
-      </a>
-      <div class="btn btn-outline-dark btn-round" (click)="onGamePlay(2)" *ngIf="group.aowner === gid">
-        <i class="fas fa-thumbs-up"></i>
-      </div>
-    </div>
-    <div class="d-flex flex-column">
-      <a class="btn btn-outline-dark btn-round" (click)="onGamePlay(9)" *ngIf="group.aowner === gid">
-        <i class="fas fa-ban"></i>
-      </a>
-      <a class="btn btn-outline-dark btn-round" (click)="onGameRemove()" *ngIf="group.aowner === gid">
-        <i class="fas fa-trash-alt"></i>
-      </a>
-    </div>
+
+  <div *ngIf="game.play!==9 && game.play!==2">
+    <div class="kalendu-main-spielrunde-alert-green position-absolute" *ngIf="membersa?.length >= game.min">
+      {{membersa?.length}} Zusage - Wir
+      spielen!</div>
+    <div class="kalendu-main-spielrunde-alert-red position-absolute" *ngIf="membersa?.length < game.min">Noch {{iNeed}}
+      Zusagen nötig</div>
   </div>
-</div>
-<div class="row no-gutters mb-2" *ngIf="bIsLoaded">
-  <div class="col-2">
+
+  <h3 class="kalendu-main-spielrunde-headline" *ngIf="game.title">{{game.title}}</h3>
+  <h3 class="kalendu-main-spielrunde-headline" *ngIf="!game.title">Freizeitkick</h3>
+  <div class="d-flex flex-row kalendu-main-spielrunde-infos">
+    <div class="pr-2"><i class="fas fa-calendar-alt"></i> {{ game.dt | date:'EEEE, dd.MM.yyyy' }}</div>
+    <div class="pr-2"><i class="fas fa-clock"></i> {{game.dt | date:'HH:mm'}} Uhr</div>
+    <div class="pr-0"><i class="fas fa-map-marker-alt"></i> {{place.title}}</div>
+  </div>
+  <div class="kalendu-main-spielrunde-deadline mt-3">
+
+    <span class="red" *ngIf="game.play===9">Abgesagt!</span>
+    <span class="red" *ngIf="game.play===2">Du kannst noch einsteigen, solange Platz frei!</span>
+
     <div *ngIf="game.play!==9 && game.play!==2">
-      <a *ngIf="membersa?.length >= game.min || !bDeadline" class="text-light" (click)="onNavigateGame()">
-        <p class="bg-info text-left text-uppercase text-center">mitspielen</p>
-      </a>
+      <div *ngIf="!bDeadline">
+        <span class="text-red">Deadline Anmeldung: </span>
+        <span class="text-red">{{dlDays}} </span>
+        <span>Tage </span>
+        <span class="text-red">{{dlHours}} </span>
+        <span>Stunden </span>
+        <span class="text-red">{{dlMinutes}} </span>
+        <span>Minuten </span>
+        <span class="text-red">{{dlSeconds}} </span>
+        <span>Sekunden </span>
+      </div>
+      <span *ngIf="bDeadline && membersa?.length < game.min" class="text-red">
+        Deadline Anmeldung: <span class="">Es wird nicht gespielt!</span>
+      </span>
+      <span *ngIf="bDeadline && membersa?.length >= game.min" class="text-red">
+        Du kannst noch einsteigen, solange Platz frei!
+      </span>
     </div>
-    <div *ngIf="game.play===2">
-      <a class="text-light" (click)="onNavigateGame()">
-        <p class="bg-info text-left text-uppercase text-center">mitspielen</p>
+  </div>
+
+  <div class="kalendu-main-spielrunde-button1 position-absolute" *ngIf="game.play===2"  (click)="onGameMemberNew()">
+    Mitspielen Zack-Zack!
+  </div>
+  <ng-container *ngIf="game.play!==9 && game.play!==2">
+    <div *ngIf="membersa?.length >= game.min || !bDeadline" class="kalendu-main-spielrunde-button1 position-absolute"
+      (click)="onGameMemberNew()">
+      Mitspielen Zack-Zack!
+    </div>
+  </ng-container>
+
+  <div class="kalendu-main-spielrunde-button2 position-absolute" *ngIf="game.play===2" (click)="onNavigateGame()">
+    Mitspielen in Details!
+  </div>
+  <ng-container *ngIf="game.play!==9 && game.play!==2">
+    <div *ngIf="membersa?.length >= game.min || !bDeadline" class="kalendu-main-spielrunde-button2 position-absolute"
+         (click)="onNavigateGame()">
+      Mitspielen in Details!
+    </div>
+  </ng-container>
+
+  <ng-template #tipContent let-text="text" placement="left">{{text}}</ng-template>
+  <!-- EDIT BAR -->
+  <a class="kalendu-main-edit-button kalendu-main-edit-button1" (click)="onGamePlay(2, t1)" *ngIf="group.aowner === gid"
+     placement="left" triggers="manual" [ngbTooltip]="tipContent" #t1="ngbTooltip">
+    <i class="fas fa-thumbs-up text-green"></i>
+  </a>
+  <a class="kalendu-main-edit-button kalendu-main-edit-button2" (click)="onGamePlay(9, t2)" *ngIf="group.aowner === gid"
+     placement="left" triggers="manual" [ngbTooltip]="tipContent" #t2="ngbTooltip">
+    <i class="fas fa-thumbs-down text-red"></i>
+  </a>
+  <div ngbDropdown placement="bottom-right" class="kalendu-main-edit-button kalendu-main-edit-button3"
+       *ngIf="group.aowner === gid">
+    <i class="fas fa-ellipsis-h" ngbDropdownToggle></i>
+    <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+      <div class="dropdown-item" (click)="onGamePlay(1)" *ngIf="group.aowner === gid && game.play === 9">
+        <i class="fas fa-thumbs-up"></i>
+        <span>&nbsp;Wieder aktivieren</span>
+      </div>
+      <a class="dropdown-item" (click)="onGameRemove()" *ngIf="group.aowner === gid">
+        <i class="fas fa-trash-alt"></i>
+        <span>&nbsp;Spielrunde Löschen</span>
       </a>
     </div>
   </div>
-  <div class="col-10"></div>
+  <!-- /EDIT BAR -->
 </div>
+

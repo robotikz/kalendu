@@ -1,0 +1,52 @@
+@import "~node_modules/ngx-chips/core/styles/core/_core.scss";
+
+$kalendu-primary: #fafafa;
+$kalendu-primary-dark: darken($kalendu-primary, 5%);
+
+$kalendu-border: #28a745;
+$kalendu-border-dark: darken($kalendu-border, 10%);
+$kalendu-border-light: lighten($kalendu-border, 20%);
+$kalendu-border-shadow: rgba($kalendu-border, .25);
+
+// this is the container's theme
+$kalendu-input-theme: (
+    container-border-bottom: 1px solid $kalendu-border,
+    border-editing: 1px solid $kalendu-border,
+    // box-shadow: 0 2px 3px 1px darken(#28a745, 5%),
+    container-border-bottom-focused: 1px solid $kalendu-border-dark,
+);
+
+// this is the tag's theme
+$kalendu-tag-theme: (
+    background: $kalendu-primary,
+    background-focused: $kalendu-primary-dark,
+    background-active: $kalendu-primary-dark,
+    background-hover: $kalendu-primary-dark,
+    color: #495057,
+    color-hover: #495057,
+    border-radius: .3rem,
+    box-shadow: 0 0 0 0.2rem $kalendu-border-shadow, 
+);
+
+// this is the delete icon's theme
+$kalendu-icon-theme: (
+    fill: #adb5bd,
+    fill-focus: #fff,
+    transition: all 0.35s
+);
+
+// apply theme to the container
+tag-input .kalendu.ng2-tag-input {
+    @include tag-input-theme($kalendu-input-theme);
+}
+
+// apply theme to the tags
+tag-input .kalendu.ng2-tag-input tag {
+    @include tag-theme($kalendu-tag-theme);
+    border: 1px solid $kalendu-border-light;
+}
+
+// apply theme to the delete icon
+tag-input .kalendu.ng2-tag-input tag delete-icon {
+    @include icon-theme($kalendu-icon-theme);
+}
