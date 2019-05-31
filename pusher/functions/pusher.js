@@ -35,15 +35,15 @@ router.post('/subscription', (req, res) => {
     // fakeDatabase.push(subscription);
     // const group_id = req.param('id');
     // Read the document.
-    console.log(subscription.keys.auth);
-    console.log(subscription.group_id);
+    console.log('subscription.keys.auth - ', subscription.keys.auth);
+    console.log('subscription.group_id - ', subscription.group_id);
     fs.collection('notifications')
         .where('keys.auth', '==', subscription.keys.auth)
         .where('group_id', '==', subscription.group_id)
         .get()
         .then((docs) => {
             console.log('docs.length', docs.length);
-            if (docs.length <= 0) {
+            if (docs.empty) {
                 Object.assign(subscription, {
                     created: fbadmin.firestore.FieldValue.serverTimestamp()
                 });
@@ -73,7 +73,7 @@ router.post('/sendnotifications', async (req, res, next) => {
     console.log('body - ', b);
     const refDocs = await fs.collection('notifications').where('group_id', '==', b.group_id).get();
     console.log('docs.length', refDocs.docs.length);
-    if (!refDocs.docs.length) {
+    if (refDocs.docs.empty) {
         res.status(200).json({
             message: 'There are no subscribers for group: ' + b.group_id,
         })

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { Member } from '../model/member';
 import { Game } from '../model/game';
@@ -16,6 +16,7 @@ import { Group } from '../model/group';
 import { I18n, DeDatepickerI18n } from '../help/de-datepickerI-18n';
 import { DeDateParserFormatter } from '../help/de-date-parser-formatter';
 import { FbService } from '../services/fb.service';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 
 @Component({
@@ -27,9 +28,20 @@ import { FbService } from '../services/fb.service';
     I18n,
     { provide: NgbDatepickerI18n, useClass: DeDatepickerI18n },
     { provide: NgbDateParserFormatter, useClass: DeDateParserFormatter }
-  ]
+  ],
+  animations: [
+    trigger('fadeGM', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('2s', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('.5s', style({ opacity: 0 }))
+      ]),
+    ]),
+  ],
 })
-export class MembersGameComponent implements OnInit, AfterViewInit {
+export class MembersGameComponent implements OnInit {
 
   loading = true;
   // memberNickInput: FormControl;
@@ -88,7 +100,9 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
   // setValue() { this.memberNickInput.setValue('new value'); }
 
   ngOnInit() {
-    this.spinner.show();
+    setTimeout(() => {
+      this.spinner.show();
+    }, 100);
     // this.memberNickInput = new FormControl('');
     // this.route.data
     this.gid = this.route.snapshot.params['group_id'];
@@ -103,7 +117,7 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
         this.game = data[0] as Game;
         const gr = data[1] as Group;
         if (!gr) {
-          alert('Gruppe ist nicht gefunden, privat oder keine Rechte');
+          alert('Gruppe existiert nicht, sie ist privat oder du hast keine Rechte., privat oder keine Rechte');
           this.router.navigate(['/gamesg', { group_id: this.gid }]);
           return;
         }
@@ -116,10 +130,6 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
         this.loading = false;
       }
     );
-
-  }
-
-  ngAfterViewInit() {
 
   }
 
@@ -428,9 +438,14 @@ export class MembersGameComponent implements OnInit, AfterViewInit {
     // this.dtDeadline.setHours(this.game.dt.getHours() - this.game.deadline);
     // this.dtDeadline.setSeconds(this.dtDeadline.getSeconds() - 1);
     const dtNow = new Date();
-    if (this.membersa.length < this.game.min && this.dtDeadline < dtNow) {
-      this.router.navigate(['/gamesg', { place_id: this.game.place_id, group_id: this.gid }]);
+    if (this.game.play === 2) {
+
+    } else {
+      if (this.membersa.length < this.game.min && this.dtDeadline < dtNow) {
+        this.router.navigate(['/gamesg', { place_id: this.game.place_id, group_id: this.gid }]);
+      }
     }
+
     interval(1000).pipe(
       map(() => {
         return Math.floor((this.dtDeadline.getTime() - new Date().getTime()) / 1000);

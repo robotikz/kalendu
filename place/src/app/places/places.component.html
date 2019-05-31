@@ -4,21 +4,82 @@
 <ngx-spinner bdColor="#c1c1c1" size="large" color="#fff" type="ball-scale-multiple">
 </ngx-spinner>
 
-<div class="container kalendu-main-section" *ngIf="!loading">
-    <p class="path">
-        Orte
-        <span class="text-danger">&nbsp;&gt;&gt;&nbsp;</span> Spielstätten
-    </p>
-    <div class="row">
-        <div class="col-6">
-            <h3>Spielstätten</h3>
-        </div>
-        <div class="col-6"></div>
-    </div>
-    <div *ngFor="let place of places">
-        <app-place-list-item [place]="place"></app-place-list-item>
-    </div>
+<main role="main" class="flex-shrink-0 kalendu-main-section pb-2 mb-3" *ngIf="!loading">
+  <div class="container px-0">
+    <div class="container px-0">
+      <div class="d-flex flex-row">
+        <div class="container px-0">
 
-</div>
+          <div class="kalendu-main-header-block">
+            <div class="container">
+              <div class="position-relative mb-4">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb kalendu-breadcrumb  px-0">
+                    <li class="breadcrumb-item " aria-current="page">
+                      Orte
+                    </li>
+                    <li class="breadcrumb-item active">
+                      Spielstätten
+                    </li>
+                  </ol>
+                </nav>
+                <!-- EDIT BAR -->
+                <!-- /EDIT BAR -->
+              </div>
+            </div>
+          </div>
+
+          <div class="kalendu-main-header-block mt-4">
+            <div class="container">
+
+              <!-- /Spielrunden Elements -->
+              <div class="position-relative mb-4">
+                <h2>Spielstätten</h2>
+                <!-- EDIT BAR -->
+                <!-- /EDIT BAR -->
+              </div>
+
+
+              <div class="kalendu-main-item position-relative pointer" *ngFor="let place of places"
+                   (click)="onNavigateGroup(place)" @fadeGM>
+                <!-- <div class="kalendu-main-top-info text-center">{{place.title}}</div> -->
+                <div class="kalendu-main-top-info2 text-center">{{place.title}}</div>
+                <div class="d-flex flex-row p-2">
+                  <div class="kalendu-main-bild d-flex align-items-center justify-content-center">
+                    <img src="assets/images/fallback-ort.jpg" *ngIf="!place.avatar">
+                    <img [src]="place.avatar" *ngIf="place.avatar">
+                  </div>
+                  <div class="kalendu-main-infos ml-2">
+                    <h3 class="kalendu-main-headline">{{place.title}}</h3>
+
+                    <div class="kalendu-main-infos-typ">{{place.zip}} {{place.city}}
+                    </div>
+                    <div class="kalendu-main-infos-sportarten">
+                      <span>Sportarten:&nbsp;</span>
+                      <span class="" *ngFor="let sport of place.sports, let isLast=last">{{sport}}{{isLast ? '' : ', '}}</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- EDIT BAR -->
+                <a class="kalendu-main-edit-button" target="_blank"
+                   href="https://www.google.com/maps/search/?api=1&query={{place.street}} {{place.nr}} {{place.zip}} {{place.city}}">
+                  <i class="fas fa-location-arrow"></i>
+                </a>
+                <!-- /EDIT BAR -->
+              </div>
+
+            </div>
+          </div>
+
+
+        </div>
+        <div class="kalendu-edit-col">
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
 
 <app-a-footer></app-a-footer>

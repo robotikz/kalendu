@@ -22,6 +22,7 @@ import { MailerService } from '../services/mailer.service';
 import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { Member } from '../model/member';
+import { Tools } from '../help/tools';
 
 @Component({
   selector: 'app-games-g',
@@ -35,7 +36,7 @@ import { Member } from '../model/member';
     NgbTooltipConfig
   ],
   animations: [
-    trigger('fadeGM', [ 
+    trigger('fadeGM', [
       transition(':enter', [
         style({ opacity: 0 }),
         animate('1s', style({ opacity: 1 })),
@@ -89,7 +90,9 @@ export class GamesGComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.spinner.show();
+    setTimeout(() => {
+      this.spinner.show();
+    }, 100);
     // this.route.data
     this.gid = this.route.snapshot.params['group_id'];
     const os = this.fbService.getGroupByAccessId(this.gid)
@@ -97,7 +100,7 @@ export class GamesGComponent implements OnInit {
         concatMap(gr => {
           console.log('getGroupAccess', gr);
           if (!gr) {
-            alert('Gruppe ist nicht gefunden, privat oder keine Rechte');
+            alert('Gruppe existiert nicht, sie ist privat oder du hast keine Rechte., privat oder keine Rechte');
             this.router.navigate(['/places']);
             return;
           }
@@ -126,7 +129,7 @@ export class GamesGComponent implements OnInit {
           this.games = data[2] as Game[];
           this.gameLast = data[3] as Game;
           if (!this.group) {
-            alert('Gruppe ist nicht gefunden oder privat');
+            alert('Gruppe existiert nicht, sie ist privat oder du hast keine Rechte. oder privat');
             this.router.navigate(['/places']);
             return;
           }
@@ -159,7 +162,7 @@ export class GamesGComponent implements OnInit {
             ball: [false],
             camisole: [false],
             pay: [true],
-            status: [5]
+            status: [true]
           });
           this.spinner.hide();
           this.loading = false;
@@ -179,6 +182,22 @@ export class GamesGComponent implements OnInit {
     });
   }
 
+  gamenewrepeat = false;
+  gamenewrepeatcb() {
+    // alert('dont use it yet!')
+    this.gamenewrepeat = !this.gamenewrepeat;
+  }
+  gamenewrepeatnr = 10;
+  gamenewrepeatnrpm(pm: number) {
+    this.gamenewrepeatnr += pm;
+    this.gamenewrepeatnr = this.gamenewrepeatnr > 53 ? 53 : this.gamenewrepeatnr;
+    this.gamenewrepeatnr = this.gamenewrepeatnr < 1 ? 1 : this.gamenewrepeatnr;
+    console.log('this.gamenewrepeatnr - ', this.gamenewrepeatnr)
+  }
+
+  // checkbox(v:boolean){
+  //   v = !v;
+  // }
   onGameNewDlg(dlg: any) {
     // this.gameNew = this.gameLast;
     this.gameNew = new Game();
@@ -215,7 +234,7 @@ export class GamesGComponent implements OnInit {
       m.play = 0;
       return m;
     });
-    this.gameNew.id = '' + Math.floor(Math.random()); // FIXME
+    this.gameNew.id = this.fbService.uid(); //'' + Math.floor(Math.random()); // FIXME
     this.modalService.open(dlg, { centered: true }).result.then((result) => {
       // this.closeResult = `Closed with: ${result}`;
       // only OK is here
@@ -241,13 +260,42 @@ export class GamesGComponent implements OnInit {
     this.gameNew.place_id = this.place.id;
     this.gameNew.group_id = this.group.id;
     this.gameNew.play = 1;
-    console.log(this.gameNew);
-    this.fbService
-      .createGame(this.gameNew)
-      .subscribe();
-    this.gameNew.place = this.place;
-    this.gameNew.group = this.group;
+    const title = this.gameNew.title;
+    if (this.gamenewrepeat) {
+      this.gameNew.title += ' - ' + Tools.getNumberOfWeek(this.gameNew.dt);
+    }
+    console.log('this.gameNew - ', 0, this.gameNew);
+    // this.fbService
+    //   .createGame(this.gameNew)
+    //   .subscribe();
     this.games.push(this.gameNew);
+
+    // TODO
+    // if it repeat on create!
+    if (this.gamenewrepeat) {
+      // let gameRepeat = new Game();
+      // Object.assign(gameRepeat, this.gameNew);
+      let gameRepeat = Object.assign(Object.create(this.gameNew), this.gameNew);
+      for (let i = 2; i <= this.gamenewrepeatnr; i++) {
+        const dt = (d => new Date(d.setDate(d.getDate() + 7)))(new Date(gameRepeat.dt)); //new Date(gameRepeat.dt);
+        const dd = (d => new Date(d.setDate(d.getDate() + 7)))(new Date(gameRepeat.dd)); //new Date(gameRepeat.dd.getDate() + 7);
+        dt.getDate() + 7;
+        gameRepeat.id = this.fbService.uid();
+        gameRepeat.dt = dt;
+        gameRepeat.dd = dd;
+        gameRepeat.title = title + ' - ' + Tools.getNumberOfWeek(gameRepeat.dt);
+        console.log('gameRepeat - ', i, gameRepeat);
+        // this.fbService
+        //   .createGame(gameRepeat)
+        //   .subscribe();
+        gameRepeat.place = this.place;
+        gameRepeat.group = this.group;
+        this.games.push(gameRepeat);
+        // gameRepeat = new Game();
+        // Object.assign(gameRepeat, this.gameNew);
+        gameRepeat = Object.assign(Object.create(gameRepeat), gameRepeat);
+      }
+    }
     this.games.sort(function (a, b) { return b.dt > a.dt ? -1 : b.dt < a.dt ? 1 : 0; });
   }
 
@@ -281,7 +329,7 @@ export class GamesGComponent implements OnInit {
 
   onSubscribeToNotifications(tt: any) {
     if (!tt.isOpen()) {
-      tt.open({ text: 'Klicken Sie noch mal, un die Push-Benachrichtigungen immer bekommen!' });
+      tt.open({ text: 'Berühre die Glocke noch einmal, um in Zukunft Push-Nachrichten dieser Gruppe zu erhalten.' });
       return;
     } else {
       tt.close();
@@ -338,6 +386,31 @@ export class GamesGComponent implements OnInit {
     this.pushService.sendNotifications(this.group.id, this.place.id).subscribe(res => {
       console.log('sendNotifications2', res);
     });
+    console.log('sendNotifications3 - mailer.group', environment.mailer.group);
+    const fd = new FormData();
+    const gamenext = this.games[0];
+    const body = {
+      to: this.group.member,
+      tmp: 'mail-erinnerung-spielrunde',
+      locals: {
+        app_link: location.hostname,
+        group_title: this.group.title,
+        group_link_m: location.hostname + '/gamesg;group_id=' + this.group.amember,
+        group_place: this.place.title,
+        group_game_dt: gamenext.dt.toLocaleString('de-DE'),
+        group_game_dd: gamenext.dd.toLocaleString('de-DE'),
+      },
+    };
+    console.log('sendNotifications4 - member.body - ', body);
+    fd.append('json', JSON.stringify(body));
+    this.mailer.sendGroup(fd).subscribe(res => {
+      // this.wait = false;
+      console.log('[App] Mailer send-group', res);
+    },
+      (error: any) => {
+        console.log('[App] Mailer Error', error);
+      }
+    );
   }
 
   onLockGroup() {
@@ -384,7 +457,8 @@ export class GamesGComponent implements OnInit {
     this.fg.ball.setValue(this.group.ball);
     this.fg.camisole.setValue(this.group.camisole);
     this.fg.pay.setValue(this.group.pay);
-    this.fg.status.setValue(this.group.status);
+    // this.fg.status.setValue(this.group.status);
+    this.fg.status.setValue(this.group.status === 5 ? true : false)
     this.modalService.open(dlg, { size: 'lg', centered: true }).result.then(() => {
       // this.onGroupAddDlgOk();
     }, () => { // close, esc
@@ -417,25 +491,39 @@ export class GamesGComponent implements OnInit {
     // this.group.member = this.frmg.value.member.split(",").map((i: string) => i.trim());
     const groupMembersCurr = this.frmg.value.membercurr; //.map(e => e.value);
     const groupMembersNew = this.frmg.value.member; //.map(e => e.value); //this.group.member.filter(e => this.groupMembersCurr.includes(e));
+    console.log('onGroupEditDlgOk - groupMembersCurrr', groupMembersCurr);
+    console.log('onGroupEditDlgOk - groupMembersNew', groupMembersNew);
     this.group.member = groupMembersCurr.concat(groupMembersNew);
+    this.group.member = this.group.member.filter(v => v != '');
+    console.log('onGroupEditDlgOk - this.group.member', this.group.member);
     this.group.ball = this.frmg.value.ball;
     this.group.camisole = this.frmg.value.camisole;
     this.group.pay = this.frmg.value.pay;
-    this.group.status = this.frmg.value.status;
+    // this.group.status = this.frmg.value.status;
+    this.group.status = this.frmg.value.status ? 5 : 1;
 
     this.fbService
       .updateGroup(this.group)
       .subscribe(() => {
-        console.log('onGroupAddDlgOk - mailer.group', environment.mailer.group);
-
         // if new members are here
         if (groupMembersNew && bSend) {
+          console.log('onGroupAddDlgOk - mailer.group', environment.mailer.group);
           const fd = new FormData();
+          const gamenext = this.games[0];
           const body = {
             to: groupMembersNew,
-            subject: 'Einladung zu neue Gruppe: ' + this.group.title,
-            body: 'Neue Gruppe: ' + this.group.title + '<br>'
-              + 'Sie wurden mitzuspielen eingeladen: ' + '<a href="' + location.hostname + '/gamesg;group_id=' + this.group.amember + '">' + this.group.title + '</a>' + '<br>'
+            tmp: 'mail-einladung-bestehende-gruppe',
+            locals: {
+              app_link: location.hostname,
+              group_title: this.group.title,
+              group_link_m: location.hostname + '/gamesg;group_id=' + this.group.amember,
+              group_place: this.place.title,
+              group_game_dt: gamenext.dt.toLocaleString('de-DE'),
+              group_game_dd: gamenext.dd.toLocaleString('de-DE'),
+            },
+            // subject: 'Einladung zu neue Gruppe: ' + this.group.title,
+            // body: 'Neue Gruppe: ' + this.group.title + '<br>'
+            //   + 'Sie wurden mitzuspielen eingeladen: ' + '<a href="' + location.hostname + '/gamesg;group_id=' + this.group.amember + '">' + this.group.title + '</a>' + '<br>'
           };
 
           console.log('onGroupEditDlgOk - member.body - ', body);
@@ -523,7 +611,7 @@ export class GamesGComponent implements OnInit {
   // @ViewChild('dlgzusage') private dlgzusage: any;
   memberNew: Member = new Member();
   game: Game;
-  onGameMemberNewDlg(game:Game, dlg: any) {
+  onGameMemberNewDlg(game: Game, dlg: any) {
     this.game = game;
     this.memberNew = new Member();
     this.memberNew.nick = localStorage.getItem('memberMe');
@@ -538,6 +626,7 @@ export class GamesGComponent implements OnInit {
     });
   }
 
+  @ViewChild('dlgzusagedoppelt') private dlgzusagedoppelt: any;
   onGameMemberNewDlgOk() {
     console.log(this.memberNew);
     if (!this.memberNew.nick) {
@@ -563,14 +652,12 @@ export class GamesGComponent implements OnInit {
       this.fbService
         .createMember(this.game, this.memberNew)
         .subscribe();
+      // this do the trick for array of objects in the child component, with help of Get-Set
+      this.games = this.games.map(g => g.id === this.game.id ? new Game(g) : g);
+      console.log(this.game.members);
     } else {
-      this.fbService
-        .updateMember(this.game, this.memberNew)
-        .subscribe();
+      this.modalService.open(this.dlgzusagedoppelt, { centered: true, size: 'sm' });
     }
-    // this do the trick for array of objects in the child component, with help of Get-Set
-    this.games = this.games.map(g => g.id === this.game.id ? new Game(g) : g); 
-    console.log(this.game.members);
     // this.membersInit();
     this.game = null;
     this.memberNew = new Member();
@@ -619,8 +706,25 @@ export class GamesGComponent implements OnInit {
   public switchgm = 1;
   switchGM(n: number) {
     this.switchgm = -1;
-    setTimeout(()=>{ this.switchgm = n; }, 600)
-    
+    setTimeout(() => { this.switchgm = n; }, 600)
+
+  }
+
+  ballcb() {
+    this.fg.ball.setValue(!this.frmg.value.ball);
+  }
+
+  camisolecb() {
+    this.fg.camisole.setValue(!this.frmg.value.camisole);
+  }
+
+  statuscb() {
+    // this.fg.status.setValue(this.frmg.value.status === 5 ? false : 5);
+    this.fg.status.setValue(!this.frmg.value.status)
+  }
+
+  paycb() {
+    this.fg.pay.setValue(!this.frmg.value.pay);
   }
 
 }

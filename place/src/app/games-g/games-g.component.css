@@ -1,305 +1,20 @@
 @charset "utf-8";
 /* CSS Document */
 
-.kalendu-main-section {
-  padding-top: 57px;
-}
 
-.kalendu-main-circle-min,
-.kalendu-main-circle-max {
-  height: 44px;
-  width: 44px;
-  border-radius: 50%;
-  -webkit-box-shadow: 3px 3px 3px 0px rgba(0, 209, 209, 1);
-  -moz-box-shadow: 3px 3px 3px 0px rgba(209, 209, 209, 1);
-  box-shadow: 3px 3px 3px 0px rgba(209, 209, 209, 1);
-  background-color: white;
-  border: 1px solid #d1d1d1;
-}
 
-span.kalendu-main-circle-min-text,
-span.kalendu-main-circle-max-text {
-  text-transform: uppercase;
-  display: block;
-  font-size: 0.6rem;
-}
 
-span.kalendu-main-circle-min-number,
-span.kalendu-main-circle-max-number {
-  display: block;
-  font-size: 1.2rem;
-  line-height: 1.5rem;
-}
-
-.kalendu-edit-col {
+.kalendu-edit-col-bg {
+  position: absolute;
   width: 50px;
-  background-color: #8e8e8e;
+  right: 0;
+  top: 0;
+  z-index: 99;
+  min-height: 90vh;
+  overflow: hidden;
 }
 
-.kalendu-main-info-bar {
-  background-color: #f6f6f6;
-
-}
-
-.kalendu-main-zusagen-headline,
-.kalendu-main-absagen-headline {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-}
-
-.kalendu-main-zusagen-number {
-  font-weight: bold;
-  font-size: 1rem;
-}
-
-.kalendu-main-absagen-number {
-  font-weight: bold;
-  font-size: 1.6rem;
-}
-
-.kalendu-main-zusagen-red-number {
-  font-weight: bold;
-  font-size: 1.6rem;
-  color: #ED1A43;
-}
-
-.kalendu-main-zusagen,
-.kalendu-main-absagen {
-  background-color: #e6e6e6;
-  border-radius: 10px;
-  padding: 5px !important;
-}
-
-.kalendu-main-day,
-.kalendu-main-time {
-  font-size: 0.9rem;
-  line-height: 1.1;
-}
-
-.kalendu-main-deadline {
-  text-transform: uppercase;
-  font-size: 0.7rem;
-  line-height: 1.2;
-}
-
-.kalendu-main-deadline-headline {
-  color: #ED1A43;
-}
-
-.kalendu-main-deadline-red-number {
-  color: #ED1A43;
-}
-
-.kalendu-main-deadline-check {
-  color: #13B069;
-}
-
-.kalendu-main-button-zusagen {
-  background-color: #13B069;
-  border-radius: 20px;
-  border: none !important;
-}
-
-.kalendu-main-button-absagen {
-  background-color: #ED1A43;
-  border-radius: 20px;
-  border: none !important;
-}
-
-.kalendu-main-zusagen-block-titel {
-  font-size: 0.8rem;
-  line-height: 1.0;
-}
-
-.kalendu-main-zusage-number {
-  font-size: 1.3rem;
-  vertical-align: middle;
-  height: 50px;
-  width: 50px;
-  line-height: 50px;
-  /* text-aling: center; */
-  border: 1px solid #13B069;
-  border-radius: 50%;
-  padding-left: 17px;
-  z-index: 200;
-  background-color: white;
-  top: -5px;
-  left: -12px;
-  color: #13B069;
-}
-
-.kalendu-main-zusage-green-bar {
-  background-color: #BBF3DA;
-  border-radius: 0px 20px 20px 0px;
-  padding: 0.5rem 1rem 0.5rem 50px;
-  color: #13B069;
-}
-
-.kalendu-main-frei-icons {
-  color: black;
-  font-size: 1rem;
-}
-
-.kalendu-main-frei-number {
-  font-size: 1.3rem;
-  vertical-align: middle;
-  height: 50px;
-  width: 50px;
-  line-height: 50px;
-  /* text-aling: center; */
-  border: 1px solid #9a9a9a;
-  border-radius: 50%;
-  padding-left: 17px;
-  z-index: 200;
-  background-color: white;
-  top: -5px;
-  left: -12px;
-  color: #9a9a9a;
-}
-
-.kalendu-main-frei-grey-bar {
-  background-color: #c1c1c1;
-  border-radius: 0px 20px 20px 0px;
-  padding: 0.5rem 1rem 0.5rem 50px;
-  color: white;
-  text-transform: uppercase;
-  /*-webkit-box-shadow: 0px 0px 10px 0px rgba(255,160,28,1);
-	-moz-box-shadow: 0px 0px 10px 0px rgba(255,160,28,1);
-	box-shadow: 0px 0px 10px 0px rgba(255,160,28,1);*/
-}
-
-.kalendu-main-absagen-icons {
-  color: black;
-  font-size: 1rem;
-}
-
-.kalendu-main-absagen-nummer {
-  font-size: 1.3rem;
-  vertical-align: middle;
-  height: 50px;
-  width: 50px;
-  line-height: 50px;
-  /* text-aling: center; */
-  border: 1px solid #ED1A43;
-  border-radius: 50%;
-  padding-left: 17px;
-  z-index: 200;
-  background-color: white;
-  top: -5px;
-  left: -12px;
-  color: #ED1A43;
-}
-
-.kalendu-main-absagen-red-bar {
-  background-color: #FCC2CD;
-  border-radius: 0px 20px 20px 0px;
-  padding: 0.5rem 1rem 0.5rem 50px;
-  color: white;
-}
-
-.kalendu-main-zusage-icons {
-  color: black;
-  font-size: 1rem;
-}
-
-.kalendu-separator {
-  position: relative;
-}
-
-.kalendu-separator-line {
-  border-bottom: 1px solid black;
-  width: 64%;
-  margin: 0 auto;
-}
-
-.kalendu-separator-triangle {
-  position: absolute;
-  top: -5px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  width: 0px;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-bottom: 5px solid black;
-}
-
-.kalendu-separator-min {
-  position: absolute;
-  left: 15px;
-  top: -10px;
-  text-transform: uppercase;
-  font-size: 0.9rem;
-}
-
-.kalendu-separator-max {
-  position: absolute;
-  right: 15px;
-  top: -10px;
-  text-transform: uppercase;
-  font-size: 0.9rem;
-}
-
-.kalendu-main-edit-button,
-.kalendu-main-settings-button,
-.kalendu-main-share-button {
-  position: absolute;
-  height: 34px;
-  width: 34px;
-  border-radius: 50%;
-  color: black;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  line-height: 34px;
-  background-color: white;
-  z-index: 300;
-  top: 0px;
-  right: -54px;
-  -webkit-box-shadow: 3px 3px 3px 0px rgba(82, 82, 82, 1);
-  -moz-box-shadow: 3px 3px 3px 0px rgba(82, 82, 82, 1);
-  box-shadow: 3px 3px 3px 0px rgba(82, 82, 82, 1);
-}
-
-.kalendu-main-edit-button2,
-.kalendu-main-settings-button2,
-.kalendu-main-share-button2 {
-  position: absolute;
-  height: 34px;
-  width: 34px;
-  border-radius: 50%;
-  color: black;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  line-height: 34px;
-  background-color: white;
-  z-index: 300;
-  top: 40px;
-  right: -54px;
-  -webkit-box-shadow: 3px 3px 3px 0px rgba(82, 82, 82, 1);
-  -moz-box-shadow: 3px 3px 3px 0px rgba(82, 82, 82, 1);
-  box-shadow: 3px 3px 3px 0px rgba(82, 82, 82, 1);
-}
-
-.kalendu-main-edit-button3,
-.kalendu-main-settings-button3,
-.kalendu-main-share-button3 {
-  position: absolute;
-  height: 34px;
-  width: 34px;
-  border-radius: 50%;
-  color: black;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  line-height: 34px;
-  background-color: white;
-  z-index: 300;
-  top: 80px;
-  right: -54px;
-  -webkit-box-shadow: 3px 3px 3px 0px rgba(82, 82, 82, 1);
-  -moz-box-shadow: 3px 3px 3px 0px rgba(82, 82, 82, 1);
-  box-shadow: 3px 3px 3px 0px rgba(82, 82, 82, 1);
-}
-
+/* 
 .kalendu-main-settings-button,
 .kalendu-main-share-button {
   right: -40px;
@@ -308,25 +23,8 @@ span.kalendu-main-circle-max-number {
 
 .kalendu-main-share-button {
   top: 44px;
-}
+} */
 
-@media screen and (max-width:320px) {
-
-  .kalendu-main-edit-button,
-  .kalendu-main-settings-button,
-  .kalendu-main-share-button {
-    height: 30px;
-    width: 30px;
-    right: -44px;
-    padding-left: 7px;
-    line-height: 30px;
-  }
-
-  .kalendu-main-settings-button,
-  .kalendu-main-share-button {
-    right: -36px;
-  }
-}
 
 /* SPIELGRUPPE */
 
@@ -338,54 +36,8 @@ span.kalendu-main-circle-max-number {
   border: none !important;
 }
 
-.kalendu-main-spielrunde-item {
-  background-color: #e6e6e6;
-  border-bottom-right-radius: 20px;
-  padding: 10px;
-  z-index: 400;
-  margin-bottom: 3rem;
-}
 
-.kalendu-main-spielrunde-headline {
-  font-size: 0.9rem;
-  text-transform: uppercase;
-}
 
-.kalendu-main-spielrunde-alert-red {
-  top: 0px;
-  right: 0px;
-  background-color: #ED1A43;
-  font-size: 0.8rem;
-  color: white;
-  padding: 3px;
-
-}
-
-.kalendu-main-spielrunde-alert-green {
-  top: 0px;
-  right: 0px;
-  background-color: #13B069;
-  font-size: 0.8rem;
-  color: white;
-  padding: 3px;
-}
-
-.kalendu-main-spielrunde-infos {
-  font-size: 0.8rem;
-}
-
-.kalendu-main-spielrunde-deadline {
-  font-size: 0.7rem;
-}
-
-.kalendu-main-spielrunde-button {
-  bottom: -36px;
-  left: 0px;
-  background-color: #13B069;
-  z-index: 100;
-  padding: 6px;
-  color: white;
-}
 
 .kalendu-main-spielgruppe-mitglieder-buchstabe {
   background-color: #8f99cd;
@@ -405,9 +57,13 @@ span.kalendu-main-circle-max-number {
 
 .kalendu-main-spielgruppe-mitglieder-name {
   background-color: #e6e6e6;
-  border-radius: 0px 20px 20px 0px;
-  padding: 0.5rem 1rem 0.5rem 64px;
-  margin-left: 20px;
+  border-radius: 40px 20px 20px 40px;
+  padding: 0.5rem 0 0.5rem 72px;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  /* width: 100%; */
+  /* margin-left: 20px; */
   width: calc(100% - 20px);
 }
 
@@ -455,58 +111,36 @@ span.kalendu-main-circle-max-number {
 
 /* SPIELORT */
 
-.kalendu-main-spielgruppe-item {
-  background-color: #e6e6e6;
-  border-bottom-right-radius: 20px;
-  padding: 0 px;
-  z-index: 400;
-  margin-bottom: 3rem;
-}
 
-.kalendu-main-spielgruppe-top-info {
-  color: white;
-  background-color: #3b928f;
-  text-transform: uppercase;
-  font-size: 0.9rem;
-}
-
-.kalendu-main-spielgruppe-top-info2 {
-  color: white;
-  background-color: #ED1A43;
-  text-transform: uppercase;
-  font-size: 0.9rem;
-}
-
-.kalendu-main-spielgruppe-bild img {
-  border-radius: 50%;
+.kalendu-main-gruppe-bild {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
   height: 100px;
-}
-
-.kalendu-main-spielgruppe-headline {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  color: #3b928f;
-}
-
-.kalendu-main-spielgruppe-infos {
-  font-size: 0.9rem;
-}
-
-.kalendu-main-spielgruppe-infos-status {
-  color: #3b928f;
-}
-
-.kalendu-main-spielort-bild img {
-  position: absolute;
+  overflow: hidden;
   border-radius: 50%;
-  height: 60px;
-  top: 0px;
-  right: 0px;
-  cursor: pointer;
-  /* z-index: 10; */
+  position: absolute;
+  top: -30px;
+  right: 0;
+
 }
 
-.kalendu-main-spielort-bild img:hover {
+.kalendu-main-gruppe-bild img {
+  /* position: absolute; */
+  /* border-radius: 50%; */
+  /* height: 60px; */
+  /* top: 0px; */
+  /* right: 0px; */
+  /* z-index: 10; */
+  height: 100%;
+}
+
+.kalendu-main-gruppe-bild img.admin {
+  cursor: pointer;
+}
+
+.kalendu-main-gruppe-bild img.admin:hover {
   filter: blur(2px);
 }
 

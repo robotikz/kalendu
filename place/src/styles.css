@@ -50,6 +50,171 @@ h6 {
   hyphens: auto;
 }
 
+
+.kalendu-main-section {
+  padding-top: 57px;
+}
+
+.kalendu-main-item {
+  background-color: #e6e6e6;
+  border-bottom-right-radius: 20px;
+  padding: 0 px;
+  z-index: 400;
+  margin-bottom: 3rem;
+  cursor: pointer;
+}
+
+
+.kalendu-main-top-info {
+  color: white;
+  background-color: #3b928f;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.kalendu-main-top-info2 {
+  color: white;
+  background-color: #ED1A43;
+  text-transform: uppercase;
+  font-size: 0.9rem; 
+}
+
+
+.kalendu-main-bild {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.kalendu-main-bild img {
+  border-radius: 50%;
+  height: 100px;
+}
+
+.kalendu-main-infos {
+  font-size: 0.9rem;
+}
+
+.kalendu-main-infos-status {
+  color: #3b928f;
+}
+
+
+.kalendu-main-headline {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #3b928f;
+}
+
+/*  */
+.kalendu-main-section {
+  padding-top: 57px;
+}
+
+.kalendu-edit-col {
+  width: 50px;
+  background-color: #8e8e8e;
+}
+
+.pointer,
+.kalendu-main-edit-button,
+.kalendu-main-edit-button2,
+.kalendu-main-edit-button3,
+.kalendu-main-edit-button3,
+.kalendu-main-spielrunde-button,
+.kalendu-main-notification-circle {
+  cursor: pointer;
+}
+
+.kalendu-main-edit-button,
+.kalendu-main-settings-button,
+.kalendu-main-share-button {
+  position: absolute;
+  height: 34px;
+  width: 34px;
+  border-radius: 50%;
+  color: black;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  line-height: 34px;
+  background-color: white;
+  z-index: 300;
+  top: 0px;
+  right: -54px;
+  -webkit-box-shadow: 3px 3px 3px 0px rgba(82, 82, 82, 1);
+  -moz-box-shadow: 3px 3px 3px 0px rgba(82, 82, 82, 1);
+  box-shadow: 3px 3px 3px 0px rgba(82, 82, 82, 1);
+}
+
+.kalendu-main-edit-button1,
+.kalendu-main-settings-button1,
+.kalendu-main-share-button1 {
+  top: 0px;
+  right: -54px;
+}
+
+.kalendu-main-edit-button2,
+.kalendu-main-settings-button2,
+.kalendu-main-share-button2 {
+  top: 40px;
+  right: -54px;
+}
+
+.kalendu-main-edit-button3,
+.kalendu-main-settings-button3,
+.kalendu-main-share-button3 {
+  top: 80px;
+  right: -54px;
+}
+
+.kalendu-main-edit-button4,
+.kalendu-main-settings-button4,
+.kalendu-main-share-button4 {
+  top: 120px;
+  right: -54px;
+}
+
+
+.kalendu-main-button-zusagen {
+  background-color: #13B069;
+  border-radius: 20px;
+  border: none !important;
+  color: #fff !important;
+}
+
+.kalendu-main-button-absagen {
+  background-color: #ED1A43;
+  border-radius: 20px;
+  border: none !important;
+  color: #fff !important;
+}
+
+@media screen and (max-width:320px) {
+
+  .kalendu-main-edit-button,
+  .kalendu-main-settings-button,
+  .kalendu-main-share-button {
+    height: 30px;
+    width: 30px;
+    right: -44px;
+    padding-left: 7px;
+    line-height: 30px;
+  }
+
+  .kalendu-main-settings-button,
+  .kalendu-main-share-button {
+    right: -36px;
+  }
+}
+
+.kalendu-main-info-bar {
+  background-color: #f6f6f6;
+}
+
+/*  */
+
 .breadcrumb {
   background-color: white !important;
   margin-bottom: 0px !important;
@@ -95,10 +260,12 @@ h6 {
   opacity: 1;
   line-height: 1.15;
   font-size: 100%;
+  outline: none;
 }
 
 .modal-content .modal-body button.close:hover {
-  background-color: #6c757d;
+  /* background-color: #6c757d; */
+  background-color: #ccc;
   opacity: 1;
 }
 
@@ -107,20 +274,6 @@ h6 {
   left: 50%;
   transform: translate(-50%, -50%);
   position: absolute;
-}
-
-.kalendu-main-section {
-  padding-top: 57px;
-}
-
-.pointer,
-.kalendu-main-edit-button,
-.kalendu-main-edit-button2,
-.kalendu-main-edit-button3,
-.kalendu-main-edit-button3,
-.kalendu-main-spielrunde-button,
-.kalendu-main-notification-circle {
-  cursor: pointer;
 }
 
 .text-red {

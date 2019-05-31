@@ -1,4 +1,4 @@
-<app-a-header>
+<app-a-header *ngIf="!loading" [group]="group" [gid]="gid">
 </app-a-header>
 
 <ngx-spinner bdColor="#c1c1c1" size="large" color="#fff" type="ball-scale-multiple">
@@ -7,10 +7,10 @@
 <main role="main" class="flex-shrink-0 kalendu-main-section pb-2 mb-3" *ngIf="!loading">
   <div class="container px-0">
     <div class="container px-0">
-      <div class="d-flex flex-row">
+      <div class="d-flex flex-row position-relative">
         <div class="container px-0">
 
-          <div class="kalendu-main-zusagen-block">
+          <div class="kalendu-main-header-block">
             <div class="container">
               <div class="position-relative mb-4">
                 <nav aria-label="breadcrumb">
@@ -30,6 +30,7 @@
                   </ol>
                 </nav>
                 <div class="container kalendu-main-headline px-0">
+                  <!-- <i class="far fa-minus-square"></i> -->
                   <h1>{{group.title}}</h1>
                 </div>
                 <div class="kalendu-main-notification-circle position-absolute">
@@ -70,17 +71,17 @@
                   <i class="fas fa-paper-plane"></i>
                 </a>
                 <!-- /EDIT BAR -->
-                <div class="d-flex flex-row kalendu-main-group-info">
-                  <div class="col-4 kalendu-group-info-label px-0">Sportart:</div>
-                  <div class="col-8 kalendu-group-info-data px-0">{{group.sport}}</div>
+                <div class="d-flex flex-row kalendu-main-section-info">
+                  <div class="col-4 kalendu-section-info-label px-0">Sportart:</div>
+                  <div class="col-8 kalendu-section-info-data px-0">{{group.sport}}</div>
                 </div>
-                <div class="d-flex flex-row kalendu-main-group-info">
-                  <div class="col-4 kalendu-group-info-label px-0">Spielort:</div>
-                  <div class="col-8 kalendu-group-info-data px-0">{{place.city}}, {{place.title}}</div>
+                <div class="d-flex flex-row kalendu-main-section-info">
+                  <div class="col-4 kalendu-section-info-label px-0">Spielort:</div>
+                  <div class="col-8 kalendu-section-info-data px-0">{{place.city}}, {{place.title}}</div>
                 </div>
-                <div class="d-flex flex-row kalendu-main-group-info px-0">
-                  <div class="col-4 kalendu-group-info-label px-0">Info:</div>
-                  <div class="col-8 kalendu-group-info-data px-0">{{place.info}}</div>
+                <div class="d-flex flex-row kalendu-main-section-info px-0">
+                  <div class="col-4 kalendu-section-info-label px-0">Info:</div>
+                  <div class="col-8 kalendu-section-info-data px-0">{{place.info}}</div>
                 </div>
                 <div class="d-flex flex-row kalendu-mains-ctas justify-content-center my-3"
                      *ngIf="group.aowner === gid">
@@ -93,12 +94,12 @@
             </div>
           </div>
 
-          <div class="kalendu-main-zusagen-block mt-4">
+          <div class="kalendu-main-header-block mt-4">
             <div class="container">
               <ng-template #tipContent let-text="text" placement="left">{{text}}</ng-template>
               <!-- /Spielrunden Elements -->
               <div class="position-relative mb-2 kalendu-main-button-block">
-                <div class="kalendu-main-spielort-bild">
+                <div class="kalendu-main-gruppe-bild" *ngIf="group.aowner === gid">
                   <img src="assets/images/fallback-gruppe.jpg" [ngClass]="{'admin': group.aowner === gid}"
                        *ngIf="!group.avatar" (click)="logoInput.click()">
                   <img [src]="group.avatar" [ngClass]="{'admin': group.aowner === gid}" *ngIf="group.avatar"
@@ -109,6 +110,10 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
                   <input type="file" class="file-hide" (change)="onImageAdd($event)" #logoInput>
+                </div>
+                <div class="kalendu-main-gruppe-bild" *ngIf="group.aowner !== gid">
+                  <img src="assets/images/fallback-gruppe.jpg" *ngIf="!group.avatar">
+                  <img [src]="group.avatar" *ngIf="group.avatar">
                 </div>
                 <!-- <h2>{{group.title}}</h2> -->
                 <!-- EDIT BAR -->
@@ -126,9 +131,8 @@
               </div>
               <!-- Spielrunden Elements -->
               <div class="d-flex justify-content-center" *ngIf="switchgm===1 && !games.length">
-                <div class="kalendu-main-notification-circle">
-                  <a class="kalendu-main-notification-circle-text" (click)="onGameNewDlg(dlggamenew)"
-                     *ngIf="group.aowner === gid">
+                <div class="kalendu-main-notification-circle" *ngIf="group.aowner === gid">
+                  <a class="kalendu-main-notification-circle-text" (click)="onGameNewDlg(dlggamenew)">
                     <i class="fas fa-plus"></i>
                   </a>
                 </div>
@@ -196,6 +200,8 @@
         </div>
         <div class="kalendu-edit-col">
         </div>
+        <!-- <div class="kalendu-edit-col kalendu-edit-col-bg">
+        </div> -->
       </div>
     </div>
   </div>
@@ -239,6 +245,29 @@
         <ngb-timepicker [(ngModel)]="gameNew.ddt" [minuteStep]="15"></ngb-timepicker>
       </div>
     </div>
+    <div class="form-group row">
+      <div class="col-6">
+        <div class="custom-control custom-checkbox" (click)="gamenewrepeatcb()">
+          <input type="checkbox" class="custom-control-input" [(ngModel)]="gamenewrepeat">
+          <label class="custom-control-label">wochentlich wiederholen?</label>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="input-group" *ngIf="gamenewrepeat" @fadeGM>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-danger btn-number" (click)="gamenewrepeatnrpm(-1)">
+                <i class="fas fa-minus"></i>
+            </button>
+          </span>
+          <input type="number" class="form-control input-number" min="1" max="53" [(ngModel)]="gamenewrepeatnr">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-success btn-number" (click)="gamenewrepeatnrpm(1)">
+              <i class="fas fa-plus"></i>
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-12 text-center">
         <button type="button" class="btn btn-danger" (click)="modal.close('oknew')">Ok</button>
@@ -266,7 +295,7 @@
         <div class="col-6">
         </div>
         <div class="col-2">
-          <button type="button" class="btn btn-danger" ngbAutofocus (click)="modal.close('dlgremove')">Ja</button>
+          <button type="button" class="btn btn-danger" (click)="modal.close('dlgremove')">Ja</button>
         </div>
         <div class="col-2">
           <!-- <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('close')">Nein</button> -->
@@ -295,7 +324,7 @@
     </div>
     <div class="row">
       <div class="col-12 text-center">
-        <button type="button" class="btn btn-danger" ngbAutofocus (click)="modal.close('dlgpussubsribe')">Ja</button>
+        <button type="button" class="btn btn-danger" (click)="modal.close('dlgpussubsribe')">Ja</button>
         <!-- <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('dlgclose')">Nein</button> -->
       </div>
     </div>
@@ -330,7 +359,7 @@
       <i class="fas fa-times"></i>
     </button>
     <form class="text-left" [formGroup]="frmg">
-      <div class="form-group" #ngd>
+      <div class="form-group font-weight-bold" #ngd>
         <label>Ort: {{place.title}}</label>
       </div>
       <div class="form-group">
@@ -387,29 +416,29 @@
       </div>
       <div class="form-group row">
         <div class="col-6">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" formControlName="ball" value="false">
-            <label class="form-check-label">Ball nötig?</label>
+          <div class="custom-control custom-checkbox" (click)="ballcb()">
+            <input type="checkbox" class="custom-control-input" formControlName="ball">
+            <label class="custom-control-label">Ball nötig?</label>
           </div>
         </div>
         <div class="col-6">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" formControlName="camisole" value="false">
-            <label class="form-check-label">Leibchen nötig?</label>
+          <div class="custom-control custom-checkbox" (click)="camisolecb()">
+            <input type="checkbox" class="custom-control-input" formControlName="camisole">
+            <label class="custom-control-label">Leibchen nötig?</label>
           </div>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-6">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" formControlName="status" value="5">
-            <label class="form-check-label">privat?</label>
+          <div class="custom-control custom-checkbox" (click)="statuscb()">
+            <input type="checkbox" class="custom-control-input" formControlName="status">
+            <label class="custom-control-label">privat?</label>
           </div>
         </div>
         <div class="col-6">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" formControlName="pay" value="true">
-            <label class="form-check-label">kostet?</label>
+          <div class="custom-control custom-checkbox" (click)="paycb()">
+            <input type="checkbox" class="custom-control-input" formControlName="pay">
+            <label class="custom-control-label">kostet?</label>
           </div>
         </div>
       </div>
@@ -483,13 +512,13 @@
       <div class="col-12">
         <h5 #ngd>Wie heißt du?</h5>
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Name" ngbAutofocus [(ngModel)]="memberNew.nick"
-                  (keyup.enter)="modal.close('ok')">
+          <input type="text" class="form-control" placeholder="Name" [(ngModel)]="memberNew.nick"
+                 (keyup.enter)="modal.close('ok')">
         </div>
       </div>
     </div>
     <div class="row mb-2" *ngIf="game.group.camisole || game.group.ball">
-      <div class="col-6 text-center" *ngIf="game.group.camisole">
+      <div class="col-6 text-center" *ngIf="game.group.ball">
         <div class="btn-group btn-group-toggle">
           <label [ngClass]="{'btn btn-sm': true, 'kalendu-main-button-absagen': !memberNew.ball, 'kalendu-main-button-zusagen': memberNew.ball}"
                  ngbButtonLabel>
@@ -500,7 +529,7 @@
           </label>
         </div>
       </div>
-      <div class="col-6 text-center" *ngIf="game.group.ball">
+      <div class="col-6 text-center" *ngIf="game.group.camisole">
         <div class="btn-group btn-group-toggle">
           <label [ngClass]="{'btn btn-sm': true, 'kalendu-main-button-absagen': !memberNew.camisole, 'kalendu-main-button-zusagen': memberNew.camisole}"
                  ngbButtonLabel>
@@ -517,6 +546,20 @@
       <div class="col-12 text-center">
         <a class="btn btn-sm kalendu-main-button-zusagen px-4" (click)="modal.close('ok')">Zusagen</a>
         &nbsp;
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- ZUSAGE DOPPELT -->
+<ng-template #dlgzusagedoppelt let-modal>
+  <div class="modal-body kalendu-dlg-content-zusage" ngDraggable [handle]="ngd">
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="row">
+      <div class="col-12 text-center">
+        <label class="text-red" #ngd>Ihre Name ist schon zugesagt oder abgesagt</label>
       </div>
     </div>
   </div>

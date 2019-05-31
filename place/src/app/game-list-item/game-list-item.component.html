@@ -25,8 +25,8 @@
   </div>
   <div class="kalendu-main-spielrunde-deadline mt-3">
 
-    <span class="red" *ngIf="game.play===9">Abgesagt!</span>
-    <span class="red" *ngIf="game.play===2">Du kannst noch einsteigen, solange Platz frei!</span>
+    <span class="text-red" *ngIf="game.play===9">Abgesagt!</span>
+    <span class="text-red" *ngIf="game.play===2">Du kannst noch einsteigen, solange Platz frei!</span>
 
     <div *ngIf="game.play!==9 && game.play!==2">
       <div *ngIf="!bDeadline">
@@ -50,22 +50,22 @@
   </div>
 
   <div class="kalendu-main-spielrunde-button1 position-absolute" *ngIf="game.play===2"  (click)="onGameMemberNew()">
-    Mitspielen Zack-Zack!
+    Sofort mitspielen
   </div>
   <ng-container *ngIf="game.play!==9 && game.play!==2">
     <div *ngIf="membersa?.length >= game.min || !bDeadline" class="kalendu-main-spielrunde-button1 position-absolute"
       (click)="onGameMemberNew()">
-      Mitspielen Zack-Zack!
+      Sofort mitspielen
     </div>
   </ng-container>
 
   <div class="kalendu-main-spielrunde-button2 position-absolute" *ngIf="game.play===2" (click)="onNavigateGame()">
-    Mitspielen in Details!
+    Zur Anmelde-Seite
   </div>
   <ng-container *ngIf="game.play!==9 && game.play!==2">
     <div *ngIf="membersa?.length >= game.min || !bDeadline" class="kalendu-main-spielrunde-button2 position-absolute"
          (click)="onNavigateGame()">
-      Mitspielen in Details!
+         Zur Anmelde-Seite
     </div>
   </ng-container>
 

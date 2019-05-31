@@ -1,11 +1,8 @@
 var express = require('express');
 // const bodyParser = require('body-parser');
 var nodemailer = require("nodemailer");
-const Email = require('email-templates');
 const Busboy = require('busboy');
-const {
-    google
-} = require('googleapis');
+const { google } = require('googleapis');
 const p = require('./params.js');
 
 var router = express.Router();
@@ -41,6 +38,7 @@ router.post('/mailer', (req, res) => {
             refreshToken: gRefreshToken,
             accessToken: accessToken
         }
+
     });
 
     const busboy = new Busboy({
@@ -58,36 +56,34 @@ router.post('/mailer', (req, res) => {
         console.log(`Processed m - stringify: ${JSON.stringify(m)}`);
         var mailOptions = {
             // from: m.from || p.smtp.auth.user, // sender address
+            // from: '"Bau.io" bau.io@gmail.com', // sender address
             from: `"Kalendu" ${p.smtp.auth.user}`,
             to: m.to, // list of receivers
-            // subject: m.subject, // Subject line
-            // html: m.body, // plaintext body
+            subject: m.subject, // Subject line
+            html: m.body, // plaintext body
         }
-        const email = new Email({
-            message: mailOptions,
-            send: true,
-            preview: false,
-            transport: smtpTransport
-        });
+        if (m.pdf) {
+            mailOptions.attachments = [{ // use URL as an attachment
+                filename: m.pdf.uid,
+                path: m.pdf.url
+            }, ]
+        }
         // send mail with defined transport object
-        // and with template
-        email.send({
-                template: m.tmp,
-                locals: m.locals
-            })
-            .then((r) => {
-                console.log;
-                console.log("Message sent: " + JSON.stringify(r));
+        smtpTransport.sendMail(mailOptions, (error, response) => {
+            if (error) {
+                console.log(error);
+                res.send(error);
+            } else {
+                console.log("Message sent: " + JSON.stringify(response));
                 res.setHeader('Content-Type', 'application/json');
                 res.end(JSON.stringify({
                     'message': 'Message has been sent: ' +
                         m.to
                 }));
-                // if you don't want to use this transport object anymore, uncomment following line
-                smtpTransport.close(); // shut down the connection pool, no more messages
-                return;
-            })
-            .catch(console.error);
+            }
+            // if you don't want to use this transport object anymore, uncomment following line
+            smtpTransport.close(); // shut down the connection pool, no more messages
+        });
     });
     busboy.on('finish', () => {});
     busboy.end(req.rawBody);

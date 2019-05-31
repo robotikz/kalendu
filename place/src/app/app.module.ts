@@ -54,7 +54,7 @@ registerLocaleData(localeDe, 'de');
     GameListItemComponent,
     GamesGComponent,
     MembersGameComponent,
-    OOPipe
+    OOPipe,
   ],
   imports: [
     BrowserModule,

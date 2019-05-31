@@ -10,7 +10,7 @@
       <div class="d-flex flex-row">
         <div class="container px-0">
 
-          <div class="kalendu-main-zusagen-block">
+          <div class="kalendu-main-header-block">
             <div class="container">
               <div class="position-relative mb-4">
                 <nav aria-label="breadcrumb">
@@ -38,24 +38,20 @@
                   <i class="fas fa-location-arrow"></i>
                 </a>
                 <!-- /EDIT BAR -->
-                <div class="d-flex flex-row kalendu-main-group-info">
-                  <div class="col-4 kalendu-group-info-label px-0">Adresse:</div>
-                  <div class="col-8 kalendu-group-info-data px-0">{{place.street}} {{place.nr}}<br>{{place.zip}}
+                <div class="d-flex flex-row kalendu-main-section-info">
+                  <div class="col-4 kalendu-section-info-label px-0">Adresse:</div>
+                  <div class="col-8 kalendu-section-info-data px-0">{{place.street}} {{place.nr}}<br>{{place.zip}}
                     {{place.city}}</div>
                 </div>
-                <div class="d-flex flex-row kalendu-main-group-info px-0">
-                  <div class="col-4 kalendu-group-info-label px-0">Info:</div>
-                  <div class="col-8 kalendu-group-info-data px-0">{{place.info}}</div>
+                <div class="d-flex flex-row kalendu-main-section-info px-0">
+                  <div class="col-4 kalendu-section-info-label px-0">Info:</div>
+                  <div class="col-8 kalendu-section-info-data px-0">{{place.info}}</div>
                 </div>
-                <!-- <div class="d-flex flex-row kalendu-mains-ctas justify-content-center my-3 px-0">
-                  <a class="btn btn-primary kalendu-main-button-spielrunden mr-2 px-4" href="#">Spielrunden</a>
-                  <a class="btn btn-primary kalendu-main-button-spieler ml-2 px-4" href="#">Spielgruppen</a>
-                </div> -->
               </div>
             </div>
           </div>
 
-          <div class="kalendu-main-zusagen-block mt-4">
+          <div class="kalendu-main-header-block mt-4">
             <div class="container">
 
               <!-- /Spielrunden Elements -->
@@ -70,37 +66,38 @@
 
 
 
-              <div class="kalendu-main-spielgruppe-item position-relative" [ngClass]="{'pointer': group.status === 1}"
-                   *ngFor="let group of groups" (click)="onNavigateMember(group)">
-                <div class="kalendu-main-spielgruppe-top-info text-center">Wir suchen Mitspieler!</div>
-                <div class="kalendu-main-spielgruppe-top-info2 text-center" *ngIf="group.gamenext?.id">Nächstes Spiel:
+              <div class="kalendu-main-item position-relative" [ngClass]="{'pointer': group.status === 1}"
+                   *ngFor="let group of groups" (click)="onNavigateMember(group)" @fadeGM>
+                <div class="kalendu-main-top-info text-center">Wir suchen Mitspieler!</div>
+                <div class="kalendu-main-top-info2 text-center" *ngIf="group.gamenext?.id">Nächstes Spiel:
                   {{group.gamenext?.dt | date:'EEEE, dd.MM.yyyy HH:mm'}}</div>
-                <div class="kalendu-main-spielgruppe-top-info2 text-center" *ngIf="!group.gamenext?.id">Nächstes Spiel: -
+                <div class="kalendu-main-top-info2 text-center" *ngIf="!group.gamenext?.id">Nächstes Spiel:
+                  -
                 </div>
                 <div class="d-flex flex-row p-2">
-                  <div class="kalendu-main-spielgruppe-bild pr-3">
+                  <div class="kalendu-main-bild d-flex align-items-center justify-content-center">
                     <img src="assets/images/fallback-gruppe.jpg" *ngIf="!group.avatar">
                     <img [src]="group.avatar" *ngIf="group.avatar">
                   </div>
-                  <div class="kalendu-main-spielgruppe-infos">
-                    <h3 class="kalendu-main-spielgruppe-headline">{{group.title}}</h3>
-                    <div class="kalendu-main-spielgruppe-infos-status" *ngIf="group.status === 5"
+                  <div class="kalendu-main-infos ml-2">
+                    <h3 class="kalendu-main-headline">{{group.title}}</h3>
+                    <div class="kalendu-main-infos-status" *ngIf="group.status === 5"
                          (click)="onNavigateAdmin(group)">
                       <i class="fas fa-lock"></i><span>&nbsp;Privat</span>
                       <span *ngIf="group.pay">&nbsp;|&nbsp;</span> <i class="fas fa-euro-sign"
                          *ngIf="group.pay"></i><span *ngIf="group.pay">&nbsp;Kostet</span>
                     </div>
-                    <div class="kalendu-main-spielgruppe-infos-status" *ngIf="group.status === 1"
+                    <div class="kalendu-main-infos-status" *ngIf="group.status === 1"
                          (click)="onNavigateAdmin(group)">
                       <i class="fas fa-lock-open"></i> <span>&nbsp;Offen</span>
                       <span *ngIf="group.pay">&nbsp;|&nbsp;</span><i class="fas fa-euro-sign"
                          *ngIf="group.pay"></i><span *ngIf="group.pay">&nbsp;Kostet</span>
                     </div>
-                    <div class="kalendu-main-spielgruppe-infos-typ">Freizeitmannschaft
+                    <div class="kalendu-main-infos-typ">Freizeitmannschaft
                     </div>
-                    <!-- <div class="kalendu-main-spielgruppe-infos-niveau">Niveau: gemischt</div> -->
-                    <!-- <div class="kalendu-main-spielgruppe-infos-niveau" *ngIf="group.pay">Man muss bezahlen!</div> -->
-                    <div class="kalendu-main-spielgruppe-infos-sportarten">
+                    <!-- <div class="kalendu-main-infos-niveau">Niveau: gemischt</div> -->
+                    <!-- <div class="kalendu-main-infos-niveau" *ngIf="group.pay">Man muss bezahlen!</div> -->
+                    <div class="kalendu-main-infos-sportarten">
                       <!-- <span class="text-left " *ngIf="group.gamenext.id">Nächste Spiel: -->
                       <!-- {{group.gamenext.dt | date:'EEEE, dd.MM.yyyy HH:mm'}}</span> -->
                       <!-- <span class="text-left " *ngIf="!group.gamenext.id">Nächste Spiel: -</span> -->
@@ -114,7 +111,7 @@
                 <!-- <div class="kalendu-main-edit-button">
                   <i class="fas fa-edit"></i>
                 </div> -->
-                <div class="kalendu-main-edit-button2" *ngIf="group.status === 5"
+                <div class="kalendu-main-edit-button kalendu-main-edit-button2" *ngIf="group.status === 5"
                      (click)="mailerSendRequestDlg(dlgsend, group); $event.stopPropagation()">
                   <i class="fas fa-envelope"></i>
                 </div>
@@ -147,7 +144,7 @@
       <i class="fas fa-times"></i>
     </button>
     <form class="text-left" [formGroup]="frm">
-      <div class="form-group" #ngd>
+      <div class="form-group font-weight-bold" #ngd>
         <label>Gruppe: {{group.title}}</label>
       </div>
       <div class="form-group">
@@ -155,11 +152,11 @@
         <input type="text" class="form-control" placeholder="max.mustermann@mail.de" formControlName="email" autofocus
                [ngClass]="{ 'is-invalid': f.email.errors, 'is-valid': !f.email.errors }">
         <div *ngIf="f.email.errors" class="invalid-feedback">
-          <div *ngIf="f.email.errors.required">Bitte tragen Sie ihre E-Mail ein.</div>
+          <div *ngIf="f.email.errors.required">Bitte trag deine E-Mail ein.</div>
           <div *ngIf="f.email.errors.email">E-Mail ist ungültig.</div>
         </div>
       </div>
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label>Mail-Inhalt:</label>
         <textarea class="form-control" rows="3"
                   placeholder="Ich möchte gerne mitspielen, meine E-Mail zum Kontakt: max.mustermann@email.com"
@@ -168,7 +165,7 @@
         <div *ngIf="f.body.errors" class="invalid-feedback">
           <div *ngIf="f.body.errors.required">Bitte tragen Sie den Mail-Inhalt mit ihrer E-Mail-Adresse ein.</div>
         </div>
-      </div>
+      </div> -->
     </form>
     <div class="row">
       <div class="col-6"></div>
@@ -190,16 +187,16 @@
     <button type="button" class="close" (click)="modal.dismiss('close')">
       <i class="fas fa-times"></i>
     </button>
-    <form class="text-left" [formGroup]="frmg" >
-      <div class="form-group" #ngd>
-        <label>Ort: {{place.title}}</label>
+    <form class="text-left" [formGroup]="frmg">
+      <div class="form-group font-weight-bold" #ngd>
+        <label>Spielstätte: {{place.title}}</label>
       </div>
-      <div class="form-group" >
-        <label>Gruppe-Titel:</label>
+      <div class="form-group">
+        <label>Gruppentitel:</label>
         <input type="text" class="form-control" formControlName="title" autofocus
                [ngClass]="{ 'is-invalid': fg.title.errors, 'is-valid': !fg.title.errors }">
         <div *ngIf="fg.title.errors" class="invalid-feedback">
-          <div *ngIf="fg.title.errors.required">Bitte tragen Sie eine Gruppe ein.</div>
+          <div *ngIf="fg.title.errors.required">Bitte gib der Gruppe einen Namen.</div>
         </div>
       </div>
       <div class="form-group">
@@ -207,7 +204,7 @@
         <input type="text" class="form-control" placeholder="max.mustermann@mail.de" formControlName="owner"
                [ngClass]="{ 'is-invalid': fg.owner.errors, 'is-valid': !fg.owner.errors }">
         <div *ngIf="fg.owner.errors" class="invalid-feedback">
-          <div *ngIf="fg.owner.errors.required">Bitte tragen Sie ihre E-Mail ein.</div>
+          <div *ngIf="fg.owner.errors.required">Bitte trag deine E-Mail ein.</div>
           <div *ngIf="fg.owner.errors.email">E-Mail ist ungültig.</div>
         </div>
       </div>
@@ -216,56 +213,56 @@
         <input type="text" class="form-control" placeholder="max.mustermann@mail.de" formControlName="member">
       </div> -->
       <div class="form-group">
-        <label>Mitglieder einladen? Die Liste einfügen mit Komma getrent</label>
+        <label>Möchtest du MitspielerInnen einladen? Trage ihre E-Mail-Adressen hier ein und setze ein Komma nach jeder Adresse.</label>
         <tag-input formControlName="member" [secondaryPlaceholder]="'max.mustermann@mail.de'" [placeholder]="'Email'"
                    [errorMessages]="memberErrorMessages" [validators]="memberValidators" [addOnPaste]='true'
                    [theme]="'kalendu'" [modelAsStrings]='true'></tag-input>
       </div>
       <div class="form-row">
         <div class="form-group col-6">
-          <label>Min:</label>
+          <label>Mindestanzahl SpielerInnen:</label>
           <input type="text" class="form-control input-number" value="1" [min]="1" formControlName="min"
                  [ngClass]="{ 'is-invalid': fg.min.errors, 'is-valid': !fg.min.errors }">
           <div *ngIf="fg.min.errors" class="invalid-feedback">
-            <div *ngIf="fg.min.errors.required">Minimumspieler darf nicht leer sein</div>
+            <div *ngIf="fg.min.errors.required">Mindestanzahl darf nicht leer sein</div>
             <div *ngIf="fg.min.errors.min">Der Wert muss größer als Null sein</div>
           </div>
         </div>
         <div class="form-group col-6">
-          <label>Max:</label>
+          <label>Maximalanzahl SpielerInnen:</label>
           <input type="text" class="form-control input-number" value="2" [min]="2" formControlName="max"
                  [ngClass]="{ 'is-invalid': fg.max.errors, 'is-valid': !fg.max.errors }">
           <div *ngIf="fg.max.errors" class="invalid-feedback">
-            <div *ngIf="fg.max.errors.required">Maximumspieler darf nicht leer sein</div>
+            <div *ngIf="fg.max.errors.required">Maximalanzahl darf nicht leer sein</div>
             <div *ngIf="fg.max.errors.min">Der Wert muss größer als Null sein</div>
           </div>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-6">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" formControlName="ball" value="false">
-            <label class="form-check-label">Ball nötig?</label>
+          <div class="custom-control custom-checkbox" (click)="ballcb()">
+            <input type="checkbox" class="custom-control-input" formControlName="ball">
+            <label class="custom-control-label">Ball nötig?</label>
           </div>
         </div>
         <div class="col-6">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" formControlName="camisole" value="false">
-            <label class="form-check-label">Leibchen nötig?</label>
+          <div class="custom-control custom-checkbox" (click)="camisolecb()">
+            <input type="checkbox" class="custom-control-input" formControlName="camisole">
+            <label class="custom-control-label">Leibchen nötig?</label>
           </div>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-6">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" formControlName="status" value="5">
-            <label class="form-check-label">privat?</label>
+          <div class="custom-control custom-checkbox" (click)="statuscb()">
+            <input type="checkbox" class="custom-control-input" formControlName="status" value="5">
+            <label class="custom-control-label">Privat (geschlossene Gruppe)?</label>
           </div>
         </div>
         <div class="col-6">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" formControlName="pay" value="true">
-            <label class="form-check-label">kostet?</label>
+          <div class="custom-control custom-checkbox" (click)="paycb()">
+            <input type="checkbox" class="custom-control-input" formControlName="pay">
+            <label class="custom-control-label">Kostet?</label>
           </div>
         </div>
       </div>

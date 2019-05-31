@@ -156,6 +156,7 @@ export class GameListItemComponent implements OnInit {
   }
 
   onNavigateGame() {
+    console.log(['/gamem', { group_id: this.route.snapshot.params['group_id'], game_id: this.game.id }]);
     this.router.navigate(['/gamem', { group_id: this.route.snapshot.params['group_id'], game_id: this.game.id }]);
   }
 

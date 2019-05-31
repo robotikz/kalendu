@@ -15,11 +15,12 @@
         "body-parser": "^1.18.3",
         "busboy": "^0.3.1",
         "cors": "^2.8.5",
+        "email-templates": "^5.0.5",
         "express": "^4.16.4",
         "firebase-admin": "~7.0.0",
         "firebase-functions": "^2.3.0",
         "googleapis": "^39.2.0",
-        "node-gyp": "^3.8.0",
+        "node-gyp": "^4.0.0",
         "nodemailer": "^5.1.1",
         "web-push": "^3.3.3"
     },

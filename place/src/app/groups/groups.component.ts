@@ -13,11 +13,23 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MailerService } from '../services/mailer.service';
 import { FbService } from '../services/fb.service';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
-  styleUrls: ['./groups.component.css']
+  styleUrls: ['./groups.component.css'],
+  animations: [
+    trigger('fadeGM', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('2s', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('.5s', style({ opacity: 0 }))
+      ]),
+    ]),
+  ],
 })
 export class GroupsComponent implements OnInit {
 
@@ -43,7 +55,9 @@ export class GroupsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.spinner.show();
+    setTimeout(() => {
+      this.spinner.show();
+    }, 100);
     // this.route.data
     console.log('this.route.snapshot.params[place_id] - ', this.route.snapshot.params['place_id']);
     return forkJoin([
@@ -71,7 +85,7 @@ export class GroupsComponent implements OnInit {
             ball: [false],
             camisole: [false],
             pay: [true],
-            status: [5]
+            status: [true]
           });
         }
       );
@@ -115,8 +129,16 @@ export class GroupsComponent implements OnInit {
     const fd = new FormData();
     const body = {
       to: this.group.owner,
-      email: 'Neuer Mitspieler/-in',
-      body: this.f.body.value + ' ' + this.f.email.value,
+      tmp: 'mail-anfrage-private-gruppe',
+      locals: {
+        app_link: location.hostname,
+        group_req_email: this.frm.value.email,
+        group_title: this.group.title,
+        group_link_o: location.hostname + '/gamesg;group_id=' + this.group.aowner,
+        group_link_m: location.hostname + '/gamesg;group_id=' + this.group.amember,
+      },
+      // email: 'Neuer Mitspieler/-in'
+      // body: this.f.body.value + ' ' + this.f.email.value,
     };
     console.log('mailerSendRequestDlgOk - body - ', body);
     fd.append('json', JSON.stringify(body));
@@ -150,6 +172,7 @@ export class GroupsComponent implements OnInit {
     this.fg.ball.setValue(false);
     this.fg.camisole.setValue(false);
     this.fg.pay.setValue(true);
+    this.fg.status.setValue(true);
     this.modalService.open(dlg, { size: 'lg' }).result.then(() => {
       // this.onGroupAddDlgOk();
     }, () => { // close, esc
@@ -184,7 +207,7 @@ export class GroupsComponent implements OnInit {
     this.group.ball = this.frmg.value.ball;
     this.group.camisole = this.frmg.value.camisole;
     this.group.pay = this.frmg.value.pay;
-    this.group.status = this.frmg.value.status;
+    this.group.status = this.frmg.value.status ? 5 : 1;
 
     this.fbService
       .createGroup(this.group)
@@ -195,28 +218,44 @@ export class GroupsComponent implements OnInit {
         let fd = new FormData();
         let body = {
           to: this.group.owner,
-          subject: 'Neue Gruppe: ' + this.group.title,
-          body: 'Neue Gruppe: ' + this.group.title + '<br>'
-            + 'Adminlink: ' + '<a href="' + location.hostname + '/gamesg;group_id=' + this.group.aowner + '">Adminlink</a>' + '<br>'
-            + 'Mitgliederlink: ' + '<a href="' + location.hostname + '/gamesg;group_id=' + this.group.amember + '">Mitgliederlink</a>' + '<br>'
-            + 'Wenn die Gruppe öffentlich, dann: ' + '<a href="' + location.hostname + '/gamesg;group_id=' + this.group.id + '">für alle</a>' + '<br>'
-          ,
+          tmp: 'mail-neue-spielgruppe',
+          locals: {
+            app_link: location.hostname,
+            group_title: this.group.title,
+            group_link_o: location.hostname + '/gamesg;group_id=' + this.group.aowner,
+            group_link_m: location.hostname + '/gamesg;group_id=' + this.group.amember,
+          },
+          // subject: 'Kalendu: Alle Infos zu deiner neuen Spielgruppe: ' + this.group.title,
+          // body: 'Neue Gruppe: ' + this.group.title + '<br>'
+          //   + 'Adminlink: ' + '<a href="' + location.hostname + '/gamesg;group_id=' + this.group.aowner + '">Adminlink</a>' + '<br>'
+          //   + 'Mitgliederlink: ' + '<a href="' + location.hostname + '/gamesg;group_id=' + this.group.amember + '">Mitgliederlink</a>' + '<br>'
+          //   + 'Wenn die Gruppe öffentlich, dann: ' + '<a href="' + location.hostname + '/gamesg;group_id=' + this.group.id + '">für alle</a>' + '<br>'
+          // ,
         };
 
-        console.log('onGroupAddDlgOk - body - ', body);
+        console.log('onGroupAddDlgOk - admin body - ', body);
         fd.append('json', JSON.stringify(body));
 
         this.mailer.sendGroup(fd).subscribe(res => {
           this.wait = false;
-          console.log('[App] Mailer send-group', res);
+          console.log('[App] Mailer send-group - admin - res - ', res);
           // if members are here
           if (this.group.member) {
             fd = new FormData();
             body = {
               to: this.frmg.value.member,
-              subject: 'Einladung zu neue Gruppe: ' + this.group.title,
-              body: 'Neue Gruppe: ' + this.group.title + '<br>'
-                + 'Sie wurden mitzuspielen eingeladen: ' + '<a href="' + location.hostname + '/gamesg;group_id=' + this.group.amember + '">' + this.group.title + '</a>' + '<br>'
+              tmp: 'mail-einladung-neue-gruppe',
+              locals: {
+                app_link: location.hostname,
+                group_title: this.group.title,
+                group_link_o: '',
+                group_link_m: location.hostname + '/gamesg;group_id=' + this.group.amember,
+              },
+              // subject: 'Kalendu: Du wurdest zu einer neuen Spielgruppe eingeladen: ' + this.group.title,
+              // body: 'Neue Gruppe: ' + this.group.title + '<br>'
+              //   + 'Sie wurden mitzuspielen eingeladen: ' 
+              //   + '<a href="' + location.hostname + '/gamesg;group_id=' + this.group.amember + '">' 
+              //   + this.group.title + '</a>' + '<br>'
             };
 
             console.log('onGroupAddDlgOk - member.body - ', body);
@@ -224,22 +263,22 @@ export class GroupsComponent implements OnInit {
 
             this.mailer.sendGroup(fd).subscribe(res => {
               this.wait = false;
-              console.log('[App] Mailer send-group', res);
+              console.log('[App] Mailer send-group - member - res - ', res);
               this.router.navigate(['/gamesg', { group_id: this.group.aowner }]);
               this.group = null;
             },
               error => {
-                console.log('[App] Mailer Error', error);
+                console.log('[App] Mailer Error member', error);
                 this.group = null;
               }
             );
           } else {
             this.router.navigate(['/gamesg', { group_id: this.group.aowner }]);
           }
-          this.group = null;
+          // this.group = null;
         },
           error => {
-            console.log('[App] Mailer Error', error);
+            console.log('[App] Mailer Error admin', error);
             this.group = null;
           }
         );
@@ -272,6 +311,23 @@ export class GroupsComponent implements OnInit {
       map(term => (term === '' ? this.place.sports
         : this.place.sports.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).map(v => v)).slice(0, 10))
     );
+  }
+
+  ballcb() {
+    this.fg.ball.setValue(!this.frmg.value.ball);
+  }
+
+  camisolecb() {
+    this.fg.camisole.setValue(!this.frmg.value.camisole);
+  }
+
+  statuscb() {
+    // this.fg.status.setValue(this.frmg.value.status === 1 ? 5 : 1);
+    this.fg.status.setValue(!this.frmg.value.status)
+  }
+
+  paycb() {
+    this.fg.pay.setValue(!this.frmg.value.pay);
   }
 
   onNavigatePublic(group: Group) {

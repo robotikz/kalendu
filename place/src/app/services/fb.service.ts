@@ -85,32 +85,32 @@ export class FbService {
         return res;
         // return concatMap(...res);
       }),
-      concatMap(places => {
-        // console.log(result);
-        // return of([new Place()]);
-        // return result;
-        const placeObservables = places.map(place => {
-          return this.afs
-            .collection<any>(`places/${place.id}/sports`)
-            .valueChanges().pipe(
-              map(sports => {
-                // console.log(sports);
-                // place.sports = sports;
-                // return place;
-                // const rr = { ...place, sports: sports };
-                place.sports = sports;
-                // console.log(rr);
-                return place;
-                // return Object.assign(r, {sports});
-              }),
-              first()
-            );
-        });
-        if (placeObservables.length === 0) {
-          return of([]); // The workaround is to check the length of the list and to not use this operator when it is empty.
-        }
-        return forkJoin(...placeObservables);
-      }),
+      // concatMap(places => {
+      //   // console.log(result);
+      //   // return of([new Place()]);
+      //   // return result;
+      //   const placeObservables = places.map(place => {
+      //     return this.afs
+      //       .collection<any>(`places/${place.id}/sports`)
+      //       .valueChanges().pipe(
+      //         map(sports => {
+      //           // console.log(sports);
+      //           // place.sports = sports;
+      //           // return place;
+      //           // const rr = { ...place, sports: sports };
+      //           place.sports = sports;
+      //           // console.log(rr);
+      //           return place;
+      //           // return Object.assign(r, {sports});
+      //         }),
+      //         first()
+      //       );
+      //   });
+      //   if (placeObservables.length === 0) {
+      //     return of([]); // The workaround is to check the length of the list and to not use this operator when it is empty.
+      //   }
+      //   return forkJoin(...placeObservables);
+      // }),
       first()
     );
   }
