@@ -7,7 +7,7 @@ import { map, mergeMap, first, concatMap } from 'rxjs/operators';
 import { Group } from '../model/group';
 import { Game } from '../model/game';
 import { Member } from '../model/member';
-import * as firebase from 'firebase/app';
+import * as firebase from 'firebase';
 
 
 
