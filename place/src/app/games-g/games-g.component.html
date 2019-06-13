@@ -249,7 +249,7 @@
       <div class="col-6">
         <div class="custom-control custom-checkbox" (click)="gamenewrepeatcb()">
           <input type="checkbox" class="custom-control-input" [(ngModel)]="gamenewrepeat">
-          <label class="custom-control-label">wochentlich wiederholen?</label>
+          <label class="custom-control-label">wöchentlich wiederholen?</label>
         </div>
       </div>
       <div class="col-6">
@@ -286,7 +286,7 @@
       <div class="row">
         <div class="col-1"></div>
         <div class="col-10">
-          <p><strong>Sind Sie sich sicher, die Spielrunde <span class="text-primary">"{{gameNew.title}}"</span> zu
+          <p><strong>Bist du sicher, die Spielrunde <span class="text-primary">"{{gameNew.title}}"</span> zu
               löschen?</strong></p>
         </div>
         <div class="col-1"></div>
@@ -341,7 +341,7 @@
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
         <i class="fas fa-times"></i>
       </button>
-      <p><strong>Sind Sie sich sicher, Gruppe <span class="text-primary">"{{group.title}}"</span>
+      <p><strong>Bist du sicher, die Gruppe <span class="text-primary">"{{group.title}}"</span>
           und alle zugehörigen Spielrunden zu löschen?</strong></p>
       <div class="row">
         <div class="col-12 text-center">
@@ -363,33 +363,33 @@
         <label>Ort: {{place.title}}</label>
       </div>
       <div class="form-group">
-        <label>Gruppe-Titel:</label>
+        <label>Name der Gruppe:</label>
         <input type="text" class="form-control" formControlName="title" autofocus
                [ngClass]="{ 'is-invalid': fg.title.errors, 'is-valid': !fg.title.errors }">
         <div *ngIf="fg.title.errors" class="invalid-feedback">
-          <div *ngIf="fg.title.errors.required">Bitte tragen Sie eine Gruppe ein.</div>
+          <div *ngIf="fg.title.errors.required">Bitte gib der Gruppe einen Namen.</div>
         </div>
       </div>
       <div class="form-group">
-        <label>Ihre E-Mail:</label>
+        <label>Deine E-Mail-Adresse:</label>
         <input type="text" class="form-control" placeholder="max.mustermann@mail.de" formControlName="owner"
                [ngClass]="{ 'is-invalid': fg.owner.errors, 'is-valid': !fg.owner.errors }">
         <div *ngIf="fg.owner.errors" class="invalid-feedback">
-          <div *ngIf="fg.owner.errors.required">Bitte tragen Sie ihre E-Mail ein.</div>
-          <div *ngIf="fg.owner.errors.email">E-Mail ist ungültig.</div>
+          <div *ngIf="fg.owner.errors.required">Bitte trag deine E-Mail-Adresse ein.</div>
+          <div *ngIf="fg.owner.errors.email">Die E-Mail-Adresse ist ungültig.</div>
         </div>
       </div>
       <div class="form-group">
-        <label>Mitglieder löschen?</label>
+        <label>Mitglieder entfernen?</label>
         <a class="btn btn-danger btn-round" (click)="onGroupEditMemberDlg(dlggroupeditmember)">
-          <i class="fas fa-trash"></i>
+          <i class="fas fa-user-minus"></i>
         </a>
         <tag-input formControlName="membercurr" [secondaryPlaceholder]="'max.mustermann@mail.de'"
                    [placeholder]="'Email'" [errorMessages]="memberErrorMessages" [validators]="memberValidators"
                    [theme]="'kalendu'" [modelAsStrings]='true' [hideForm]='true' *ngIf="groupMemberEdit"></tag-input>
       </div>
       <div class="form-group">
-        <label>neue Mitglieder einladen?</label>
+        <label>Neue Mitglieder einladen?</label>
         <tag-input formControlName="member" [secondaryPlaceholder]="'max.mustermann@mail.de'" [placeholder]="'Email'"
                    [errorMessages]="memberErrorMessages" [validators]="memberValidators" [addOnPaste]='true'
                    [theme]="'kalendu'" [modelAsStrings]='true'></tag-input>
@@ -400,8 +400,8 @@
           <input type="text" class="form-control input-number" value="1" [min]="1" formControlName="min"
                  [ngClass]="{ 'is-invalid': fg.min.errors, 'is-valid': !fg.min.errors }">
           <div *ngIf="fg.min.errors" class="invalid-feedback">
-            <div *ngIf="fg.min.errors.required">Minimumspieler darf nicht leer sein</div>
-            <div *ngIf="fg.min.errors.min">Der Wert muss größer als Null sein</div>
+            <div *ngIf="fg.min.errors.required">Bitte gib ein Minimum ein.</div>
+            <div *ngIf="fg.min.errors.min">Der Wert muss größer als Null sein.</div>
           </div>
         </div>
         <div class="form-group col-6">
@@ -409,8 +409,8 @@
           <input type="text" class="form-control input-number" value="2" [min]="2" formControlName="max"
                  [ngClass]="{ 'is-invalid': fg.max.errors, 'is-valid': !fg.max.errors }">
           <div *ngIf="fg.max.errors" class="invalid-feedback">
-            <div *ngIf="fg.max.errors.required">Maximumspieler darf nicht leer sein</div>
-            <div *ngIf="fg.max.errors.min">Der Wert muss größer als Null sein</div>
+            <div *ngIf="fg.max.errors.required">Bitte gib ein Maximum ein.</div>
+            <div *ngIf="fg.max.errors.min">Der Wert muss größer als Null sein.</div>
           </div>
         </div>
       </div>
@@ -432,13 +432,13 @@
         <div class="col-6">
           <div class="custom-control custom-checkbox" (click)="statuscb()">
             <input type="checkbox" class="custom-control-input" formControlName="status">
-            <label class="custom-control-label">privat?</label>
+            <label class="custom-control-label">Privat?</label>
           </div>
         </div>
         <div class="col-6">
           <div class="custom-control custom-checkbox" (click)="paycb()">
             <input type="checkbox" class="custom-control-input" formControlName="pay">
-            <label class="custom-control-label">kostet?</label>
+            <label class="custom-control-label">Kosten?</label>
           </div>
         </div>
       </div>
@@ -474,10 +474,10 @@
     </button>
     <form class="text-left" [formGroup]="frmg">
       <div class="form-group" #ngd>
-        <label>Gruppe-Titel: {{group.title}}</label>
+        <label>Name der Gruppe: {{group.title}}</label>
       </div>
       <div class="form-group">
-        <label>neue Mitglieder einladen?</label>
+        <label>Neue Mitglieder einladen?</label>
         <tag-input formControlName="member" [secondaryPlaceholder]="'max.mustermann@mail.de'" [placeholder]="'Email'"
                    [errorMessages]="memberErrorMessages" [validators]="memberValidators" [addOnPaste]='true'
                    [theme]="'kalendu'" [modelAsStrings]='true'></tag-input>

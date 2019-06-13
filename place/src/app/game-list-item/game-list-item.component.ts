@@ -116,10 +116,10 @@ export class GameListItemComponent implements OnInit {
       let ttt = '';
       switch (n) {
         case 2:
-          ttt = 'Klicken Sie noch mal, um trotzdem zu spielen, unabhängig von Zusage Anzahl!';
+          ttt = 'Klick noch einmal, um die Spielrunde auf jeden Fall stattfunden zu lassen.';
           break;
         case 9:
-          ttt = 'Klicken Sie noch mal, um die Spielrunde deaktivieren, keine Zusage möglich!';
+          ttt = 'Klick noch einmal, um die Spielrunde abzusagen.';
           break;
         default:
           break;

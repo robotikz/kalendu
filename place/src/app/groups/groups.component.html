@@ -148,12 +148,12 @@
         <label>Gruppe: {{group.title}}</label>
       </div>
       <div class="form-group">
-        <label>Ihre E-Mail:</label>
+        <label>Deine E-Mail-Adresse:</label>
         <input type="text" class="form-control" placeholder="max.mustermann@mail.de" formControlName="email" autofocus
                [ngClass]="{ 'is-invalid': f.email.errors, 'is-valid': !f.email.errors }">
         <div *ngIf="f.email.errors" class="invalid-feedback">
-          <div *ngIf="f.email.errors.required">Bitte trag deine E-Mail ein.</div>
-          <div *ngIf="f.email.errors.email">E-Mail ist ungültig.</div>
+          <div *ngIf="f.email.errors.required">Bitte trag deine E-Mail-Adresse ein.</div>
+          <div *ngIf="f.email.errors.email">Die E-Mail-Adresse ist ungültig.</div>
         </div>
       </div>
       <!-- <div class="form-group">
@@ -192,7 +192,7 @@
         <label>Spielstätte: {{place.title}}</label>
       </div>
       <div class="form-group">
-        <label>Gruppentitel:</label>
+        <label>Name der Gruppe:</label>
         <input type="text" class="form-control" formControlName="title" autofocus
                [ngClass]="{ 'is-invalid': fg.title.errors, 'is-valid': !fg.title.errors }">
         <div *ngIf="fg.title.errors" class="invalid-feedback">
@@ -200,12 +200,12 @@
         </div>
       </div>
       <div class="form-group">
-        <label>Ihre E-Mail:</label>
+        <label>Deine E-Mail-Adresse:</label>
         <input type="text" class="form-control" placeholder="max.mustermann@mail.de" formControlName="owner"
                [ngClass]="{ 'is-invalid': fg.owner.errors, 'is-valid': !fg.owner.errors }">
         <div *ngIf="fg.owner.errors" class="invalid-feedback">
-          <div *ngIf="fg.owner.errors.required">Bitte trag deine E-Mail ein.</div>
-          <div *ngIf="fg.owner.errors.email">E-Mail ist ungültig.</div>
+          <div *ngIf="fg.owner.errors.required">Bitte trag deine E-Mail-Adresse ein.</div>
+          <div *ngIf="fg.owner.errors.email">Die E-Mail-Adresse ist ungültig.</div>
         </div>
       </div>
       <!-- <div class="form-group">
