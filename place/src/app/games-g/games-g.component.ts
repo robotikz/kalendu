@@ -135,7 +135,7 @@ export class GamesGComponent implements OnInit {
           }
           if (!this.gameLast) {
             this.gameLast = new Game();
-            this.gameLast.title = 'Freikick';
+            this.gameLast.title = 'Freizeit-Kick';
             this.gameLast.dt = new Date();
             this.gameLast.dt.setDate(this.gameLast.dt.getDate() + 0);
             // this.gameLast.dd = new Date(this.gameLast.dt);
@@ -203,7 +203,7 @@ export class GamesGComponent implements OnInit {
     this.gameNew = new Game();
     Object.assign(this.gameNew, this.gameLast);
     console.log(this.gameNew);
-    this.gameNew.title = this.gameNew.title ? this.gameNew.title : 'Freikick';
+    this.gameNew.title = this.gameNew.title ? this.gameNew.title : 'Freizeit-Kick';
     this.gameNew.dt = new Date(this.gameLast.dt);
     this.gameNew.dt.setDate(this.gameLast.dt.getDate() + 7);
     if (!this.gameNew.dd) {
@@ -352,7 +352,7 @@ export class GamesGComponent implements OnInit {
         })
         .catch(err => console.error('Could not subscribe to notifications', err));
     } else {
-      console.log('Push-Service ist in ihrem Browser ausgeschaltet');
+      console.log('Push-Service ist in deinem Browser ausgeschaltet.');
     }
   }
 
@@ -371,13 +371,13 @@ export class GamesGComponent implements OnInit {
         })
         .catch(err => console.error('Could not unsubscribe to notifications', err));
     } else {
-      console.log('Push-Service ist in ihrem Browser ausgeschaltet');
+      console.log('Push-Service ist in deinem Browser ausgeschaltet.');
     }
   }
 
   onSendNotifications(tt: any) {
     if (!tt.isOpen()) {
-      tt.open({ text: 'Klicken Sie noch mal, un alle Mitglieder über Push-Benachrichtigungen noch mal informieren!' });
+      tt.open({ text: 'Klicke noch einmal, un alle Mitglieder über Push-Benachrichtigungen zu informieren!' });
       return;
     } else {
       tt.close();
