@@ -222,7 +222,7 @@
     </div>
     <div class="form-row">
       <div class="form-group col-6">
-        <label class="kalendu-dlg-content-label">Wann spielen wir?</label>
+        <label class="kalendu-dlg-content-label ngb-tp-date">Wann spielen wir?</label>
         <input class="form-control" placeholder="dd.mm.yyyy" (focus)="d1.open()" [(ngModel)]="gameNew.dt" ngbDatepicker
                #d1="ngbDatepicker">
       </div>
@@ -232,7 +232,7 @@
     </div>
     <div class="form-row">
       <div class="form-group col-6">
-        <label class="kalendu-dlg-content-label">Deadline:</label>
+        <label class="kalendu-dlg-content-label ngb-tp-date">Deadline:</label>
         <input class="form-control" placeholder="dd.mm.yyyy" (focus)="d2.open()" [(ngModel)]="gameNew.dd" ngbDatepicker
                #d2="ngbDatepicker">
       </div>

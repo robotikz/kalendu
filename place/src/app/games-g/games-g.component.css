@@ -172,6 +172,12 @@
   font-size: 1.8rem;
 }
 
+.kalendu-dlg-content-label.ngb-tp-date {
+  padding: .375rem 0;
+  margin-bottom: 0;
+  border: 1px solid transparent;
+}
+
 
 /* special */
 .kalendu-main-button-block {
