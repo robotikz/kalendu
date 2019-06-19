@@ -116,14 +116,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100px;
-  height: 100px;
+  width: 55px;
+  height: 55px;
   overflow: hidden;
   border-radius: 50%;
   position: absolute;
-  top: -30px;
-  right: 0;
-
+  top: 20px;
+  right: 80px;
 }
 
 .kalendu-main-gruppe-bild img {
@@ -142,6 +141,15 @@
 
 .kalendu-main-gruppe-bild img.admin:hover {
   filter: blur(2px);
+}
+
+.kalendu-main-gruppe-bild button {
+  position: absolute;
+  display: none;
+}
+
+.kalendu-main-gruppe-bild:hover button {
+  display: block;
 }
 
 .kalendu-main-notification-circle {

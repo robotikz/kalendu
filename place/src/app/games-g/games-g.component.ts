@@ -265,9 +265,9 @@ export class GamesGComponent implements OnInit {
       this.gameNew.title += ' - ' + Tools.getNumberOfWeek(this.gameNew.dt);
     }
     console.log('this.gameNew - ', 0, this.gameNew);
-    // this.fbService
-    //   .createGame(this.gameNew)
-    //   .subscribe();
+    this.fbService
+      .createGame(this.gameNew)
+      .subscribe();
     this.games.push(this.gameNew);
 
     // TODO
@@ -285,9 +285,9 @@ export class GamesGComponent implements OnInit {
         gameRepeat.dd = dd;
         gameRepeat.title = title + ' - ' + Tools.getNumberOfWeek(gameRepeat.dt);
         console.log('gameRepeat - ', i, gameRepeat);
-        // this.fbService
-        //   .createGame(gameRepeat)
-        //   .subscribe();
+        this.fbService
+          .createGame(gameRepeat)
+          .subscribe();
         gameRepeat.place = this.place;
         gameRepeat.group = this.group;
         this.games.push(gameRepeat);

@@ -2,8 +2,9 @@
 
 /* CSS FOR HEADER */
 
-.kalendu-fixed-header-bg {
+.kalendu-fixed-header {
   background: #5AA8C2;
+  height: 8hv;
 }
 
 .kalendu-header-logo {

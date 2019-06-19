@@ -32,6 +32,23 @@
                 <div class="container kalendu-main-headline px-0">
                   <!-- <i class="far fa-minus-square"></i> -->
                   <h1>{{group.title}}</h1>
+                  <div class="">
+                      <div class="kalendu-main-gruppe-bild" *ngIf="group.aowner === gid">
+                        <img src="assets/images/fallback-gruppe.jpg" [ngClass]="{'admin': group.aowner === gid}"
+                              *ngIf="!group.avatar" (click)="logoInput.click()">
+                        <img [src]="group.avatar" [ngClass]="{'admin': group.aowner === gid}" *ngIf="group.avatar"
+                              (click)="logoInput.click()">
+                        <button type="button" class="close" aria-label="Close" (click)="onImageRem()"
+                                *ngIf="group.aowner === gid && group.avatar">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                        <input type="file" class="file-hide" (change)="onImageAdd($event)" #logoInput>
+                      </div>
+                      <div class="kalendu-main-gruppe-bild" *ngIf="group.aowner !== gid">
+                        <img src="assets/images/fallback-gruppe.jpg" *ngIf="!group.avatar">
+                        <img [src]="group.avatar" *ngIf="group.avatar">
+                      </div>
+                  </div>
                 </div>
                 <div class="kalendu-main-notification-circle position-absolute">
                   <!-- <span class="kalendu-main-notification-circle-text"><i class="fas fa-bell"></i></span> -->
@@ -42,7 +59,7 @@
                 </div>
 
                 <!-- EDIT BAR -->
-                <div ngbDropdown placement="bottom-right" class="kalendu-main-edit-button mt-1"
+                <div ngbDropdown placement="bottom-right" class="kalendu-main-edit-button mt-4"
                      *ngIf="group.aowner === gid">
                   <i class="fas fa-ellipsis-h" ngbDropdownToggle></i>
                   <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
@@ -66,7 +83,7 @@
                     </a>
                   </div>
                 </div>
-                <a class="kalendu-main-edit-button mt-5" (click)="onSendNotifications(t2)" *ngIf="group.aowner === gid"
+                <a class="kalendu-main-edit-button mt-7" (click)="onSendNotifications(t2)" *ngIf="group.aowner === gid"
                    placement="left" triggers="manual" [ngbTooltip]="tipContent" #t2="ngbTooltip">
                   <i class="fas fa-paper-plane"></i>
                 </a>
@@ -85,9 +102,9 @@
                 </div>
                 <div class="d-flex flex-row kalendu-mains-ctas justify-content-center my-3"
                      *ngIf="group.aowner === gid">
-                  <a class="btn kalendu-main-button-spielrunden mr-2 px-4" (click)="switchGM(1)" *ngIf="switchgm===2"
+                  <a [className]="switchgm===2 ? 'btn kalendu-main-button-spielrunden mr-2 px-4' : 'btn kalendu-main-button-spielrunden mr-2 px-4 btn-inactive'" class="" (click)="switchGM(1)"
                      @fadeGM>Spielrunden</a>
-                  <a class="btn kalendu-main-button-spieler ml-2 px-4" (click)="switchGM(2)" *ngIf="switchgm===1"
+                  <a [className]="switchgm===1 ? 'btn kalendu-main-button-spieler ml-2 px-4' : 'btn kalendu-main-button-spieler ml-2 px-4 btn-inactive'" (click)="switchGM(2)"
                      @fadeGM>Mitglieder</a>
                 </div>
               </div>
@@ -97,28 +114,6 @@
           <div class="kalendu-main-header-block mt-4">
             <div class="container">
               <ng-template #tipContent let-text="text" placement="left">{{text}}</ng-template>
-              <!-- /Spielrunden Elements -->
-              <div class="position-relative mb-2 kalendu-main-button-block">
-                <div class="kalendu-main-gruppe-bild" *ngIf="group.aowner === gid">
-                  <img src="assets/images/fallback-gruppe.jpg" [ngClass]="{'admin': group.aowner === gid}"
-                       *ngIf="!group.avatar" (click)="logoInput.click()">
-                  <img [src]="group.avatar" [ngClass]="{'admin': group.aowner === gid}" *ngIf="group.avatar"
-                       (click)="logoInput.click()">
-                  <!-- <div class="overlay"></div> -->
-                  <button type="button" class="close" aria-label="Close" (click)="onImageRem()"
-                          *ngIf="group.aowner === gid && group.avatar">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                  <input type="file" class="file-hide" (change)="onImageAdd($event)" #logoInput>
-                </div>
-                <div class="kalendu-main-gruppe-bild" *ngIf="group.aowner !== gid">
-                  <img src="assets/images/fallback-gruppe.jpg" *ngIf="!group.avatar">
-                  <img [src]="group.avatar" *ngIf="group.avatar">
-                </div>
-                <!-- <h2>{{group.title}}</h2> -->
-                <!-- EDIT BAR -->
-              </div>
-              <!-- /EDIT BAR -->
 
               <div class="position-relative mb-4" *ngIf="switchgm===1" @fadeGM>
                 <h2>Spielrunden</h2>
